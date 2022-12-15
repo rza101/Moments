@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "233501223483",
+    "firebase_url": "https://moments-83238-default-rtdb.firebaseio.com",
+    "project_id": "moments-83238",
+    "storage_bucket": "moments-83238.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233501223483:android:ce2697d6617f89c8978a1e",
+        "android_client_info": {
+          "package_name": "com.pahat.moments"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "233501223483-u7dphg7p7p0s443nukgukepi6fimt64j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqzl-vqhL-0j-XGAPWsOrWRDYs8BKlz1A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "233501223483-u7dphg7p7p0s443nukgukepi6fimt64j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
