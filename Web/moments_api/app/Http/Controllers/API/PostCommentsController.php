@@ -45,7 +45,7 @@ class PostCommentsController extends Controller
            $post_comments->comment = $request->comment;
            $post_comments->save();
            return response()->json([
-               'status' => 201,
+               'status' => 200,
                'message' => 'success',
                'data' => $post_comments
            ]);
@@ -94,7 +94,7 @@ class PostCommentsController extends Controller
        if ($post_comments) {
            $post_comments->delete();
            return response()->json([
-               'status' => 202,
+               'status' => 200,
                'message' => 'Data berhasil dihapus!'
            ]);
        } else {

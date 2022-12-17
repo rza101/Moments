@@ -122,12 +122,12 @@ class PostsController extends Controller
         if ($posts) {
             $posts->delete();
             return response()->json([
-                'status' => 202,
+                'status' => 200,
                 'message' => 'Data berhasil dihapus!'
             ]);
         } else {
             return response()->json([
-                'status' => 204,
+                'status' => 400,
                 'message' => 'Data gagal dihapus!'
             ]);
         }

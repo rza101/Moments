@@ -93,12 +93,12 @@ class SavedPostsController extends Controller
         if ($saved_posts) {
             $saved_posts->delete();
             return response()->json([
-                'status' => 202,
+                'status' => 200,
                 'message' => 'Data berhasil dihapus!'
             ]);
         } else {
             return response()->json([
-                'status' => 204,
+                'status' => 400,
                 'message' => 'Data gagal dihapus!'
             ]);
         }

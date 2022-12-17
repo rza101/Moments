@@ -4,7 +4,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIUtil {
-    private static final String API_BASE_URL = "https://pahat.dvrproject.com";
+    private static final String API_BASE_URL = "https://rhezarijaya.000webhostapp.com/api";
     private static Retrofit retrofit;
 
     public static Retrofit getRetrofit() {
