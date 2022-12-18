@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('post_likes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('post_id');
-            // $table->string('post_id',128);
-            $table->string('user_id',128);
+            $table->string('user_id');
+            $table->foreign('user_id')->references('user_id')->on('users')->cascadeOnDelete();
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');;
             $table->timestamps();
         });
