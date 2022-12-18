@@ -55,9 +55,9 @@ class SavedPostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($user_id)
     {
-        $saved_post = SavedPost::find($id);
+        $saved_post = SavedPost::where('user_id', '=', $user_id);
 
         if ($saved_post) {
             return response()->json([

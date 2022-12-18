@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\UserFollow;
 use Exception;
 use Illuminate\Http\Request;
@@ -55,19 +56,21 @@ class UserFollowController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $user_id)
+    public function show($user_id)
     {
-        if($request->type === 'follower'){
-            $user_follow = UserFollow::where('user_id', '=', $user_id);
-        }else{
-            $user_follow = UserFollow::where('user_following', '=', $user_id);
-        }
+        $user = User::where('user_id', '=', $user_id);
 
-        if($user_follow){
+        if($user){
+            $following = UserFollow::where('user_id', '=', $user_id);
+            $follower = UserFollow::where('user_following', '=', $user_id);
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',
-                'data' => $user_follow
+                'data' => [
+                    'follower' => $follower,
+                    'following' => $following
+                ]
             ]);
         } else {
             return response()->json([

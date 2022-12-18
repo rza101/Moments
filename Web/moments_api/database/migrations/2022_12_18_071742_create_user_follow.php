@@ -13,6 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
+        // disini user_id FOLLOWING user_following
+        // jadi user_id punya following sebanyak user_following
+        // user_following punya followers sebanyak user_id
         Schema::create('user_follow', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');

@@ -57,9 +57,10 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($user_id)
     {
-        $posts = Post::find($id);
+        $posts = Post::where('user_id', '=', $user_id);
+        
         if ($posts) {
             return response()->json([
                 'status' => 200,

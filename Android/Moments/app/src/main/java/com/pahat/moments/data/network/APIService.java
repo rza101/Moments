@@ -1,10 +1,15 @@
 package com.pahat.moments.data.network;
 
+import androidx.core.app.NotificationCompat;
+
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.data.network.model.PostComment;
 import com.pahat.moments.data.network.model.PostLike;
 import com.pahat.moments.data.network.model.SavedPost;
+import com.pahat.moments.data.network.model.User;
+import com.pahat.moments.data.network.model.UserFollow;
+import com.pahat.moments.data.network.model.UserFollowComposite;
 
 import java.util.List;
 
@@ -20,10 +25,31 @@ import retrofit2.http.Query;
 
 public interface APIService {
     // USER
+    @GET("/users/{user_id}")
+    Call<APIResponse<List<User>>> getUserByUID(@Path("user_id") String user_id);
 
-    // USER FOLLOWERS
+    @POST("/users")
+    @FormUrlEncoded
+    Call<APIResponse<List<User>>> createUser(@Field("user_id") String user_id,
+                                             @Field("full_name") String full_name,
+                                             @Field("profile_picture") String profile_picture);
 
-    // USER FOLLOWINGS
+    @PUT("/users/{user_id}")
+    @FormUrlEncoded
+    Call<APIResponse<List<User>>> updateUser(@Path("user_id") String user_id,
+                                             @Field("full_name") String full_name,
+                                             @Field("profile_picture") String profile_picture);
+
+    // USER FOLLOW
+    @GET("/userfollow/{user_id}")
+    Call<APIResponse<UserFollowComposite>> getUserFollow(@Path("user_id") String user_id);
+
+    @POST("/userfollow")
+    Call<APIResponse<List<UserFollow>>> createUserFolloe(@Field("user_id") String user_id,
+                                                         @Field("user_following") String user_following);
+
+    @DELETE("/userfollow/{user_foll_id}")
+    Call<APIResponse<UserFollow>> deleteUserFollow(@Path("user_foll_id") long user_follow_id);
 
     // POSTS
     @GET("/posts")
@@ -50,12 +76,12 @@ public interface APIService {
     @GET("/postlikes")
     Call<APIResponse<List<PostLike>>> getAllPostLikes(@Query("post_id") long post_id);
 
-    @POST("/postslikes")
+    @POST("/postlikes")
     @FormUrlEncoded
     Call<APIResponse<Post>> createPostLike(@Field("post_id") long post_id,
                                            @Field("user_id") String user_id);
 
-    @DELETE("/postslikes/{id}")
+    @DELETE("/postlikes/{id}")
     @FormUrlEncoded
     Call<APIResponse<Post>> deletePostLike(@Path("post_id") long id);
 
@@ -63,13 +89,13 @@ public interface APIService {
     @GET("/postcomments")
     Call<APIResponse<List<PostComment>>> getAllPostComments(@Query("post_id") long post_id);
 
-    @POST("/postscomments")
+    @POST("/postcomments")
     @FormUrlEncoded
     Call<APIResponse<Post>> createPostComment(@Field("post_id") long post_id,
                                               @Field("user_id") String user_id,
                                               @Field("comment") String comment);
 
-    @DELETE("/postscomments/{id}")
+    @DELETE("/postcomments/{id}")
     @FormUrlEncoded
     Call<APIResponse<Post>> deletePostComment(@Path("id") long id);
 
