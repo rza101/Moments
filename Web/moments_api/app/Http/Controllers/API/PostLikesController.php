@@ -7,7 +7,7 @@ use App\Models\PostLike;
 use Illuminate\Http\Request;
 use Exception;
 
-class PostLikeController extends Controller
+class PostLikesController extends Controller
 {
         /**
      * Display a listing of the resource.
