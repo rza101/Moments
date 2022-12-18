@@ -57,7 +57,7 @@ class PostLikesController extends Controller
      */
     public function show($post_id)
     {
-        $post_like = PostLike::where('post_id', '=', $post_id);
+        $post_like = PostLike::where('post_id', '=', $post_id)->get();
 
         if ($post_like) {
             return response()->json([

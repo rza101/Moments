@@ -65,7 +65,7 @@ Parameter :
 3. caption
 
 ### Show
-Endpoints : /api/posts/{id}
+Endpoints : /api/posts/{user_id}
 Method : GET
 
 ### Update
@@ -138,7 +138,6 @@ Method : POST
 Parameter :
 1. user_id
 2. post_id
-3. comment
 
 ### Show
 Endpoints : /api/savedposts/{user_id}

@@ -24,4 +24,5 @@ class User extends Authenticatable
         'profile_picture'
     ];
     protected $primaryKey = 'user_id';
+    public $incrementing = false;
 }

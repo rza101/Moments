@@ -57,7 +57,7 @@ class SavedPostsController extends Controller
      */
     public function show($user_id)
     {
-        $saved_post = SavedPost::where('user_id', '=', $user_id);
+        $saved_post = SavedPost::where('user_id', '=', $user_id)->get();
 
         if ($saved_post) {
             return response()->json([

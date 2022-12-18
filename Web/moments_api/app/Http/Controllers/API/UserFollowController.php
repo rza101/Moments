@@ -61,8 +61,8 @@ class UserFollowController extends Controller
         $user = User::where('user_id', '=', $user_id);
 
         if($user){
-            $following = UserFollow::where('user_id', '=', $user_id);
-            $follower = UserFollow::where('user_following', '=', $user_id);
+            $following = UserFollow::where('user_id', '=', $user_id)->get();
+            $follower = UserFollow::where('user_following', '=', $user_id)->get();
 
             return response()->json([
                 'status' => 200,

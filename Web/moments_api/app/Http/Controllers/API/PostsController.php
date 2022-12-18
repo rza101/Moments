@@ -59,7 +59,7 @@ class PostsController extends Controller
      */
     public function show($user_id)
     {
-        $posts = Post::where('user_id', '=', $user_id);
+        $posts = Post::where('user_id', '=', $user_id)->get();
         
         if ($posts) {
             return response()->json([

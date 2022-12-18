@@ -58,7 +58,7 @@ class PostCommentsController extends Controller
     */
    public function show($post_id)
    {
-       $post_comment = PostComment::where('post_id', '=', $post_id);
+       $post_comment = PostComment::where('post_id', '=', $post_id)->get();
 
        if ($post_comment) {
            return response()->json([
