@@ -20,9 +20,9 @@ use App\Http\Controllers\API\UserFollowController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 // ex: api/posts -> Create, Read
 // ex: api/posts{id} -> Update, Show, Delete
 Route::apiResource('posts', PostsController::class);
