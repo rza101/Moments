@@ -1,7 +1,5 @@
 package com.pahat.moments.data.network;
 
-import androidx.core.app.NotificationCompat;
-
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.data.network.model.PostComment;
@@ -21,7 +19,6 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface APIService {
     // USER
@@ -73,8 +70,8 @@ public interface APIService {
     Call<APIResponse<Post>> deletePost(@Path("post_id") long post_id);
 
     // POST LIKE
-    @GET("/postlikes")
-    Call<APIResponse<List<PostLike>>> getAllPostLikes(@Query("post_id") long post_id);
+    @GET("/postlikes/{post_id}")
+    Call<APIResponse<List<PostLike>>> getAllPostLikes(@Path("post_id") long post_id);
 
     @POST("/postlikes")
     @FormUrlEncoded
@@ -86,8 +83,8 @@ public interface APIService {
     Call<APIResponse<Post>> deletePostLike(@Path("post_id") long id);
 
     // POST COMMENTS
-    @GET("/postcomments")
-    Call<APIResponse<List<PostComment>>> getAllPostComments(@Query("post_id") long post_id);
+    @GET("/postcomments/{post_id}")
+    Call<APIResponse<List<PostComment>>> getAllPostComments(@Path("post_id") long post_id);
 
     @POST("/postcomments")
     @FormUrlEncoded
@@ -100,8 +97,8 @@ public interface APIService {
     Call<APIResponse<Post>> deletePostComment(@Path("id") long id);
 
     // SAVED POSTS
-    @GET("/savedposts")
-    Call<APIResponse<List<SavedPost>>> getAllSavedPosts(@Query("post_id") long post_id);
+    @GET("/savedposts/{user_id}")
+    Call<APIResponse<List<SavedPost>>> getAllSavedPosts(@Path("user_id") long post_id);
 
     @POST("/savedposts")
     @FormUrlEncoded
