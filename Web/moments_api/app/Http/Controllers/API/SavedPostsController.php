@@ -31,7 +31,7 @@ class SavedPostsController extends Controller
     public function store(Request $request)
     {
         try {
-            $saved_post = new SavedPost();
+            $saved_post = SavedPost::firstOrNew(['user_id' => $request->user_id, 'post_id' => $request->post_id]);
             $saved_post->user_id = $request->user_id;
             $saved_post->post_id = $request->post_id;
             $saved_post->save();

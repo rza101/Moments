@@ -32,7 +32,7 @@ class UserFollowController extends Controller
     public function store(Request $request)
     {
         try {
-            $user_follow = new UserFollow();
+            $user_follow = UserFollow::firstOrNew(['user_id' => $request->user_id, 'user_following' => $request->user_following]);
             $user_follow->user_id = $request->user_id;
             $user_follow->user_following = $request->user_following;
             $user_follow->save();
