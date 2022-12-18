@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\SavedPost;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Exception;
 
-class SavedPostsController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,20 +31,21 @@ class SavedPostsController extends Controller
     public function store(Request $request)
     {
         try {
-            $saved_post = new SavedPost();
-            $saved_post->user_id = $request->user_id;
-            $saved_post->post_id = $request->post_id;
-            $saved_post->save();
+            $user = new User();
+            $user->user_id = $request->user_id;
+            $user->full_name = $request->full_name;
+            $user->profile_picture = $request->profile_picture;
+            $user->save();
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Saved post stored',
-                'data' => $saved_post
+                'message' => 'User stored',
+                'data' => $user
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 400,
-                'message' => 'Failed to store saved post'
+                'message' => 'Failed to store user'
             ]);
         }
     }
@@ -57,18 +58,17 @@ class SavedPostsController extends Controller
      */
     public function show($id)
     {
-        $saved_post = SavedPost::find($id);
-
-        if ($saved_post) {
+        $user = User::find($id);
+        if($user){
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',
-                'data' => $saved_post
+                'data' => $user
             ]);
         } else {
             return response()->json([
                 'status' => 400,
-                'message' => 'Failed to show saved post'
+                'message' => 'Failed to show user'
             ]);
         }
     }
@@ -82,10 +82,23 @@ class SavedPostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return response()->json([
-            'status' => 200,
-            'message' => 'Success'
-        ]);
+        try {
+            $user = User::find($id);
+            $user->full_name = $request->full_name;
+            $user->profile_picture = $request->profile_picture;
+            $user->save();
+            
+            return response()->json([
+                'status' => 200,
+                'message' => 'User updated',
+                'data' => $user
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Failed to update user'
+            ]);
+        }
     }
 
     /**
@@ -96,18 +109,18 @@ class SavedPostsController extends Controller
      */
     public function destroy($id)
     {
-        $saved_post = SavedPost::find($id);
+        $user = User::find($id);
 
-        if ($saved_post) {
-            $saved_post->delete();
+        if ($user) {
+            $user->delete();
             return response()->json([
                 'status' => 200,
-                'message' => 'Saved post deleted'
+                'message' => 'User deleted'
             ]);
         } else {
             return response()->json([
                 'status' => 400,
-                'message' => 'Failed to delete saved post'
+                'message' => 'Failed to delete user'
             ]);
         }
     }

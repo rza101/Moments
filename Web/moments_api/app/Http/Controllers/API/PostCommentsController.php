@@ -4,7 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\PostComments;
+use App\Models\PostComment;
+use Exception;
 
 class PostCommentsController extends Controller
 {   
@@ -15,19 +16,10 @@ class PostCommentsController extends Controller
     */
    public function index()
    {
-       $post_comments = PostComments::all();
-       if($post_comments){
-           return response()->json([
-               'status' => 200,
-               'message' => 'success',
-               'data' => $post_comments
-           ]);
-       } else {
-           return response()->json([
-               'status' => 400,
-               'message' => 'failed'
-           ]);
-       }
+    return response()->json([
+        'status' => 200,
+        'message' => 'success'
+    ]);
    }
 
    /**
@@ -39,23 +31,23 @@ class PostCommentsController extends Controller
    public function store(Request $request)
    {
        try {
-           $post_comments = new PostComments();
-           $post_comments->user_id = $request->user_id;
-           $post_comments->post_id = $request->post_id;
-           $post_comments->comment = $request->comment;
-           $post_comments->save();
+           $post_comment = new PostComment();
+           $post_comment->user_id = $request->user_id;
+           $post_comment->post_id = $request->post_id;
+           $post_comment->comment = $request->comment;
+           $post_comment->save();
+
            return response()->json([
                'status' => 200,
-               'message' => 'success',
-               'data' => $post_comments
+               'message' => 'Post comment stored',
+               'data' => $post_comment
            ]);
        } catch (Exception $e) {
            return response()->json([
                'status' => 400,
-               'message' => 'failed'
+               'message' => 'Failed to store post comment'
            ]);
        }
-
    }
 
    /**
@@ -64,23 +56,38 @@ class PostCommentsController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-   public function show($id)
+   public function show($post_id)
    {
-       $post_comments = PostComments::find($id);
-       if ($post_comments) {
+       $post_comment = PostComment::where('post_id', '=', $post_id);
+
+       if ($post_comment) {
            return response()->json([
                'status' => 200,
-               'message' => 'success',
-               'data' => $post_comments
+               'message' => 'Success',
+               'data' => $post_comment
            ]);
        } else {
            return response()->json([
                'status' => 400,
-               'message' => 'failed'
+               'message' => 'Failed to show post comment'
            ]);
        }
-
    }
+
+   /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success'
+        ]);
+    }
 
    /**
     * Remove the specified resource from storage.
@@ -90,19 +97,19 @@ class PostCommentsController extends Controller
     */
    public function destroy($id)
    {
-       $post_comments = PostComments::find($id);
-       if ($post_comments) {
-           $post_comments->delete();
+       $post_comment = PostComment::find($id);
+
+       if ($post_comment) {
+           $post_comment->delete();
            return response()->json([
                'status' => 200,
-               'message' => 'Data berhasil dihapus!'
+               'message' => 'Post comment deleted'
            ]);
        } else {
            return response()->json([
                'status' => 400,
-               'message' => 'Data gagal dihapus!'
+               'message' => 'Failed to delete post comment'
            ]);
        }
-
    }
 }

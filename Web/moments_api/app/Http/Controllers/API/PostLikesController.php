@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\PostLike;
 use Illuminate\Http\Request;
-use App\Models\PostLikes;
+use Exception;
 
 class PostLikeController extends Controller
 {
@@ -15,19 +16,10 @@ class PostLikeController extends Controller
      */
     public function index()
     {
-        $PostLike = PostLikes::all();
-        if($PostLike){
-            return response()->json([
-                'status' => 200,
-                'message' => 'success',
-                'data' => $PostLike
-            ]);
-        } else {
-            return response()->json([
-                'status' => 400,
-                'message' => 'failed'
-            ]);
-        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success'
+        ]);
     }
 
     /**
@@ -39,22 +31,22 @@ class PostLikeController extends Controller
     public function store(Request $request)
     {
         try {
-            $PostLike = new PostLikes();
-            $PostLike->user_id = $request->user_id;
-            $PostLike->post_id = $request->post_id;
-            $PostLike->save();
+            $post_like = new PostLike();
+            $post_like->user_id = $request->user_id;
+            $post_like->post_id = $request->post_id;
+            $post_like->save();
+
             return response()->json([
                 'status' => 200,
-                'message' => 'success',
-                'data' => $PostLike
+                'message' => 'Post like stored',
+                'data' => $post_like
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 400,
-                'message' => 'failed'
+                'message' => 'Failed to store post like'
             ]);
         }
-
     }
 
     /**
@@ -63,22 +55,37 @@ class PostLikeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($post_id)
     {
-        $PostLike = PostLikes::find($id);
-        if ($PostLike) {
+        $post_like = PostLike::where('post_id', '=', $post_id);
+
+        if ($post_like) {
             return response()->json([
                 'status' => 200,
-                'message' => 'success',
-                'data' => $PostLike
+                'message' => 'Success',
+                'data' => $post_like
             ]);
         } else {
             return response()->json([
                 'status' => 400,
-                'message' => 'failed'
+                'message' => 'Failed to show post like'
             ]);
         }
+    }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success'
+        ]);
     }
 
     /**
@@ -89,19 +96,18 @@ class PostLikeController extends Controller
      */
     public function destroy($id)
     {
-        $PostLike = PostLikes::find($id);
-        if ($PostLike) {
-            $PostLike->delete();
+        $post_like = PostLike::find($id);
+        if ($post_like) {
+            $post_like->delete();
             return response()->json([
                 'status' => 200,
-                'message' => 'Data berhasil dihapus!'
+                'message' => 'Post like deleted'
             ]);
         } else {
             return response()->json([
                 'status' => 400,
-                'message' => 'Data gagal dihapus!'
+                'message' => 'Failed to delete post like'
             ]);
         }
-
     }
 }

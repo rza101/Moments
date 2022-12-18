@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Http\Request;
-use App\Models\Posts;
+use Exception;
 
 class PostsController extends Controller
 {
@@ -15,19 +16,11 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Posts::all();
-        if($posts){
-            return response()->json([
-                'status' => 200,
-                'message' => 'success',
-                'data' => $posts
-            ]);
-        } else {
-            return response()->json([
-                'status' => 400,
-                'message' => 'failed'
-            ]);
-        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success',
+            'data' => Post::all()
+        ]);
     }
 
     /**
@@ -39,23 +32,23 @@ class PostsController extends Controller
     public function store(Request $request)
     {
         try {
-            $posts = new Posts();
+            $posts = new Post();
             $posts->user_id = $request->user_id;
             $posts->image_url = $request->image_url;
             $posts->caption = $request->caption;
             $posts->save();
+
             return response()->json([
                 'status' => 200,
-                'message' => 'success',
+                'message' => 'Post stored',
                 'data' => $posts
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 400,
-                'message' => 'failed'
+                'message' => 'Failed to store post'
             ]);
         }
-
     }
 
     /**
@@ -66,20 +59,19 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        $posts = Posts::find($id);
+        $posts = Post::find($id);
         if ($posts) {
             return response()->json([
                 'status' => 200,
-                'message' => 'success',
+                'message' => 'Success',
                 'data' => $posts
             ]);
         } else {
             return response()->json([
                 'status' => 400,
-                'message' => 'failed'
+                'message' => 'Failed to show post'
             ]);
         }
-
     }
 
     /**
@@ -92,20 +84,19 @@ class PostsController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $posts = Posts::find($id);
-            $posts->user_id = $request->user_id;
-            $posts->image_url = $request->image_url;
-            $post->caption = $request->caption;
+            $posts = Post::find($id);
+            $posts->caption = $request->caption;
             $posts->save();
+
             return response()->json([
                 'status' => 200,
-                'message' => 'success',
+                'message' => 'Post updated',
                 'data' => $posts
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 400,
-                'message' => 'failed'
+                'message' => 'Failed to update post'
             ]);
         }
     }
@@ -118,19 +109,18 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        $posts = Posts::find($id);
+        $posts = Post::find($id);
         if ($posts) {
             $posts->delete();
             return response()->json([
                 'status' => 200,
-                'message' => 'Data berhasil dihapus!'
+                'message' => 'Post deleted'
             ]);
         } else {
             return response()->json([
                 'status' => 400,
-                'message' => 'Data gagal dihapus!'
+                'message' => 'Failed to delete post'
             ]);
         }
-
     }
 }

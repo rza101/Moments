@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\SavedPost;
-use Illuminate\Http\Request;
+use App\Models\UserFollow;
 use Exception;
+use Illuminate\Http\Request;
 
-class SavedPostsController extends Controller
+class UserFollowController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,20 +31,20 @@ class SavedPostsController extends Controller
     public function store(Request $request)
     {
         try {
-            $saved_post = new SavedPost();
-            $saved_post->user_id = $request->user_id;
-            $saved_post->post_id = $request->post_id;
-            $saved_post->save();
+            $user_follow = new UserFollow();
+            $user_follow->user_id = $request->user_id;
+            $user_follow->user_following = $request->user_following;
+            $user_follow->save();
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Saved post stored',
-                'data' => $saved_post
+                'message' => 'User follow stored',
+                'data' => $user_follow
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 400,
-                'message' => 'Failed to store saved post'
+                'message' => 'Failed to store user follow'
             ]);
         }
     }
@@ -55,20 +55,24 @@ class SavedPostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $user_id)
     {
-        $saved_post = SavedPost::find($id);
+        if($request->type === 'follower'){
+            $user_follow = UserFollow::where('user_id', '=', $user_id);
+        }else{
+            $user_follow = UserFollow::where('user_following', '=', $user_id);
+        }
 
-        if ($saved_post) {
+        if($user_follow){
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',
-                'data' => $saved_post
+                'data' => $user_follow
             ]);
         } else {
             return response()->json([
                 'status' => 400,
-                'message' => 'Failed to show saved post'
+                'message' => 'Failed to show user follow'
             ]);
         }
     }
@@ -96,18 +100,18 @@ class SavedPostsController extends Controller
      */
     public function destroy($id)
     {
-        $saved_post = SavedPost::find($id);
+        $user_follow = UserFollow::find($id);
 
-        if ($saved_post) {
-            $saved_post->delete();
+        if ($user_follow) {
+            $user_follow->delete();
             return response()->json([
                 'status' => 200,
-                'message' => 'Saved post deleted'
+                'message' => 'User follow deleted'
             ]);
         } else {
             return response()->json([
                 'status' => 400,
-                'message' => 'Failed to delete saved post'
+                'message' => 'Failed to delete user follow'
             ]);
         }
     }
