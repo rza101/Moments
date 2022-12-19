@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_main"
-    app:startDestination="@id/menu_nav_main_home">
+    app:startDestination="@id/menu_main_nav_home">
 
     <fragment
-        android:id="@+id/menu_nav_main_home"
+        android:id="@+id/menu_main_nav_home"
         android:name="com.pahat.moments.ui.fragments.mainhome.MainHomeFragment"
         android:label="fragment_main_home"
         tools:layout="@layout/fragment_main_home" />
     <fragment
-        android:id="@+id/menu_nav_main_profile"
+        android:id="@+id/menu_main_nav_profile"
         android:name="com.pahat.moments.ui.fragments.mainprofile.MainProfileFragment"
         android:label="fragment_main_profile"
         tools:layout="@layout/fragment_main_profile" />
     <fragment
-        android:id="@+id/menu_nav_main_chat"
+        android:id="@+id/menu_main_nav_chat"
         android:name="com.pahat.moments.ui.fragments.mainchat.MainChatFragment"
         android:label="fragment_main_chat"
         tools:layout="@layout/fragment_main_chat" />

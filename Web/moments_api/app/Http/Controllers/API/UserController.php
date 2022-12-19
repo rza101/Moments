@@ -32,7 +32,8 @@ class UserController extends Controller
     {
         try {
             $user = new User();
-            $user->user_id = str_replace(' ','_',$request->user_id);
+            $user->user_id = $request->user_id;
+            $user->username = str_replace(' ','_',$request->username);
             $user->full_name = $request->full_name;
             $user->profile_picture = $request->profile_picture;
             $user->save();
