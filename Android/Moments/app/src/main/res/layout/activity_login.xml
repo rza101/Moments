@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/form_border"
-        android:paddingHorizontal="5dp"
+        android:paddingHorizontal="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_tv_login">
 
@@ -66,7 +66,7 @@
         android:layout_marginTop="10dp"
         android:layout_height="50dp"
         android:background="@drawable/form_border"
-        android:paddingHorizontal="5dp"
+        android:paddingHorizontal="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_cl_email">
 
@@ -96,7 +96,7 @@
             android:background="@android:color/transparent"
             android:text="Password"
             android:textColor="@color/grey"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/login_iv_password_eye"
             app:layout_constraintStart_toEndOf="@id/login_iv_password" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -138,6 +138,6 @@
         android:textColor="@color/black"
         android:textSize="15dp"
         android:layout_marginBottom="16dp"
-        android:textAlignment="center"/>>
+        android:textAlignment="center"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

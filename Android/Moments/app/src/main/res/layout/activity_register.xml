@@ -4,6 +4,224 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.register.RegisterActivity">
+    tools:context=".ui.activities.register.RegisterActivity"
+    android:layout_marginHorizontal="20dp">
+
+    <ImageView
+        android:id="@+id/register_iv_illustration"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_ill_register"/>
+
+    <TextView
+        android:id="@+id/register_tv_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_iv_illustration"
+        android:textSize="32sp"
+        android:text="Register"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="15dp"
+        android:id="@+id/register_cl_email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/form_border"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_tv_register">
+
+        <ImageView
+            android:id="@+id/register_iv_email"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_twotone_alternate_email"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/register_et_email"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:background="@android:color/transparent"
+            android:text="Email"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/register_iv_email" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/register_cl_full_name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/form_border"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_cl_email">
+
+        <ImageView
+            android:id="@+id/register_iv_full_name"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ph_user"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/register_et_full_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:background="@android:color/transparent"
+            android:text="Full Name"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/register_iv_full_name" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/register_cl_username"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/form_border"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_cl_full_name">
+
+        <ImageView
+            android:id="@+id/register_iv_username"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ph_user"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/register_et_username"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:background="@android:color/transparent"
+            android:text="Username"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/register_iv_username" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/register_cl_password"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="50dp"
+        android:background="@drawable/form_border"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_cl_username">
+
+        <ImageView
+            android:id="@+id/register_iv_password"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_outline_lock"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/register_iv_password_eye"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/dashicons_hidden"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/register_et_password"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:background="@android:color/transparent"
+            android:text="Password"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toStartOf="@id/register_iv_password_eye"
+            app:layout_constraintStart_toEndOf="@id/register_iv_password" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/register_cl_confirm_password"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="50dp"
+        android:background="@drawable/form_border"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_cl_password"
+        >
+
+        <ImageView
+            android:id="@+id/register_iv_confirm_password"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_outline_lock"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/register_iv_confirm_password_eye"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/dashicons_hidden"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/register_et_confirm_password"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:background="@android:color/transparent"
+            android:text="Password"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toStartOf="@id/register_iv_confirm_password_eye"
+            app:layout_constraintStart_toEndOf="@id/register_iv_confirm_password" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/register_btn_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/blue"
+        app:layout_constraintTop_toBottomOf="@id/register_cl_confirm_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:paddingVertical="15dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
