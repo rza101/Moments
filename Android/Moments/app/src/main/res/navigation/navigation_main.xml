@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/menu_nav_main_home">
+
+    <fragment
+        android:id="@+id/menu_nav_main_home"
+        android:name="com.pahat.moments.ui.fragments.mainhome.MainHomeFragment"
+        android:label="fragment_main_home"
+        tools:layout="@layout/fragment_main_home" />
+    <fragment
+        android:id="@+id/menu_nav_main_profile"
+        android:name="com.pahat.moments.ui.fragments.mainprofile.MainProfileFragment"
+        android:label="fragment_main_profile"
+        tools:layout="@layout/fragment_main_profile" />
+    <fragment
+        android:id="@+id/menu_nav_main_chat"
+        android:name="com.pahat.moments.ui.fragments.mainchat.MainChatFragment"
+        android:label="fragment_main_chat"
+        tools:layout="@layout/fragment_main_chat" />
+</navigation>

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('user_id')->primary();
             $table->string('full_name');
             $table->string('profile_picture')->nullable();
+            $table->string('fcm_token')->nullable();
             $table->timestamps();
         });
     }

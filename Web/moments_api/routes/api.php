@@ -31,3 +31,4 @@ Route::apiResource('postcomments', PostCommentsController::class);
 Route::apiResource('savedposts', SavedPostsController::class);
 Route::apiResource('users', UserController::class);
 Route::apiResource('userfollow', UserFollowController::class);
+Route::post('usersfcm/{user_id}', [UserController::class, 'setFCMToken']);

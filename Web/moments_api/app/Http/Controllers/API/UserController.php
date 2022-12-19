@@ -101,6 +101,26 @@ class UserController extends Controller
         }
     }
 
+    public function setFCMToken(Request $request, $user_id)
+    {
+        try {
+            $user = User::find($user_id);
+            $user->fcm_token = $request->fcm_token;
+            $user->save();
+            
+            return response()->json([
+                'status' => 200,
+                'message' => 'User FCM token updated',
+                'data' => $user
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Failed to update user FCM token'
+            ]);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
