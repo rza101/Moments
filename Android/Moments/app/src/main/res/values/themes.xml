@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/inter_medium</item>
     </style>
 
     <style name="Theme.Moments.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">

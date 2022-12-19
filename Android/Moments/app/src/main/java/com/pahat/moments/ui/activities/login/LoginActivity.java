@@ -1,6 +1,7 @@
 package com.pahat.moments.ui.activities.login;
 
 import android.os.Bundle;
+import android.text.Html;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,5 +17,9 @@ public class LoginActivity extends AppCompatActivity {
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        String register = "<font color=#FF000000>New to this app ? </font>" +
+                "<font color=#3FBDF1>Register Here</font>";
+        binding.loginTvRegister.setText(Html.fromHtml(register));
     }
 }
