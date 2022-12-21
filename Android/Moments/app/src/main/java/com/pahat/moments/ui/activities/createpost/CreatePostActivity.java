@@ -1,11 +1,16 @@
 package com.pahat.moments.ui.activities.createpost;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Environment;
+import android.view.WindowManager;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-
-import com.pahat.moments.R;
 import com.pahat.moments.databinding.ActivityCreatePostBinding;
+
+import java.io.File;
+import java.io.IOException;
 
 public class CreatePostActivity extends AppCompatActivity {
 
@@ -17,5 +22,21 @@ public class CreatePostActivity extends AppCompatActivity {
 
         binding = ActivityCreatePostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+    }
+
+    private File createTempImageFile(Context context) {
+        File file = null;
+
+        try {
+            file = File.createTempFile(
+                    System.currentTimeMillis() + "_" + (Math.random() * 1000),
+                    ".jpg",
+                    context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return file;
     }
 }

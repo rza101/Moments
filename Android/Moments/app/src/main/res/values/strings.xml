@@ -2,4 +2,10 @@
     <string name="app_name">Moments</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_post">Create Post</string>
+    <string name="update_post">Update Post</string>
+    <string name="write_some_captions">Write some captions</string>
+    <string name="update">Update</string>
+    <string name="post">Post</string>
+    <string name="add_an_image_first_from_camera_or_gallery">Add an Image First from Camera or Gallery</string>
 </resources>

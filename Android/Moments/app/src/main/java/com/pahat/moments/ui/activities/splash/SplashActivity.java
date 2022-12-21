@@ -7,7 +7,9 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.pahat.moments.databinding.ActivitySplashBinding;
+import com.pahat.moments.ui.activities.createpost.CreatePostActivity;
 import com.pahat.moments.ui.activities.main.MainActivity;
+import com.pahat.moments.ui.activities.updatepost.UpdatePostActivity;
 
 import java.util.TimerTask;
 
@@ -23,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         new Handler().postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
             finish();
         }, 1000);
     }
