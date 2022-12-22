@@ -10,122 +10,118 @@
         android:id="@+id/chat_cl_toolbar"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        
+        app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/chat_tv_identity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Dika Saputra's"
             android:textSize="12sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/chat_tv_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chat"
             android:fontFamily="@font/inter_semibold"
+            android:text="Chat"
             android:textSize="25sp"
-            app:layout_constraintTop_toBottomOf="@id/chat_tv_identity"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chat_tv_identity" />
 
         <ImageView
+            android:id="@+id/about_iv_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/about_iv_menu"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="20dp"
             android:src="@drawable/ic_menu_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="20dp"
-            />
-        
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-    
+
     <ScrollView
-        android:layout_marginHorizontal="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/chat_cl_toolbar"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="10dp"
         app:layout_constraintBottom_toTopOf="@id/chat_cl_bottom_chat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/chat_cl_toolbar">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chat_rv_chat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/chat_cl_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/chat_cl_toolbar" />
 
     </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_marginHorizontal="10dp"
-        android:paddingVertical="5dp"
         android:id="@+id/chat_cl_bottom_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:paddingVertical="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:background="@drawable/bg_border_grey"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/chat_ib_send"
             android:layout_marginEnd="10dp"
-            >
+            android:background="@drawable/bg_border_grey"
+            app:layout_constraintEnd_toStartOf="@+id/chat_ib_send"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
                 android:id="@+id/chat_ib_emoji"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_outline_emoji_emotions"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="10dp"
+                android:background="@null"
                 android:padding="0dp"
-                android:background="none"/>
+                android:src="@drawable/ic_outline_emoji_emotions"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
+                android:id="@+id/chat_et_message"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@+id/chat_ib_emoji"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:id="@+id/chat_et_message"
                 android:layout_marginStart="5dp"
                 android:background="@android:color/transparent"
                 android:text="Message..."
                 android:textColor="@color/grey"
-                />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/chat_ib_emoji"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/chat_ib_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_image_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginEnd="10dp"
+                android:background="@null"
                 android:padding="0dp"
-                android:background="none"/>
+                android:src="@drawable/ic_image_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -133,13 +129,13 @@
             android:id="@+id/chat_ib_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_send_rounded"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="10dp"
+            android:background="@null"
             android:padding="0dp"
-            android:background="none"/>
+            android:src="@drawable/ic_send_rounded"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

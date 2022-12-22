@@ -5,8 +5,11 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.PopupMenu;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -25,8 +28,30 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        setSupportActionBar(binding.toolbar.getRoot());
+        binding.toolbar.toolbarFullname.setText("Fullname");
+
         NavController navController = Navigation.findNavController(this, R.id.main_fragment);
         NavigationUI.setupWithNavController(binding.mainBnv, navController);
+
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController navController,
+                                             @NonNull NavDestination navDestination,
+                                             @Nullable Bundle bundle) {
+                String title = "";
+
+                if(navDestination.getId() == R.id.menu_main_nav_home){
+                    title = "Home";
+                }else if(navDestination.getId() == R.id.menu_main_nav_chat){
+                    title = "Chat";
+                }else if(navDestination.getId() == R.id.menu_main_nav_profile){
+                    title = "Profile";
+                }
+
+                binding.toolbar.toolbarTitle.setText(title);
+            }
+        });
 
         binding.mainIvMenu.setOnClickListener(new View.OnClickListener() {
             @Override
