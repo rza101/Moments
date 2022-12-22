@@ -8,4 +8,7 @@
     <string name="update">Update</string>
     <string name="post">Post</string>
     <string name="add_an_image_first_from_camera_or_gallery">Add an Image First from Camera or Gallery</string>
+    <string name="follow">Follow</string>
+    <string name="comments">Comments</string>
+    <string name="write_some_comment">Write some comment</string>
 </resources>

@@ -23,7 +23,6 @@
         android:layout_marginStart="30dp"
         android:fontFamily="@font/inter_semibold"
         android:text="@string/update_post"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/update_post_iv_back"
         app:layout_constraintStart_toEndOf="@id/update_post_iv_back"
@@ -102,6 +101,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="@string/update"
                 android:textSize="16sp"
+                android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/update_post_mcv_caption"
                 app:layout_constraintStart_toStartOf="@id/update_post_mcv_caption" />

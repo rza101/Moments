@@ -23,7 +23,6 @@
         android:layout_marginStart="30dp"
         android:fontFamily="@font/inter_semibold"
         android:text="@string/create_post"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/create_post_iv_back"
         app:layout_constraintStart_toEndOf="@id/create_post_iv_back"
@@ -81,7 +80,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_chainStyle="packed" />
+                        app:layout_constraintVertical_chainStyle="packed"
+                        app:tint="@color/grey" />
 
                     <TextView
                         android:id="@+id/create_post_tv_text_info"
@@ -90,7 +90,6 @@
                         android:fontFamily="@font/inter_semibold"
                         android:text="@string/add_an_image_first_from_camera_or_gallery"
                         android:textAlignment="center"
-                        android:textColor="@color/black"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -164,6 +163,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="@string/post"
                 android:textSize="16sp"
+                android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/create_post_mcv_image"
                 app:layout_constraintStart_toStartOf="@id/create_post_mcv_image" />
