@@ -11,10 +11,11 @@
         android:id="@+id/forgot_pass_iv_illustration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_forgot_pass"
+        android:src="@drawable/img_forgot_pass_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp" />
+
     <TextView
         android:id="@+id/forgot_pass_tv_title"
         android:layout_width="wrap_content"
@@ -25,7 +26,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginLeft="20dp"
         android:fontFamily="@font/inter_bold"
-        android:textSize="32sp"/>
+        android:textSize="32sp" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,18 +34,17 @@
         android:id="@+id/forgot_pass_cl_email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/form_border"
+        android:background="@drawable/bg_form_border"
         android:paddingHorizontal="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/forgot_pass_tv_title"
-        android:layout_marginHorizontal="20dp"
-        >
+        android:layout_marginHorizontal="20dp">
 
         <ImageView
             android:id="@+id/forgot_pass_iv_email"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:src="@drawable/ic_twotone_alternate_email"
+            android:src="@drawable/ic_alternate_email_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -59,7 +59,7 @@
             android:textColor="@color/grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/forgot_pass_iv_email"
-            android:fontFamily="@font/nunitosans_regular"/>
+            android:fontFamily="@font/nunitosans_regular" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -76,10 +76,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="20sp"
-       android:fontFamily="@font/nunitosans_extrabold"
+        android:fontFamily="@font/nunitosans_extrabold"
         android:paddingVertical="15dp"
-        android:layout_marginHorizontal="20dp"/>
-    
+        android:layout_marginHorizontal="20dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,8 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String register = "<font color=#FF000000>New to this app ? </font>" +
-                "<font color=#3FBDF1>Register Here</font>";
+        String register = "New to this app? <font color=#3FBDF1>Register Here</font>";
         binding.loginTvRegister.setText(Html.fromHtml(register));
 
         mAuth = FirebaseAuth.getInstance();
@@ -80,7 +79,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 

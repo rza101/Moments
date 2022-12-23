@@ -4,15 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="10dp"
-    tools:context=".ui.fragments.mainhome.MainHomeFragment">
+    tools:context=".ui.activities.likelist.LikeListActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_children" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_main_home_rv_posts"
+        android:id="@+id/like_list_rv_likes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:spanCount="2"
-        tools:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-        tools:listitem="@layout/item_post" />
+        android:layout_height="0dp"
+        tools:listitem="@layout/item_user"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

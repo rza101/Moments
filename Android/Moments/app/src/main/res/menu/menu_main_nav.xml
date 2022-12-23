@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_main_nav_chat"
-        android:title="Chat"
-        android:icon="@drawable/ic_chat_bubble_24"/>
+        android:id="@id/main_nav_home"
+        android:icon="@drawable/ic_home_24"
+        app:showAsAction="always" />
     <item
-        android:id="@+id/menu_main_nav_home"
-        android:title="Home"
-        android:icon="@drawable/ic_home_24"/>
+        android:id="@id/main_nav_search"
+        android:icon="@drawable/ic_search_24"
+        app:showAsAction="always" />
     <item
-        android:id="@+id/menu_main_nav_profile"
-        android:title="Profile"
-        android:icon="@drawable/ic_person_24"/>
+        android:id="@id/main_nav_chat"
+        android:icon="@drawable/ic_chat_bubble_24"
+        app:showAsAction="always" />
+    <item
+        android:id="@id/main_nav_profile"
+        android:icon="@drawable/ic_person_24"
+        app:showAsAction="always" />
 </menu>

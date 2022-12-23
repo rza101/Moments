@@ -35,18 +35,18 @@ public class FCMService extends FirebaseMessagingService {
         super.onNewToken(token);
     }
 
-    private void sendNotification(String title, String content){
+    private void sendNotification(String title, String content) {
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent;
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             pendingIntent = PendingIntent.getActivity(
                     this,
                     0,
                     intent,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
             );
-        }else{
+        } else {
             pendingIntent = PendingIntent.getActivity(
                     this,
                     0,
@@ -69,7 +69,7 @@ public class FCMService extends FirebaseMessagingService {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setDescription(CHANNEL_DESCRIPTION);
             channel.setShowBadge(true);

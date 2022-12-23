@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <font-family xmlns:android="http://schemas.android.com/apk/res/android">
-    <font
-        android:font="@font/inter_regular" />
-    <font
-        android:font="@font/inter_medium" />
-    <font
-        android:font="@font/inter_semibold"/>
-    <font
-        android:font="@font/inter_bold"/>
-    <font
-        android:font="@font/inter_black"/>
-    <font
-        android:font="@font/nunitosans_bold"/>
-    <font
-        android:font="@font/nunitosans_extrabold"/>
-    <font
-        android:font="@font/nunitosans_extralight"/>
-    <font
-        android:font="@font/nunitosans_light"/>
-    <font
-        android:font="@font/nunitosans_regular"/>
-    <font
-        android:font="@font/nunitosans_semibold"/>
+    <font android:font="@font/inter_regular" />
+    <font android:font="@font/inter_medium" />
+    <font android:font="@font/inter_semibold" />
+    <font android:font="@font/inter_bold" />
+    <font android:font="@font/inter_black" />
+    <font android:font="@font/nunitosans_bold" />
+    <font android:font="@font/nunitosans_extrabold" />
+    <font android:font="@font/nunitosans_extralight" />
+    <font android:font="@font/nunitosans_light" />
+    <font android:font="@font/nunitosans_regular" />
+    <font android:font="@font/nunitosans_semibold" />
 </font-family>

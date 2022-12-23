@@ -1,12 +1,11 @@
 package com.pahat.moments.ui.activities.about;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.pahat.moments.databinding.ActivityAboutBinding;
-import com.pahat.moments.databinding.ActivityLoginBinding;
 
 public class AboutActivity extends AppCompatActivity {
 

@@ -87,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(RegisterActivity.this, "Register success!", Toast.LENGTH_SHORT).show();
-                                    User user = new User(email, username,fullName);
+                                    User user = new User(email, username, fullName);
                                     String userId = task.getResult().getUser().getUid();
                                     mRef = mRoot.child("users").child(userId);
                                     mRef.setValue(user);

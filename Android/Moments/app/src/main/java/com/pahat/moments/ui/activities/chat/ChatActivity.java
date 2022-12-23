@@ -1,11 +1,10 @@
 package com.pahat.moments.ui.activities.chat;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 
-import com.pahat.moments.databinding.ActivityChangePassBinding;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.pahat.moments.databinding.ActivityChatBinding;
 
 public class ChatActivity extends AppCompatActivity {

@@ -1,8 +1,8 @@
 package com.pahat.moments.ui.activities.changepass;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.pahat.moments.databinding.ActivityChangePassBinding;
 

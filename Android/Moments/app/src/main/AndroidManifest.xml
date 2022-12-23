@@ -17,20 +17,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.searchuser.SearchUser"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ui.activities.likelist.LikeList"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".ui.activities.splash.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
@@ -99,6 +85,14 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ui.activities.likelist.LikeListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.activities.createpost.CreatePostActivity"
             android:exported="false"
             android:screenOrientation="portrait">
@@ -123,5 +117,4 @@
                 android:value="" />
         </activity>
     </application>
-
 </manifest>

@@ -17,7 +17,7 @@
         android:layout_margin="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:src="@drawable/ph_user" />
+        tools:src="@drawable/ic_person_24" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,7 +37,7 @@
         android:layout_margin="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/about_civ_rheza"
-        tools:src="@drawable/ph_user" />
+        tools:src="@drawable/ic_person_24" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
         android:layout_margin="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/about_civ_dika"
-        tools:src="@drawable/ph_user" />
+        tools:src="@drawable/ic_person_24" />
 
     <TextView
         android:layout_width="wrap_content"

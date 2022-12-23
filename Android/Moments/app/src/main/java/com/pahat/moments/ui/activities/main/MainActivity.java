@@ -44,11 +44,13 @@ public class MainActivity extends AppCompatActivity {
                                              @Nullable Bundle bundle) {
                 String title = "";
 
-                if (navDestination.getId() == R.id.menu_main_nav_home) {
+                if (navDestination.getId() == R.id.main_nav_home) {
                     title = "Home";
-                } else if (navDestination.getId() == R.id.menu_main_nav_chat) {
+                } else if (navDestination.getId() == R.id.main_nav_search) {
+                    title = "Search";
+                } else if (navDestination.getId() == R.id.main_nav_chat) {
                     title = "Chat";
-                } else if (navDestination.getId() == R.id.menu_main_nav_profile) {
+                } else if (navDestination.getId() == R.id.main_nav_profile) {
                     title = "Profile";
                 }
 
