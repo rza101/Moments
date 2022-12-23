@@ -14,11 +14,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $user = User::where('user_id', 'like', '%'.$request->user_id.'%')->get();
         return response()->json([
             'status' => 200,
-            'message' => 'Success'
+            'message' => 'Success',
+            'data' => $user
         ]);
     }
 
