@@ -28,4 +28,8 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="fontFamily">@font/inter_medium</item>
+    </style>
 </resources>
