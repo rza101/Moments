@@ -52,8 +52,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
-            android:text="Email"
-            android:textColor="@color/grey"
+            android:hint="Email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/login_iv_email" />
 
@@ -94,8 +93,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
-            android:text="Password"
-            android:textColor="@color/grey"
+            android:hint="Password"
             app:layout_constraintEnd_toStartOf="@+id/login_iv_password_eye"
             app:layout_constraintStart_toEndOf="@id/login_iv_password" />
 

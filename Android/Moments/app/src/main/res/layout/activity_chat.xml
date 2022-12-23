@@ -106,7 +106,6 @@
                 android:layout_marginStart="5dp"
                 android:background="@android:color/transparent"
                 android:text="Message..."
-                android:textColor="@color/grey"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/chat_ib_emoji"
                 app:layout_constraintTop_toTopOf="parent" />
