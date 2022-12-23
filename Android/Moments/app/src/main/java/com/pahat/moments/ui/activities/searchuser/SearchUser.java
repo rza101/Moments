@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.pahat.moments.databinding.ActivityForgotPassBinding;
 
-public class searchuser extends AppCompatActivity {
+public class SearchUser extends AppCompatActivity {
 
     private ActivityForgotPassBinding binding;
 

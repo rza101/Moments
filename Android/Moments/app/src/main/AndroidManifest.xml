@@ -17,14 +17,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.searchuser.searchuser"
+            android:name=".ui.activities.searchuser.SearchUser"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.activities.likelist.likelist"
+            android:name=".ui.activities.likelist.LikeList"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.pahat.moments.databinding.ActivityForgotPassBinding;
 
-public class likelist extends AppCompatActivity {
+public class LikeList extends AppCompatActivity {
 
     private ActivityForgotPassBinding binding;
 
