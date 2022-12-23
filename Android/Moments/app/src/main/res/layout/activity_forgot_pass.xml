@@ -4,6 +4,82 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.forgotpass.ForgotPassActivity">
+    tools:context=".ui.activities.forgotpass.ForgotPassActivity"
+    android:layout_marginHorizontal="0dp">
+
+    <ImageView
+        android:id="@+id/forgot_pass_iv_illustration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_forgot_pass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"/>
+    <TextView
+        android:id="@+id/forgot_pass_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Reset Your Password"
+        app:layout_constraintTop_toBottomOf="@+id/forgot_pass_iv_illustration"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="20dp"
+        android:fontFamily="@font/inter_bold"
+        android:textSize="32sp"/>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="20dp"
+        android:id="@+id/forgot_pass_cl_email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/form_border"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/forgot_pass_tv_title"
+        android:layout_marginHorizontal="20dp"
+        >
+
+        <ImageView
+            android:id="@+id/forgot_pass_iv_email"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_twotone_alternate_email"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/forgot_pass_et_email"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:background="@android:color/transparent"
+            android:text="Email"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/forgot_pass_iv_email"
+            android:fontFamily="@font/nunitosans_regular"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/forgot_pass_btn_send_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Email"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/blue"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/forgot_pass_cl_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="20sp"
+       android:fontFamily="@font/nunitosans_extrabold"
+        android:paddingVertical="15dp"
+        android:layout_marginHorizontal="20dp"/>
+    
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

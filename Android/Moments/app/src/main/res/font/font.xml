@@ -10,4 +10,16 @@
         android:font="@font/inter_bold"/>
     <font
         android:font="@font/inter_black"/>
+    <font
+        android:font="@font/nunitosans_bold"/>
+    <font
+        android:font="@font/nunitosans_extrabold"/>
+    <font
+        android:font="@font/nunitosans_extralight"/>
+    <font
+        android:font="@font/nunitosans_light"/>
+    <font
+        android:font="@font/nunitosans_regular"/>
+    <font
+        android:font="@font/nunitosans_semibold"/>
 </font-family>
