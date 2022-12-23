@@ -205,11 +205,21 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/register_tv_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Have an account? Login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/register_cl_confirm_password"
+        android:paddingVertical="5dp"
+        />
+
+
     <Button
         android:id="@+id/register_btn_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:backgroundTint="@color/blue"
         android:paddingVertical="15dp"
         android:text="Register"
@@ -218,6 +228,6 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/register_cl_confirm_password" />
+        app:layout_constraintTop_toBottomOf="@id/register_tv_login" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
