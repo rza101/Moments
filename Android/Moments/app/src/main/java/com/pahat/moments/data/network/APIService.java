@@ -19,9 +19,13 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface APIService {
     // USER
+    @GET("/users")
+    Call<APIResponse<List<User>>> searchUser(@Query("query") String query);
+
     @GET("/users/{user_id}")
     Call<APIResponse<List<User>>> getUserByUID(@Path("user_id") String user_id);
 
@@ -103,7 +107,7 @@ public interface APIService {
     @POST("/savedposts")
     @FormUrlEncoded
     Call<APIResponse<Post>> createSavedPost(@Field("user_id") String user_id,
-                                              @Field("post_id") long post_id);
+                                            @Field("post_id") long post_id);
 
     @DELETE("/savedposts/{id}")
     @FormUrlEncoded

@@ -27,13 +27,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_main_nav" />
 
-    <ImageView
-        android:id="@+id/main_iv_menu"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_menu_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

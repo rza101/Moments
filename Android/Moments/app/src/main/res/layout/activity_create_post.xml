@@ -6,42 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.createpost.CreatePostActivity">
 
-    <ImageView
-        android:id="@+id/create_post_iv_back"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_arrow_back_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/grey" />
-
-    <TextView
-        android:id="@+id/create_post_tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:fontFamily="@font/inter_semibold"
-        android:text="@string/create_post"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/create_post_iv_back"
-        app:layout_constraintStart_toEndOf="@id/create_post_iv_back"
-        app:layout_constraintTop_toTopOf="@id/create_post_iv_back" />
-
-    <View
-        android:id="@+id/create_post_view_line"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="20dp"
-        android:alpha="0.5"
-        android:background="@color/grey"
-        app:layout_constraintTop_toBottomOf="@id/create_post_iv_back" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_children" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/create_post_view_line">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -162,8 +135,8 @@
                 android:backgroundTint="@color/blue"
                 android:fontFamily="@font/inter_bold"
                 android:text="@string/post"
-                android:textSize="16sp"
                 android:textAllCaps="false"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/create_post_mcv_image"
                 app:layout_constraintStart_toStartOf="@id/create_post_mcv_image" />

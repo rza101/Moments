@@ -6,42 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.updatepost.UpdatePostActivity">
 
-    <ImageView
-        android:id="@+id/update_post_iv_back"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_arrow_back_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/grey" />
-
-    <TextView
-        android:id="@+id/update_post_tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:fontFamily="@font/inter_semibold"
-        android:text="@string/update_post"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/update_post_iv_back"
-        app:layout_constraintStart_toEndOf="@id/update_post_iv_back"
-        app:layout_constraintTop_toTopOf="@id/update_post_iv_back" />
-
-    <View
-        android:id="@+id/update_post_view_line"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="20dp"
-        android:alpha="0.5"
-        android:background="@color/grey"
-        app:layout_constraintTop_toBottomOf="@id/update_post_iv_back" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_children" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/update_post_view_line">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

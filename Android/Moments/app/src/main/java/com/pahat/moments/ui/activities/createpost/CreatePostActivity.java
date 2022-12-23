@@ -3,6 +3,7 @@ package com.pahat.moments.ui.activities.createpost;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.View;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,15 @@ public class CreatePostActivity extends AppCompatActivity {
 
         binding = ActivityCreatePostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.toolbar.getRoot());
+        binding.toolbar.toolbarTitle.setText("Create Post");
+        binding.toolbar.toolbarBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private File createTempImageFile(Context context) {

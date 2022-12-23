@@ -1,7 +1,9 @@
 package com.pahat.moments.ui.activities.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 
@@ -11,11 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.pahat.moments.R;
 import com.pahat.moments.databinding.ActivityMainBinding;
+import com.pahat.moments.ui.activities.about.AboutActivity;
+import com.pahat.moments.ui.activities.changepass.ChangePassActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
                                              @Nullable Bundle bundle) {
                 String title = "";
 
-                if(navDestination.getId() == R.id.menu_main_nav_home){
+                if (navDestination.getId() == R.id.menu_main_nav_home) {
                     title = "Home";
-                }else if(navDestination.getId() == R.id.menu_main_nav_chat){
+                } else if (navDestination.getId() == R.id.menu_main_nav_chat) {
                     title = "Chat";
-                }else if(navDestination.getId() == R.id.menu_main_nav_profile){
+                } else if (navDestination.getId() == R.id.menu_main_nav_profile) {
                     title = "Profile";
                 }
 
@@ -53,10 +56,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.mainIvMenu.setOnClickListener(new View.OnClickListener() {
+        binding.toolbar.toolbarMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(MainActivity.this, v);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+
+                        if (id == R.id.menu_main_popup_about) {
+                            startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                            return true;
+                        } else if (id == R.id.menu_main_popup_change_pass) {
+                            startActivity(new Intent(MainActivity.this, ChangePassActivity.class));
+                            return true;
+                        } else if (id == R.id.menu_main_popup_logout) {
+                            // logout
+                            return true;
+                        }
+
+                        return false;
+                    }
+                });
+
                 MenuInflater menuInflater = popupMenu.getMenuInflater();
                 menuInflater.inflate(R.menu.menu_main_popup, popupMenu.getMenu());
                 popupMenu.show();

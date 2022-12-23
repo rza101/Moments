@@ -16,7 +16,10 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $user = User::where('user_id', 'like', '%'.$request->user_id.'%')->get();
+        $user = User::where(function ($query) use ($request) {
+            $query->where('fullname', 'like', '%'.$request->query.'%')
+                  ->orWhere('username', 'like', '%'.$request->query.'%');
+        })->get();
         return response()->json([
             'status' => 200,
             'message' => 'Success',
