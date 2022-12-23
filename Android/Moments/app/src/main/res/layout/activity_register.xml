@@ -20,7 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
-        android:textColor="@color/black"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,8 +50,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
-            android:text="Email"
-            android:textColor="@color/grey"
+            android:hint="Email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/register_iv_email" />
 
@@ -84,8 +82,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
-            android:text="Full Name"
-            android:textColor="@color/grey"
+            android:hint="Full Name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/register_iv_full_name" />
 
@@ -117,8 +114,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
-            android:text="Username"
-            android:textColor="@color/grey"
+            android:hint="Username"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/register_iv_username" />
 
@@ -161,8 +157,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
-            android:text="Password"
-            android:textColor="@color/grey"
+            android:hint="Password"
             app:layout_constraintEnd_toStartOf="@id/register_iv_password_eye"
             app:layout_constraintStart_toEndOf="@id/register_iv_password" />
 
@@ -204,8 +199,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
-            android:text="Password"
-            android:textColor="@color/grey"
+            android:hint="Confirm Password"
             app:layout_constraintEnd_toStartOf="@id/register_iv_confirm_password_eye"
             app:layout_constraintStart_toEndOf="@id/register_iv_confirm_password" />
 
