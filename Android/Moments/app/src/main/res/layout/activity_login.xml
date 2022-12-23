@@ -83,10 +83,10 @@
             android:id="@+id/login_iv_password_eye"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:src="@drawable/dashicons_hidden"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/dashicons_hidden"/>
 
         <EditText
             android:id="@+id/login_et_password"
