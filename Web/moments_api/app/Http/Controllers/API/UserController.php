@@ -16,14 +16,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $user = User::where(function ($query) use ($request) {
-            $query->where('fullname', 'like', '%'.$request->query.'%')
-                  ->orWhere('username', 'like', '%'.$request->query.'%');
-        })->get();
         return response()->json([
             'status' => 200,
-            'message' => 'Success',
-            'data' => $user
+            'message' => 'Success'
         ]);
     }
 
@@ -38,15 +33,12 @@ class UserController extends Controller
         try {
             $user = new User();
             $user->user_id = $request->user_id;
-            $user->username = str_replace(' ','_',$request->username);
-            $user->full_name = $request->full_name;
-            $user->profile_picture = $request->profile_picture;
+            $user->fcm_token = $request->fcm_token;
             $user->save();
 
             return response()->json([
                 'status' => 200,
-                'message' => 'User stored',
-                'data' => $user
+                'message' => 'User stored'
             ]);
         } catch (Exception $e) {
             return response(400)->json([
@@ -94,6 +86,7 @@ class UserController extends Controller
             $user->profile_picture = $request->profile_picture;
             if($user){
                 $user->save();
+                $user->fcm_token = $request->fcm_token;
                 return response()->json([
                     'status' => 200,
                     'message' => 'User updated',
@@ -110,26 +103,6 @@ class UserController extends Controller
             return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to update user'
-            ]);
-        }
-    }
-
-    public function setFCMToken(Request $request, $user_id)
-    {
-        try {
-            $user = User::find($user_id);
-            $user->fcm_token = $request->fcm_token;
-            $user->save();
-            
-            return response()->json([
-                'status' => 200,
-                'message' => 'User FCM token updated',
-                'data' => $user
-            ]);
-        } catch (Exception $e) {
-            return response(400)->json([
-                'status' => 400,
-                'message' => 'Failed to update user FCM token'
             ]);
         }
     }

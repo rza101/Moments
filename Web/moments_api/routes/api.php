@@ -24,12 +24,10 @@ use App\Http\Controllers\API\UserFollowController;
 //     return $request->user();
 // });
 // ex: api/posts -> Create, Read
-// ex: api/posts{id} -> Update, Show, Delete
+// ex: api/posts/{id} -> Update, Show, Delete
 Route::apiResource('posts', PostsController::class);
 Route::apiResource('postlikes', PostLikesController::class);
 Route::apiResource('postcomments', PostCommentsController::class);
 Route::apiResource('savedposts', SavedPostsController::class);
-Route::apiResource('users', UserController::class, ['except' => ['index']]);
+Route::apiResource('users', UserController::class);
 Route::apiResource('userfollow', UserFollowController::class);
-Route::post('usersfcm/{user_id}', [UserController::class, 'setFCMToken']);
-Route::get('users', [UserController::class, 'index']);

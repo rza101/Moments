@@ -3,12 +3,14 @@ package com.pahat.moments.ui.activities.register;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -16,10 +18,21 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.pahat.moments.data.network.model.User;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.pahat.moments.R;
+import com.pahat.moments.data.firebase.model.User;
+import com.pahat.moments.data.network.APIService;
+import com.pahat.moments.data.network.APIUtil;
+import com.pahat.moments.data.network.model.APIResponse;
+import com.pahat.moments.data.network.model.APIUser;
 import com.pahat.moments.databinding.ActivityRegisterBinding;
-import com.pahat.moments.ui.activities.login.LoginActivity;
 import com.pahat.moments.ui.activities.main.MainActivity;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -72,42 +85,83 @@ public class RegisterActivity extends AppCompatActivity {
                     binding.registerEtConfirmPassword.setError("Enter your confirm password!");
                     return;
                 }
-//                if (password.length() < 6) {
-//                    binding.etPassword.setError("Password too short, enter minimum 6 characters!");
-//                    return;
-//                }
+                if (password.length() < 6) {
+                    binding.registerEtPassword.setError("Password too short, enter minimum 6 characters!");
+                    return;
+                }
+
                 if (!confirmPassword.equals(password)) {
                     binding.registerEtConfirmPassword.setError("Password doesn't match!");
                     return;
                 }
 
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(RegisterActivity.this, "Register success!", Toast.LENGTH_SHORT).show();
-                                    User user = new User(email, username, fullName);
-                                    String userId = task.getResult().getUser().getUid();
-                                    mRef = mRoot.child("users").child(userId);
-                                    mRef.setValue(user);
-                                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Toast.makeText(RegisterActivity.this, "Register failed!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> fcmTask) {
+                        mAuth.createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> authTask) {
+                                        if (authTask.isSuccessful()) {
+                                            String userId = authTask.getResult().getUser().getUid();
+
+                                            APIUtil.getAPIService().createUser(userId, fcmTask.getResult()).enqueue(new Callback<APIResponse<List<APIUser>>>() {
+                                                @Override
+                                                public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
+                                                    User user = new User(userId, username, fullName, null);
+                                                    mRef = mRoot.child("users").child(userId);
+                                                    mRef.setValue(user);
+
+                                                    Toast.makeText(RegisterActivity.this, "Register success!", Toast.LENGTH_SHORT).show();
+
+                                                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<APIResponse<List<APIUser>>> call, Throwable t) {
+                                                    call.clone().enqueue(this);
+                                                }
+                                            });
+                                        } else {
+                                            Toast.makeText(RegisterActivity.this, "Register failed!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
+                });
             }
         });
 
         binding.registerTvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intent);
                 finish();
+            }
+        });
+
+        binding.registerIvPasswordEye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.registerEtPassword.setInputType(
+                        binding.registerEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
+                );
+
+                binding.registerIvPasswordEye.setImageDrawable(AppCompatResources.getDrawable(RegisterActivity.this,
+                        binding.registerEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                                R.drawable.ic_visibility_off_24 :
+                                R.drawable.ic_visibility_24
+                ));
+            }
+        });
+
+        binding.registerIvConfirmPasswordEye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

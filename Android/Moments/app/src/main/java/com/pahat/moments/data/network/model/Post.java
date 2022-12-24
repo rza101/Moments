@@ -3,30 +3,43 @@ package com.pahat.moments.data.network.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Post implements Parcelable {
+    @SerializedName("id")
     private long id;
-    private String user_id;
-    private String image_url;
+
+    @SerializedName("user_id")
+    private String userId;
+
+    @SerializedName("image_url")
+    private String imageUrl;
+
+    @SerializedName("caption")
     private String caption;
-    private String created_at;
-    private String updated_at;
+
+    @SerializedName("created_at")
+    private String createdAt;
+
+    @SerializedName("updated_at")
+    private String updatedAt;
 
     public Post() {
     }
 
-    public Post(String user_id, String image_url, String caption) {
-        this.user_id = user_id;
-        this.image_url = image_url;
+    public Post(String userId, String imageUrl, String caption) {
+        this.userId = userId;
+        this.imageUrl = imageUrl;
         this.caption = caption;
     }
 
     protected Post(Parcel in) {
         id = in.readLong();
-        user_id = in.readString();
-        image_url = in.readString();
+        userId = in.readString();
+        imageUrl = in.readString();
         caption = in.readString();
-        created_at = in.readString();
-        updated_at = in.readString();
+        createdAt = in.readString();
+        updatedAt = in.readString();
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
@@ -45,24 +58,24 @@ public class Post implements Parcelable {
         return id;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getUserId() {
+        return userId;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public String getCaption() {
         return caption;
     }
 
-    public String getCreated_at() {
-        return created_at;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public String getUpdated_at() {
-        return updated_at;
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
     @Override
@@ -73,10 +86,10 @@ public class Post implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
-        parcel.writeString(user_id);
-        parcel.writeString(image_url);
+        parcel.writeString(userId);
+        parcel.writeString(imageUrl);
         parcel.writeString(caption);
-        parcel.writeString(created_at);
-        parcel.writeString(updated_at);
+        parcel.writeString(createdAt);
+        parcel.writeString(updatedAt);
     }
 }

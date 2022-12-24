@@ -14,19 +14,25 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.pahat.moments.data.network.APIUtil;
+import com.pahat.moments.data.network.model.APIResponse;
+import com.pahat.moments.data.network.model.APIUser;
 import com.pahat.moments.databinding.ActivityLoginBinding;
 import com.pahat.moments.ui.activities.forgotpass.ForgotPassActivity;
 import com.pahat.moments.ui.activities.main.MainActivity;
 import com.pahat.moments.ui.activities.register.RegisterActivity;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private FirebaseAuth mAuth;
-    private FirebaseDatabase mDatabase;
-    private DatabaseReference mRoot, mRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginTvRegister.setText(Html.fromHtml(register));
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance();
-        mRoot = mDatabase.getReference();
-
 
         binding.loginBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,19 +61,36 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Toast.makeText(LoginActivity.this, "Authentication failed, check your email and password or sign up", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> fcmTask) {
+                        mAuth.signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> authTask) {
+                                        if (authTask.isSuccessful()) {
+                                            APIUtil.getAPIService()
+                                                    .updateUser(authTask.getResult().getUser().getUid(), fcmTask.getResult())
+                                                    .enqueue(new Callback<APIResponse<List<APIUser>>>() {
+                                                        @Override
+                                                        public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
+                                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(Call<APIResponse<List<APIUser>>> call, Throwable t) {
+                                                            call.clone().enqueue(this);
+                                                        }
+                                                    });
+                                        } else {
+                                            Toast.makeText(LoginActivity.this, "Authentication failed, check your email and password or sign up", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
+                });
             }
         });
 
