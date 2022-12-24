@@ -9,7 +9,7 @@ use Exception;
 
 class PostLikesController extends Controller
 {
-        /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -38,14 +38,13 @@ class PostLikesController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Post like stored',
-                'data' => $post_like
+                'message' => 'Post like stored'
             ]);
         } catch (Exception $e) {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to store post like'
-            ]);
+            ], 400);
         }
     }
 
@@ -66,10 +65,10 @@ class PostLikesController extends Controller
                 'data' => $post_like
             ]);
         } else {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to show post like'
-            ]);
+            ], 400);
         }
     }
 
@@ -97,17 +96,19 @@ class PostLikesController extends Controller
     public function destroy($id)
     {
         $post_like = PostLike::find($id);
+
         if ($post_like) {
             $post_like->delete();
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Post like deleted'
             ]);
         } else {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to delete post like'
-            ]);
+            ], 400);
         }
     }
 }

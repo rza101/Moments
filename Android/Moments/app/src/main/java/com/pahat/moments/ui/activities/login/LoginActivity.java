@@ -74,9 +74,14 @@ public class LoginActivity extends AppCompatActivity {
                                                     .enqueue(new Callback<APIResponse<List<APIUser>>>() {
                                                         @Override
                                                         public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
-                                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                                            startActivity(intent);
-                                                            finish();
+                                                            if (response.isSuccessful()) {
+                                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                                startActivity(intent);
+                                                                finish();
+                                                            } else {
+                                                                FirebaseAuth.getInstance().signOut();
+                                                                Toast.makeText(LoginActivity.this, "Login Failed. Please try again", Toast.LENGTH_SHORT).show();
+                                                            }
                                                         }
 
                                                         @Override

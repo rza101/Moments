@@ -16,12 +16,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.pahat.moments.R;
 import com.pahat.moments.data.firebase.model.User;
-import com.pahat.moments.data.network.APIService;
 import com.pahat.moments.data.network.APIUtil;
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.APIUser;
@@ -95,40 +97,86 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+//                mRef = mRoot.child("users");
+//                mRef.orderByChild("username").equalTo(username).addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        if()
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+
+//                if(){
+//                    binding.registerEtUsername.setError("Username already exists!");
+//                    return;
+//                }
+
+                mRef = mRoot.child("users");
+                mRef.orderByChild("username").equalTo(username).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onComplete(@NonNull Task<String> fcmTask) {
-                        mAuth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> authTask) {
-                                        if (authTask.isSuccessful()) {
-                                            String userId = authTask.getResult().getUser().getUid();
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.getValue() == null) {
+                            // USERNAME NOT DUPLICATE
+                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> fcmTask) {
+                                    // GET FCM TOKEN
+                                    mAuth.createUserWithEmailAndPassword(email, password)
+                                            .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<AuthResult> authTask) {
+                                                            if (authTask.isSuccessful()) {
+                                                                // SUCCESSFULLY REGISTERED
+                                                                String userId = authTask.getResult().getUser().getUid();
 
-                                            APIUtil.getAPIService().createUser(userId, fcmTask.getResult()).enqueue(new Callback<APIResponse<List<APIUser>>>() {
-                                                @Override
-                                                public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
-                                                    User user = new User(userId, username, fullName, null);
-                                                    mRef = mRoot.child("users").child(userId);
-                                                    mRef.setValue(user);
+                                                                APIUtil.getAPIService().createUser(userId, username, fcmTask.getResult()).enqueue(new Callback<APIResponse<List<APIUser>>>() {
+                                                                    @Override
+                                                                    public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
+                                                                        if (response.isSuccessful()) {
+                                                                            // STORE TO API SUCCESS
+                                                                            User user = new User(userId, username, fullName, null);
+                                                                            mRef = mRoot.child("users").child(userId);
+                                                                            mRef.setValue(user);
 
-                                                    Toast.makeText(RegisterActivity.this, "Register success!", Toast.LENGTH_SHORT).show();
+                                                                            Toast.makeText(RegisterActivity.this, "Register success!", Toast.LENGTH_SHORT).show();
 
-                                                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                                    startActivity(intent);
-                                                    finish();
-                                                }
+                                                                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                                                            startActivity(intent);
+                                                                            finish();
+                                                                        } else {
+                                                                            // STORE TO API FAILED
+                                                                            FirebaseAuth.getInstance().signOut();
+                                                                            Toast.makeText(RegisterActivity.this, "Register failed, please try with other credentials", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
 
-                                                @Override
-                                                public void onFailure(Call<APIResponse<List<APIUser>>> call, Throwable t) {
-                                                    call.clone().enqueue(this);
-                                                }
-                                            });
-                                        } else {
-                                            Toast.makeText(RegisterActivity.this, "Register failed!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
+                                                                    @Override
+                                                                    public void onFailure(Call<APIResponse<List<APIUser>>> call, Throwable t) {
+                                                                        call.clone().enqueue(this);
+                                                                    }
+                                                                });
+                                                            } else {
+                                                                // REGISTER FAILED
+                                                                Toast.makeText(RegisterActivity.this, "Register failed!", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    }
+                                            );
+                                }
+                            });
+                        } else {
+                            // USERNAME ALREADY EXISTS
+                            binding.registerEtUsername.setError("Username already exists!");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
                     }
                 });
             }

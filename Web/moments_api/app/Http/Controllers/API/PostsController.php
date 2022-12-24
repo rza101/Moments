@@ -44,10 +44,10 @@ class PostsController extends Controller
                 'data' => $posts
             ]);
         } catch (Exception $e) {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to store post'
-            ]);
+            ], 400);
         }
     }
 
@@ -60,7 +60,7 @@ class PostsController extends Controller
     public function show($user_id)
     {
         $posts = Post::where('user_id', '=', $user_id)->get();
-        
+
         if ($posts) {
             return response()->json([
                 'status' => 200,
@@ -71,7 +71,7 @@ class PostsController extends Controller
             return response()->json([
                 'status' => 400,
                 'message' => 'Failed to show post'
-            ]);
+            ], 400);
         }
     }
 
@@ -86,26 +86,26 @@ class PostsController extends Controller
     {
         try {
             $posts = Post::find($id);
-            $posts->caption = $request->caption;
-            if($posts){
+
+            if ($posts) {
+                $posts->caption = $request->caption;
                 $posts->save();
+
                 return response()->json([
                     'status' => 200,
-                    'message' => 'post updated',
-                    'data' => $posts
+                    'message' => 'post updated'
                 ]);
-            }
-            else {
-                return response(400)->json([
+            } else {
+                return response()->json([
                     'status' => 400,
                     'message' => 'Failed to update post'
-                ]);
+                ], 400);
             }
         } catch (Exception $e) {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to update post'
-            ]);
+            ], 400);
         }
     }
 
@@ -120,15 +120,16 @@ class PostsController extends Controller
         $posts = Post::find($id);
         if ($posts) {
             $posts->delete();
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Post deleted'
             ]);
         } else {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to delete post'
-            ]);
+            ], 400);
         }
     }
 }

@@ -27,9 +27,11 @@ public interface APIService {
 
     @POST("users")
     @FormUrlEncoded
-    Call<APIResponse<List<APIUser>>> createUser(@Field("user_id") String user_id, @Field("fcm_token") String fcm_token);
+    Call<APIResponse<List<APIUser>>> createUser(@Field("user_id") String user_id,
+                                                @Field("username") String username,
+                                                @Field("fcm_token") String fcm_token);
 
-    @PUT("users/{user_id}")
+    @POST("users/{user_id}/update")
     @FormUrlEncoded
     Call<APIResponse<List<APIUser>>> updateUser(@Path("user_id") String user_id, @Field("fcm_token") String fcm_foken);
 
@@ -41,7 +43,7 @@ public interface APIService {
     Call<APIResponse<List<UserFollow>>> createUserFolloe(@Field("user_id") String user_id,
                                                          @Field("user_following") String user_following);
 
-    @DELETE("userfollow/{user_foll_id}")
+    @POST("userfollow/{user_foll_id}/delete")
     Call<APIResponse<UserFollow>> deleteUserFollow(@Path("user_foll_id") long user_follow_id);
 
     // POSTS
@@ -57,12 +59,12 @@ public interface APIService {
                                        @Field("image_url") String image_url,
                                        @Field("caption") String caption);
 
-    @PUT("posts/{post_id}")
+    @POST("posts/{post_id}/update")
     @FormUrlEncoded
     Call<APIResponse<Post>> updatePost(@Path("post_id") long post_id,
                                        @Field("caption") String caption);
 
-    @DELETE("posts/{post_id}")
+    @POST("posts/{post_id}/delete")
     Call<APIResponse<Post>> deletePost(@Path("post_id") long post_id);
 
     // POST LIKE
@@ -74,9 +76,9 @@ public interface APIService {
     Call<APIResponse<Post>> createPostLike(@Field("post_id") long post_id,
                                            @Field("user_id") String user_id);
 
-    @DELETE("postlikes/{id}")
+    @POST("postlikes/{post_like_id}/delete")
     @FormUrlEncoded
-    Call<APIResponse<Post>> deletePostLike(@Path("post_id") long id);
+    Call<APIResponse<Post>> deletePostLike(@Path("post_like_id") long post_like_id);
 
     // POST COMMENTS
     @GET("postcomments/{post_id}")
@@ -88,9 +90,9 @@ public interface APIService {
                                               @Field("user_id") String user_id,
                                               @Field("comment") String comment);
 
-    @DELETE("postcomments/{id}")
+    @POST("postcomments/{post_comment_id}/delete")
     @FormUrlEncoded
-    Call<APIResponse<Post>> deletePostComment(@Path("id") long id);
+    Call<APIResponse<Post>> deletePostComment(@Path("post_comment_id") long post_comment_id);
 
     // SAVED POSTS
     @GET("savedposts/{user_id}")
@@ -101,7 +103,7 @@ public interface APIService {
     Call<APIResponse<Post>> createSavedPost(@Field("user_id") String user_id,
                                             @Field("post_id") long post_id);
 
-    @DELETE("savedposts/{id}")
+    @POST("savedposts/{saved_post_id}/delete")
     @FormUrlEncoded
-    Call<APIResponse<Post>> deleteSavedPost(@Path("id") long id);
+    Call<APIResponse<Post>> deleteSavedPost(@Path("saved_post_id") long saved_post_id);
 }

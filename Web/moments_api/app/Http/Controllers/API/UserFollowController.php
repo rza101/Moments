@@ -39,14 +39,13 @@ class UserFollowController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'message' => 'User follow stored',
-                'data' => $user_follow
+                'message' => 'User follow stored'
             ]);
         } catch (Exception $e) {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to store user follow'
-            ]);
+            ], 400);
         }
     }
 
@@ -60,7 +59,7 @@ class UserFollowController extends Controller
     {
         $user = User::where('user_id', '=', $user_id);
 
-        if($user){
+        if ($user) {
             $following = UserFollow::where('user_id', '=', $user_id)->get();
             $follower = UserFollow::where('user_following', '=', $user_id)->get();
 
@@ -73,10 +72,10 @@ class UserFollowController extends Controller
                 ]
             ]);
         } else {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to show user follow'
-            ]);
+            ], 400);
         }
     }
 
@@ -107,15 +106,16 @@ class UserFollowController extends Controller
 
         if ($user_follow) {
             $user_follow->delete();
+
             return response()->json([
                 'status' => 200,
                 'message' => 'User follow deleted'
             ]);
         } else {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to delete user follow'
-            ]);
+            ], 400);
         }
     }
 }

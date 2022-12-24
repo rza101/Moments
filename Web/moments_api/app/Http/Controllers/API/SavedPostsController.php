@@ -38,14 +38,13 @@ class SavedPostsController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Saved post stored',
-                'data' => $saved_post
+                'message' => 'Saved post stored'
             ]);
         } catch (Exception $e) {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to store saved post'
-            ]);
+            ], 400);
         }
     }
 
@@ -66,10 +65,10 @@ class SavedPostsController extends Controller
                 'data' => $saved_post
             ]);
         } else {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to show saved post'
-            ]);
+            ], 400);
         }
     }
 
@@ -100,15 +99,16 @@ class SavedPostsController extends Controller
 
         if ($saved_post) {
             $saved_post->delete();
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Saved post deleted'
             ]);
         } else {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to delete saved post'
-            ]);
+            ], 400);
         }
     }
 }

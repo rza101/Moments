@@ -21,6 +21,7 @@ return new class extends Migration
             // $table->string('password');
             // $table->rememberToken();
             $table->string('user_id')->primary();
+            $table->string('username')->unique();
             $table->string('fcm_token')->nullable();
             $table->timestamps();
         });

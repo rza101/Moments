@@ -23,11 +23,30 @@ use App\Http\Controllers\API\UserFollowController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-// ex: api/posts -> Create, Read
-// ex: api/posts/{id} -> Update, Show, Delete
-Route::apiResource('posts', PostsController::class);
-Route::apiResource('postlikes', PostLikesController::class);
-Route::apiResource('postcomments', PostCommentsController::class);
-Route::apiResource('savedposts', SavedPostsController::class);
-Route::apiResource('users', UserController::class);
-Route::apiResource('userfollow', UserFollowController::class);
+
+Route::get('posts', [PostsController::class, 'index']);
+Route::post('posts', [PostsController::class, 'store']);
+Route::get('posts/{user_id}', [PostsController::class, 'show']);
+Route::post('posts/{id}/update', [PostsController::class, 'update']);
+Route::post('posts/{id}/delete', [PostsController::class, 'destroy']);
+
+Route::post('postlikes', [PostLikesController::class, 'store']);
+Route::get('postlikes/{post_id}', [PostLikesController::class, 'show']);
+Route::post('postlikes/{id}/delete', [PostLikesController::class, 'destroy']);
+
+Route::post('postcomments', [PostCommentsController::class, 'store']);
+Route::get('postcomments/{post_id}', [PostCommentsController::class, 'show']);
+Route::post('postcomments/{id}/delete', [PostCommentsController::class, 'destroy']);
+
+Route::post('savedposts', [SavedPostsController::class, 'store']);
+Route::get('savedposts/{user_id}', [SavedPostsController::class, 'show']);
+Route::post('savedposts/{id}/delete', [SavedPostsController::class, 'destroy']);
+
+Route::post('users', [UserController::class, 'store']);
+Route::get('users/{user_id}', [UserController::class, 'show']);
+Route::post('users/{user_id}/update', [UserController::class, 'update']);
+// Route::post('users/{user_id}/delete', [UserController::class, 'destroy']);
+
+Route::post('userfollow', [UserFollowController::class, 'store']);
+Route::get('userfollow/{user_id}', [UserFollowController::class, 'show']);
+Route::post('userfollow/{id}/delete', [UserFollowController::class, 'destroy']);

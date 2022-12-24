@@ -33,6 +33,7 @@ class UserController extends Controller
         try {
             $user = new User();
             $user->user_id = $request->user_id;
+            $user->username = $request->username;
             $user->fcm_token = $request->fcm_token;
             $user->save();
 
@@ -41,10 +42,10 @@ class UserController extends Controller
                 'message' => 'User stored'
             ]);
         } catch (Exception $e) {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to store user'
-            ]);
+            ], 400);
         }
     }
 
@@ -57,17 +58,17 @@ class UserController extends Controller
     public function show($user_id)
     {
         $user = User::find($user_id);
-        if($user){
+        if ($user) {
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',
                 'data' => $user
             ]);
         } else {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to show user'
-            ]);
+            ], 400);
         }
     }
 
@@ -82,28 +83,26 @@ class UserController extends Controller
     {
         try {
             $user = User::find($user_id);
-            $user->full_name = $request->full_name;
-            $user->profile_picture = $request->profile_picture;
-            if($user){
-                $user->save();
+
+            if ($user) {
                 $user->fcm_token = $request->fcm_token;
+                $user->save();
+
                 return response()->json([
                     'status' => 200,
-                    'message' => 'User updated',
-                    'data' => $user
+                    'message' => 'User updated'
                 ]);
-            }
-            else {
-                return response(400)->json([
+            } else {
+                return response()->json([
                     'status' => 400,
                     'message' => 'Failed to update user'
-                ]);
+                ], 400);
             }
         } catch (Exception $e) {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to update user'
-            ]);
+            ], 400);
         }
     }
 
@@ -119,15 +118,16 @@ class UserController extends Controller
 
         if ($user) {
             $user->delete();
+            
             return response()->json([
                 'status' => 200,
                 'message' => 'User deleted'
             ]);
         } else {
-            return response(400)->json([
+            return response()->json([
                 'status' => 400,
                 'message' => 'Failed to delete user'
-            ]);
+            ], 400);
         }
     }
 }
