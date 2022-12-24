@@ -23,18 +23,22 @@
         android:fontFamily="@font/inter_bold"
         android:maxLines="1"
         android:textSize="15sp"
+        android:layout_marginRight="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_post_profile_iv_more"
         app:layout_constraintTop_toBottomOf="@id/item_post_profile_iv_picture"
         tools:text="Captions.............." />
 
     <ImageView
+        android:id="@+id/item_post_profile_iv_more"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_more_horiz_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/item_post_profile_tv_caption"
         app:layout_constraintTop_toBottomOf="@id/item_post_profile_iv_picture"
         app:tint="@color/grey" />
 
