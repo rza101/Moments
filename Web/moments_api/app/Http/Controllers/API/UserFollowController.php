@@ -43,7 +43,7 @@ class UserFollowController extends Controller
                 'data' => $user_follow
             ]);
         } catch (Exception $e) {
-            return response()->json([
+            return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to store user follow'
             ]);
@@ -73,7 +73,7 @@ class UserFollowController extends Controller
                 ]
             ]);
         } else {
-            return response()->json([
+            return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to show user follow'
             ]);
@@ -112,7 +112,7 @@ class UserFollowController extends Controller
                 'message' => 'User follow deleted'
             ]);
         } else {
-            return response()->json([
+            return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to delete user follow'
             ]);

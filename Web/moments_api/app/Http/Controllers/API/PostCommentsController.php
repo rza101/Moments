@@ -43,7 +43,7 @@ class PostCommentsController extends Controller
                'data' => $post_comment
            ]);
        } catch (Exception $e) {
-           return response()->json([
+           return response(400)->json([
                'status' => 400,
                'message' => 'Failed to store post comment'
            ]);
@@ -67,7 +67,7 @@ class PostCommentsController extends Controller
                'data' => $post_comment
            ]);
        } else {
-           return response()->json([
+           return response(400)->json([
                'status' => 400,
                'message' => 'Failed to show post comment'
            ]);
@@ -106,7 +106,7 @@ class PostCommentsController extends Controller
                'message' => 'Post comment deleted'
            ]);
        } else {
-           return response()->json([
+           return response(400)->json([
                'status' => 400,
                'message' => 'Failed to delete post comment'
            ]);

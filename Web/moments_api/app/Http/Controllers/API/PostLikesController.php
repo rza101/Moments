@@ -42,7 +42,7 @@ class PostLikesController extends Controller
                 'data' => $post_like
             ]);
         } catch (Exception $e) {
-            return response()->json([
+            return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to store post like'
             ]);
@@ -66,7 +66,7 @@ class PostLikesController extends Controller
                 'data' => $post_like
             ]);
         } else {
-            return response()->json([
+            return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to show post like'
             ]);
@@ -104,7 +104,7 @@ class PostLikesController extends Controller
                 'message' => 'Post like deleted'
             ]);
         } else {
-            return response()->json([
+            return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to delete post like'
             ]);

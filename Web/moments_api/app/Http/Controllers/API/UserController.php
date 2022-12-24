@@ -49,7 +49,7 @@ class UserController extends Controller
                 'data' => $user
             ]);
         } catch (Exception $e) {
-            return response()->json([
+            return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to store user'
             ]);
@@ -72,7 +72,7 @@ class UserController extends Controller
                 'data' => $user
             ]);
         } else {
-            return response()->json([
+            return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to show user'
             ]);
@@ -92,15 +92,22 @@ class UserController extends Controller
             $user = User::find($user_id);
             $user->full_name = $request->full_name;
             $user->profile_picture = $request->profile_picture;
-            $user->save();
-            
-            return response()->json([
-                'status' => 200,
-                'message' => 'User updated',
-                'data' => $user
-            ]);
+            if($user){
+                $user->save();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'User updated',
+                    'data' => $user
+                ]);
+            }
+            else {
+                return response(400)->json([
+                    'status' => 400,
+                    'message' => 'Failed to update user'
+                ]);
+            }
         } catch (Exception $e) {
-            return response()->json([
+            return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to update user'
             ]);
@@ -120,7 +127,7 @@ class UserController extends Controller
                 'data' => $user
             ]);
         } catch (Exception $e) {
-            return response()->json([
+            return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to update user FCM token'
             ]);
@@ -144,7 +151,7 @@ class UserController extends Controller
                 'message' => 'User deleted'
             ]);
         } else {
-            return response()->json([
+            return response(400)->json([
                 'status' => 400,
                 'message' => 'Failed to delete user'
             ]);
