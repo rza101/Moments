@@ -34,7 +34,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/change_pass_cl_email"
+        android:id="@+id/change_pass_cl_password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="20dp"
@@ -43,42 +43,6 @@
         android:paddingHorizontal="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/change_pass_tv_title">
-
-        <ImageView
-            android:id="@+id/change_pass_iv_email"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/ic_alternate_email_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/grey" />
-
-        <EditText
-            android:id="@+id/change_pass_et_email"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/nunitosans_regular"
-            android:text="Email"
-            android:textColor="@color/grey"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/change_pass_iv_email" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/change_pass_cl_password"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg_form_border"
-        android:paddingHorizontal="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/change_pass_cl_email">
 
         <ImageView
             android:id="@+id/change_pass_iv_password"
@@ -98,6 +62,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:background="@null"
             app:tint="@color/grey" />
 
         <EditText
@@ -106,15 +71,62 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
+            android:fontFamily="@font/nunitosans_regular"
             android:text="Password"
             android:textColor="@color/grey"
-            app:layout_constraintEnd_toStartOf="@+id/change_pass_iv_password_eye"
+            app:layout_constraintEnd_toStartOf="@id/change_pass_iv_password_eye"
             app:layout_constraintStart_toEndOf="@id/change_pass_iv_password" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/change_pass_cl_password_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_form_border"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_pass_cl_password">
+
+        <ImageView
+            android:id="@+id/change_pass_iv_password_confirm"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_lock_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/grey" />
+
+        <ImageButton
+            android:id="@+id/change_pass_iv_confirm_password_eye"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_visibility_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/grey"
+            android:background="@null"/>
+
+        <EditText
+            android:id="@+id/change_pass_et_password_confirm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:background="@android:color/transparent"
+            android:text="Confirm Password"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toStartOf="@+id/change_pass_iv_confirm_password_eye"
+            app:layout_constraintStart_toEndOf="@id/change_pass_iv_password_confirm" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/change_pass_btn_send_email"
+        android:id="@+id/change_pass_btn_change_pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -127,6 +139,6 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/change_pass_cl_password" />
+        app:layout_constraintTop_toBottomOf="@id/change_pass_cl_password_confirm" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
