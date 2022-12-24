@@ -3,23 +3,30 @@ package com.pahat.moments.data.network.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class UserFollow implements Parcelable {
+    @SerializedName("id")
     private long id;
-    private String user_id;
-    private String user_following;
+
+    @SerializedName("user_id")
+    private String userId;
+
+    @SerializedName("user_following")
+    private String userFollowing;
 
     public UserFollow() {
     }
 
-    public UserFollow(String user_id, String user_following) {
-        this.user_id = user_id;
-        this.user_following = user_following;
+    public UserFollow(String userId, String userFollowing) {
+        this.userId = userId;
+        this.userFollowing = userFollowing;
     }
 
     protected UserFollow(Parcel in) {
         id = in.readLong();
-        user_id = in.readString();
-        user_following = in.readString();
+        userId = in.readString();
+        userFollowing = in.readString();
     }
 
     public static final Creator<UserFollow> CREATOR = new Creator<UserFollow>() {
@@ -38,12 +45,12 @@ public class UserFollow implements Parcelable {
         return id;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getUserId() {
+        return userId;
     }
 
-    public String getUser_following() {
-        return user_following;
+    public String getUserFollowing() {
+        return userFollowing;
     }
 
     @Override
@@ -54,7 +61,7 @@ public class UserFollow implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
-        dest.writeString(user_id);
-        dest.writeString(user_following);
+        dest.writeString(userId);
+        dest.writeString(userFollowing);
     }
 }

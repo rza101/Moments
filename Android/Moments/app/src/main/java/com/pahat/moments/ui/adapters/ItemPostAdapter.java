@@ -1,5 +1,6 @@
 package com.pahat.moments.ui.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +10,16 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.databinding.ItemPostBinding;
 import com.pahat.moments.ui.OnItemClick;
 
 public class ItemPostAdapter extends ListAdapter<Post, ItemPostAdapter.ViewHolder> {
     private final OnItemClick<Post> onItemClick;
+    private final OnItemClick<Post> onMoreClick;
 
-    public ItemPostAdapter(OnItemClick<Post> onItemClick) {
+    public ItemPostAdapter(OnItemClick<Post> onItemClick, OnItemClick<Post> onMoreClick) {
         super(new DiffUtil.ItemCallback<Post>() {
             @Override
             public boolean areItemsTheSame(@NonNull Post oldItem, @NonNull Post newItem) {
@@ -28,7 +31,9 @@ public class ItemPostAdapter extends ListAdapter<Post, ItemPostAdapter.ViewHolde
                 return false;
             }
         });
+
         this.onItemClick = onItemClick;
+        this.onMoreClick = onMoreClick;
     }
 
     @NonNull
@@ -40,11 +45,24 @@ public class ItemPostAdapter extends ListAdapter<Post, ItemPostAdapter.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull ItemPostAdapter.ViewHolder holder, int position) {
         Post data = getItem(position);
+        Context context = holder.itemView.getContext();
+
+        Glide.with(context)
+                .load(data.getImageUrl())
+                .into(holder.binding.itemPostIvPicture);
+
+        holder.binding.itemPostTvCaption.setText(data.getCaption());
+        holder.binding.itemPostIvMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMoreClick.onClick(v, data);
+            }
+        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClick.onClick(data);
+                onItemClick.onClick(v, data);
             }
         });
     }

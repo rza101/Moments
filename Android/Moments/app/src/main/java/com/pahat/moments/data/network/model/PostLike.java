@@ -3,27 +3,38 @@ package com.pahat.moments.data.network.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PostLike implements Parcelable {
+    @SerializedName("id")
     private long id;
-    private long post_id;
-    private String user_id;
-    private String created_at;
-    private String updated_at;
+
+    @SerializedName("post_id")
+    private long postId;
+
+    @SerializedName("user_id")
+    private String userId;
+
+    @SerializedName("created_at")
+    private String createdAt;
+
+    @SerializedName("updated_at")
+    private String updatedAt;
 
     public PostLike() {
     }
 
-    public PostLike(long post_id, String user_id) {
-        this.post_id = post_id;
-        this.user_id = user_id;
+    public PostLike(long postId, String userId) {
+        this.postId = postId;
+        this.userId = userId;
     }
 
     protected PostLike(Parcel in) {
         id = in.readLong();
-        post_id = in.readLong();
-        user_id = in.readString();
-        created_at = in.readString();
-        updated_at = in.readString();
+        postId = in.readLong();
+        userId = in.readString();
+        createdAt = in.readString();
+        updatedAt = in.readString();
     }
 
     public static final Creator<PostLike> CREATOR = new Creator<PostLike>() {
@@ -38,12 +49,24 @@ public class PostLike implements Parcelable {
         }
     };
 
-    public long getPost_id() {
-        return post_id;
+    public long getId() {
+        return id;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public long getPostId() {
+        return postId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
     @Override
@@ -54,9 +77,9 @@ public class PostLike implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
-        parcel.writeLong(post_id);
-        parcel.writeString(user_id);
-        parcel.writeString(created_at);
-        parcel.writeString(updated_at);
+        parcel.writeLong(postId);
+        parcel.writeString(userId);
+        parcel.writeString(createdAt);
+        parcel.writeString(updatedAt);
     }
 }

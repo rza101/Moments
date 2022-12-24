@@ -3,27 +3,38 @@ package com.pahat.moments.data.network.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class SavedPost implements Parcelable {
+    @SerializedName("id")
     private long id;
-    private String user_id;
-    private long post_id;
-    private String created_at;
-    private String updated_at;
+
+    @SerializedName("user_id")
+    private String userId;
+
+    @SerializedName("post_id")
+    private long postId;
+
+    @SerializedName("created_at")
+    private String createdAt;
+
+    @SerializedName("updated_at")
+    private String updatedAt;
 
     public SavedPost() {
     }
 
-    public SavedPost(String user_id, long post_id) {
-        this.user_id = user_id;
-        this.post_id = post_id;
+    public SavedPost(String userId, long postId) {
+        this.userId = userId;
+        this.postId = postId;
     }
 
     protected SavedPost(Parcel in) {
         id = in.readLong();
-        user_id = in.readString();
-        post_id = in.readLong();
-        created_at = in.readString();
-        updated_at = in.readString();
+        userId = in.readString();
+        postId = in.readLong();
+        createdAt = in.readString();
+        updatedAt = in.readString();
     }
 
     public static final Creator<SavedPost> CREATOR = new Creator<SavedPost>() {
@@ -42,20 +53,20 @@ public class SavedPost implements Parcelable {
         return id;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getUserId() {
+        return userId;
     }
 
-    public long getPost_id() {
-        return post_id;
+    public long getPostId() {
+        return postId;
     }
 
-    public String getCreated_at() {
-        return created_at;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public String getUpdated_at() {
-        return updated_at;
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
     @Override
@@ -66,9 +77,9 @@ public class SavedPost implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
-        parcel.writeString(user_id);
-        parcel.writeLong(post_id);
-        parcel.writeString(created_at);
-        parcel.writeString(updated_at);
+        parcel.writeString(userId);
+        parcel.writeLong(postId);
+        parcel.writeString(createdAt);
+        parcel.writeString(updatedAt);
     }
 }

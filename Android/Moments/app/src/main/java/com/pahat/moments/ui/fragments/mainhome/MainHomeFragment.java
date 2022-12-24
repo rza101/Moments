@@ -4,12 +4,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.pahat.moments.data.network.APIUtil;
+import com.pahat.moments.data.network.model.APIResponse;
+import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.databinding.FragmentMainHomeBinding;
+import com.pahat.moments.ui.OnItemClick;
+import com.pahat.moments.ui.adapters.ItemPostAdapter;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainHomeFragment extends Fragment {
 
@@ -25,6 +38,34 @@ public class MainHomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ItemPostAdapter itemPostAdapter = new ItemPostAdapter(new OnItemClick<Post>() {
+            @Override
+            public void onClick(View v, Post data) {
+                // TO DETAIL
+            }
+        }, new OnItemClick<Post>() {
+            @Override
+            public void onClick(View v, Post data) {
+                // ON MORE CLICK
+            }
+        });
+
+        binding.fragmentMainHomeRvPosts.setLayoutManager(
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        binding.fragmentMainHomeRvPosts.setAdapter(itemPostAdapter);
+
+        APIUtil.getAPIService().getAllPost().enqueue(new Callback<APIResponse<List<Post>>>() {
+            @Override
+            public void onResponse(Call<APIResponse<List<Post>>> call, Response<APIResponse<List<Post>>> response) {
+                itemPostAdapter.submitList(response.body().getData());
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse<List<Post>>> call, Throwable t) {
+                Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

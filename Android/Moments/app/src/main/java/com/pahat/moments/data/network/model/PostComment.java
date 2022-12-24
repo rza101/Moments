@@ -3,30 +3,43 @@ package com.pahat.moments.data.network.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PostComment implements Parcelable {
+    @SerializedName("id")
     private long id;
-    private long post_id;
-    private String user_id;
+
+    @SerializedName("post_id")
+    private long postId;
+
+    @SerializedName("user_id")
+    private String userId;
+
+    @SerializedName("comment")
     private String comment;
-    private String created_at;
-    private String updated_at;
+
+    @SerializedName("created_at")
+    private String createdAt;
+
+    @SerializedName("updated_at")
+    private String updatedAt;
 
     public PostComment() {
     }
 
-    public PostComment(long post_id, String user_id, String comment) {
-        this.post_id = post_id;
-        this.user_id = user_id;
+    public PostComment(long postId, String userId, String comment) {
+        this.postId = postId;
+        this.userId = userId;
         this.comment = comment;
     }
 
     protected PostComment(Parcel in) {
         id = in.readLong();
-        post_id = in.readLong();
-        user_id = in.readString();
+        postId = in.readLong();
+        userId = in.readString();
         comment = in.readString();
-        created_at = in.readString();
-        updated_at = in.readString();
+        createdAt = in.readString();
+        updatedAt = in.readString();
     }
 
     public static final Creator<PostComment> CREATOR = new Creator<PostComment>() {
@@ -45,24 +58,24 @@ public class PostComment implements Parcelable {
         return id;
     }
 
-    public long getPost_id() {
-        return post_id;
+    public long getPostId() {
+        return postId;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getUserId() {
+        return userId;
     }
 
     public String getComment() {
         return comment;
     }
 
-    public String getCreated_at() {
-        return created_at;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public String getUpdated_at() {
-        return updated_at;
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
     @Override
@@ -73,10 +86,10 @@ public class PostComment implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
-        parcel.writeLong(post_id);
-        parcel.writeString(user_id);
+        parcel.writeLong(postId);
+        parcel.writeString(userId);
         parcel.writeString(comment);
-        parcel.writeString(created_at);
-        parcel.writeString(updated_at);
+        parcel.writeString(createdAt);
+        parcel.writeString(updatedAt);
     }
 }
