@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_main_popup_saved_posts"
+        android:title="Saved Posts"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_main_popup_about"
         android:title="About"
         app:showAsAction="never" />

@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/CustomPopupMenu</item>
     </style>
 
     <style name="Theme.Moments.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -26,9 +27,16 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:popupMenuStyle">@style/CustomPopupMenu</item>
     </style>
 
-    <style name="AppSearchView" parent="Widget.AppCompat.SearchView">
+    <style name="CustomSearchView" parent="Widget.AppCompat.SearchView">
         <item name="fontFamily">@font/inter_medium</item>
+        <item name="android:fontFamily">@font/inter_medium</item>
+    </style>
+
+    <style name="CustomPopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="fontFamily">@font/inter_medium</item>
+        <item name="android:fontFamily">@font/inter_medium</item>
     </style>
 </resources>

@@ -6,6 +6,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.pahat.moments.databinding.ActivityAboutBinding;
+import com.pahat.moments.util.Utilities;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -18,13 +19,6 @@ public class AboutActivity extends AppCompatActivity {
         binding = ActivityAboutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar.getRoot());
-        binding.toolbar.toolbarTitle.setText("About");
-        binding.toolbar.toolbarBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        Utilities.initChildToolbar(this, binding.toolbar, "About");
     }
 }

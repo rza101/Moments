@@ -15,10 +15,14 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.pahat.moments.R;
 import com.pahat.moments.databinding.ActivityMainBinding;
 import com.pahat.moments.ui.activities.about.AboutActivity;
 import com.pahat.moments.ui.activities.changepass.ChangePassActivity;
+import com.pahat.moments.ui.activities.createpost.CreatePostActivity;
+import com.pahat.moments.ui.activities.login.LoginActivity;
+import com.pahat.moments.ui.activities.savedpost.SavedPostActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -70,11 +74,16 @@ public class MainActivity extends AppCompatActivity {
                         if (id == R.id.menu_main_popup_about) {
                             startActivity(new Intent(MainActivity.this, AboutActivity.class));
                             return true;
+                        } else if (id == R.id.menu_main_popup_saved_posts) {
+                            startActivity(new Intent(MainActivity.this, SavedPostActivity.class));
+                            return true;
                         } else if (id == R.id.menu_main_popup_change_pass) {
                             startActivity(new Intent(MainActivity.this, ChangePassActivity.class));
                             return true;
                         } else if (id == R.id.menu_main_popup_logout) {
-                            // logout
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            finish();
                             return true;
                         }
 
@@ -85,6 +94,13 @@ public class MainActivity extends AppCompatActivity {
                 MenuInflater menuInflater = popupMenu.getMenuInflater();
                 menuInflater.inflate(R.menu.menu_main_popup, popupMenu.getMenu());
                 popupMenu.show();
+            }
+        });
+
+        binding.toolbar.toolbarAddPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, CreatePostActivity.class));
             }
         });
     }

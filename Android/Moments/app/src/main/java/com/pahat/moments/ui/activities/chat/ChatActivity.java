@@ -6,6 +6,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.pahat.moments.databinding.ActivityChatBinding;
+import com.pahat.moments.util.Utilities;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -18,13 +19,6 @@ public class ChatActivity extends AppCompatActivity {
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar.getRoot());
-        binding.toolbar.toolbarTitle.setText("Fullname");
-        binding.toolbar.toolbarBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        Utilities.initChildToolbar(this, binding.toolbar, "Fullname");
     }
 }

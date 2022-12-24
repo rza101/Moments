@@ -1,11 +1,11 @@
 package com.pahat.moments.ui.activities.savedpost;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
-import com.pahat.moments.databinding.ActivityLikeListBinding;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.pahat.moments.databinding.ActivitySavedPostBinding;
+import com.pahat.moments.util.Utilities;
 
 public class SavedPostActivity extends AppCompatActivity {
 
@@ -17,5 +17,7 @@ public class SavedPostActivity extends AppCompatActivity {
 
         binding = ActivitySavedPostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Utilities.initChildToolbar(this, binding.toolbar, "Saved Posts");
     }
 }

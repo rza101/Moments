@@ -8,12 +8,12 @@
     tools:context=".ui.fragments.mainchat.MainChatFragment">
 
     <androidx.appcompat.widget.SearchView
-        android:theme="@style/AppSearchView"
         android:id="@+id/fragment_main_chat_sv_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/CustomSearchView"
         app:iconifiedByDefault="false"
+        app:layout_constraintTop_toTopOf="parent"
         app:queryHint="Search" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -8,6 +8,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.pahat.moments.databinding.ActivityCreatePostBinding;
+import com.pahat.moments.util.Utilities;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,14 +24,7 @@ public class CreatePostActivity extends AppCompatActivity {
         binding = ActivityCreatePostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar.getRoot());
-        binding.toolbar.toolbarTitle.setText("Create Post");
-        binding.toolbar.toolbarBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        Utilities.initChildToolbar(this, binding.toolbar, "Create Post");
     }
 
     private File createTempImageFile(Context context) {
