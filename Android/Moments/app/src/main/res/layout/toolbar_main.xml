@@ -51,6 +51,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/grey" />
 
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_add_circle_24"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/toolbar_menu"
+            app:tint="@color/grey" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.appcompat.widget.Toolbar>
