@@ -9,6 +9,8 @@ import com.pahat.moments.databinding.ActivityOtherProfileBinding;
 
 public class OtherProfileActivity extends AppCompatActivity {
 
+    public static final String USER_INTENT_KEY = "USER_INTENT_KEY";
+
     private ActivityOtherProfileBinding binding;
 
     @Override

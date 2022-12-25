@@ -12,7 +12,7 @@ public class PostComposite {
     private List<PostLike> postLike;
 
     @SerializedName("post_comment")
-    private List<PostLike> postComment;
+    private List<PostComment> postComment;
 
     public PostComposite() {
     }
@@ -25,7 +25,7 @@ public class PostComposite {
         return postLike;
     }
 
-    public List<PostLike> getPostComment() {
+    public List<PostComment> getPostComment() {
         return postComment;
     }
 }
