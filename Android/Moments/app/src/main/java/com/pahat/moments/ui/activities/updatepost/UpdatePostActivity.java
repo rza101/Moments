@@ -30,9 +30,13 @@ public class UpdatePostActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String caption = binding.updatePostEtCaption.getText().toString();
                 if (TextUtils.isEmpty(caption)) {
-                    binding.updatePostEtCaption.setError("Enter your email address!");
+                    binding.updatePostEtCaption.setError("Enter a caption");
                     return;
                 }
+//                if (caption ==) {
+//                    binding.updatePostEtCaption.setError("Caption cannot be same as before");
+//                    return;
+//                }
             }
         });
     }

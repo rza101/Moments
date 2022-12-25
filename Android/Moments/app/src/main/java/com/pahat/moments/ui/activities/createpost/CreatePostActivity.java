@@ -39,7 +39,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 String caption = binding.createPostEtCaption.getText().toString();
                 Drawable image = binding.createPostIvPreview.getDrawable();
                 if (TextUtils.isEmpty(caption)) {
-                    binding.createPostEtCaption.setError("Enter your email address!");
+                    binding.createPostEtCaption.setError("Enter a caption");
                     return;
                 }
                 if (image == null) {
