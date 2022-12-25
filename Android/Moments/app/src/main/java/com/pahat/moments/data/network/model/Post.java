@@ -9,8 +9,8 @@ public class Post implements Parcelable {
     @SerializedName("id")
     private long id;
 
-    @SerializedName("user_id")
-    private String userId;
+    @SerializedName("username")
+    private String username;
 
     @SerializedName("image_url")
     private String imageUrl;
@@ -27,15 +27,15 @@ public class Post implements Parcelable {
     public Post() {
     }
 
-    public Post(String userId, String imageUrl, String caption) {
-        this.userId = userId;
+    public Post(String username, String imageUrl, String caption) {
+        this.username = username;
         this.imageUrl = imageUrl;
         this.caption = caption;
     }
 
     protected Post(Parcel in) {
         id = in.readLong();
-        userId = in.readString();
+        username = in.readString();
         imageUrl = in.readString();
         caption = in.readString();
         createdAt = in.readString();
@@ -58,8 +58,8 @@ public class Post implements Parcelable {
         return id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
     public String getImageUrl() {
@@ -86,7 +86,7 @@ public class Post implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
-        parcel.writeString(userId);
+        parcel.writeString(username);
         parcel.writeString(imageUrl);
         parcel.writeString(caption);
         parcel.writeString(createdAt);

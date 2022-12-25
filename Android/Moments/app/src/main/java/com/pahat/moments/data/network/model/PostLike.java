@@ -12,8 +12,8 @@ public class PostLike implements Parcelable {
     @SerializedName("post_id")
     private long postId;
 
-    @SerializedName("user_id")
-    private String userId;
+    @SerializedName("username")
+    private String username;
 
     @SerializedName("created_at")
     private String createdAt;
@@ -24,15 +24,15 @@ public class PostLike implements Parcelable {
     public PostLike() {
     }
 
-    public PostLike(long postId, String userId) {
+    public PostLike(long postId, String username) {
         this.postId = postId;
-        this.userId = userId;
+        this.username = username;
     }
 
     protected PostLike(Parcel in) {
         id = in.readLong();
         postId = in.readLong();
-        userId = in.readString();
+        username = in.readString();
         createdAt = in.readString();
         updatedAt = in.readString();
     }
@@ -57,8 +57,8 @@ public class PostLike implements Parcelable {
         return postId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
     public String getCreatedAt() {
@@ -78,7 +78,7 @@ public class PostLike implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
         parcel.writeLong(postId);
-        parcel.writeString(userId);
+        parcel.writeString(username);
         parcel.writeString(createdAt);
         parcel.writeString(updatedAt);
     }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class PostComposite {
     @SerializedName("post")
-    private List<Post> post;
+    private Post post;
 
     @SerializedName("post_like")
     private List<PostLike> postLike;
@@ -17,7 +17,7 @@ public class PostComposite {
     public PostComposite() {
     }
 
-    public List<Post> getPost() {
+    public Post getPost() {
         return post;
     }
 

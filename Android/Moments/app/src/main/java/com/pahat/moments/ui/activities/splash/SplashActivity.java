@@ -16,6 +16,7 @@ import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.ActivitySplashBinding;
 import com.pahat.moments.ui.activities.login.LoginActivity;
 import com.pahat.moments.ui.activities.main.MainActivity;
+import com.pahat.moments.util.Constants;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -34,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             FirebaseDatabase.getInstance()
                     .getReference()
-                    .child("/users")
+                    .child(Constants.FIREBASE_USERS_REF)
                     .child(mAuth.getCurrentUser().getUid())
                     .addValueEventListener(new ValueEventListener() {
                         @Override

@@ -23,24 +23,24 @@ import retrofit2.http.Query;
 public interface APIService {
     // USER
     @GET("users/{user_id}")
-    Call<APIResponse<List<APIUser>>> getUserByUID(@Path("user_id") String user_id);
+    Call<APIResponse<APIUser>> getUserByUID(@Path("user_id") String user_id);
 
     @POST("users")
     @FormUrlEncoded
-    Call<APIResponse<List<APIUser>>> createUser(@Field("user_id") String user_id,
+    Call<APIResponse<APIUser>> createUser(@Field("user_id") String user_id,
                                                 @Field("username") String username,
                                                 @Field("fcm_token") String fcm_token);
 
     @POST("users/{user_id}/update")
     @FormUrlEncoded
-    Call<APIResponse<List<APIUser>>> updateUser(@Path("user_id") String user_id, @Field("fcm_token") String fcm_foken);
+    Call<APIResponse<APIUser>> updateUser(@Path("user_id") String user_id, @Field("fcm_token") String fcm_foken);
 
     // USER FOLLOW
     @GET("userfollow/{username}")
     Call<APIResponse<UserFollowComposite>> getUserFollow(@Path("username") String username);
 
     @POST("userfollow")
-    Call<APIResponse<List<UserFollow>>> createUserFolloe(@Field("username") String username,
+    Call<APIResponse<UserFollow>> createUserFolloe(@Field("username") String username,
                                                          @Field("username_following") String username_following);
 
     @POST("userfollow/{user_foll_id}/delete")
@@ -76,12 +76,12 @@ public interface APIService {
 
     @POST("postlikes")
     @FormUrlEncoded
-    Call<APIResponse<Post>> createPostLike(@Field("post_id") long post_id,
+    Call<APIResponse<PostLike>> createPostLike(@Field("post_id") long post_id,
                                            @Field("username") String username);
 
     @POST("postlikes/{post_like_id}/delete")
     @FormUrlEncoded
-    Call<APIResponse<Post>> deletePostLike(@Path("post_like_id") long post_like_id);
+    Call<APIResponse<PostLike>> deletePostLike(@Path("post_like_id") long post_like_id);
 
     // POST COMMENTS
     @GET("postcomments/{post_id}")
@@ -89,13 +89,13 @@ public interface APIService {
 
     @POST("postcomments")
     @FormUrlEncoded
-    Call<APIResponse<Post>> createPostComment(@Field("post_id") long post_id,
+    Call<APIResponse<PostComment>> createPostComment(@Field("post_id") long post_id,
                                               @Field("username") String username,
                                               @Field("comment") String comment);
 
     @POST("postcomments/{post_comment_id}/delete")
     @FormUrlEncoded
-    Call<APIResponse<Post>> deletePostComment(@Path("post_comment_id") long post_comment_id);
+    Call<APIResponse<PostComment>> deletePostComment(@Path("post_comment_id") long post_comment_id);
 
     // SAVED POSTS
     @GET("savedposts/{username}")

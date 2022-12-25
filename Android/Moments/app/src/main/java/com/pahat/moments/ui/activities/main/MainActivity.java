@@ -28,6 +28,7 @@ import com.pahat.moments.ui.activities.changepass.ChangePassActivity;
 import com.pahat.moments.ui.activities.createpost.CreatePostActivity;
 import com.pahat.moments.ui.activities.login.LoginActivity;
 import com.pahat.moments.ui.activities.savedpost.SavedPostActivity;
+import com.pahat.moments.util.Constants;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             FirebaseDatabase.getInstance()
                     .getReference()
-                    .child("/users")
+                    .child(Constants.FIREBASE_USERS_REF)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .addValueEventListener(new ValueEventListener() {
                         @Override

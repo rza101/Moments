@@ -9,24 +9,24 @@ public class UserFollow implements Parcelable {
     @SerializedName("id")
     private long id;
 
-    @SerializedName("user_id")
-    private String userId;
+    @SerializedName("username")
+    private String username;
 
-    @SerializedName("user_following")
-    private String userFollowing;
+    @SerializedName("username_following")
+    private String usernameFollowing;
 
     public UserFollow() {
     }
 
-    public UserFollow(String userId, String userFollowing) {
-        this.userId = userId;
-        this.userFollowing = userFollowing;
+    public UserFollow(String username, String usernameFollowing) {
+        this.username = username;
+        this.usernameFollowing = usernameFollowing;
     }
 
     protected UserFollow(Parcel in) {
         id = in.readLong();
-        userId = in.readString();
-        userFollowing = in.readString();
+        username = in.readString();
+        usernameFollowing = in.readString();
     }
 
     public static final Creator<UserFollow> CREATOR = new Creator<UserFollow>() {
@@ -45,12 +45,12 @@ public class UserFollow implements Parcelable {
         return id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public String getUserFollowing() {
-        return userFollowing;
+    public String getUsernameFollowing() {
+        return usernameFollowing;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class UserFollow implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
-        dest.writeString(userId);
-        dest.writeString(userFollowing);
+        dest.writeString(username);
+        dest.writeString(usernameFollowing);
     }
 }

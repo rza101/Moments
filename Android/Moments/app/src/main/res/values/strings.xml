@@ -11,4 +11,5 @@
     <string name="follow">Follow</string>
     <string name="comments">Comments</string>
     <string name="write_some_comment">Write some comment</string>
+    <string name="likes_count">%d Likes</string>
 </resources>

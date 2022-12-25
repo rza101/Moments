@@ -12,8 +12,8 @@ public class PostComment implements Parcelable {
     @SerializedName("post_id")
     private long postId;
 
-    @SerializedName("user_id")
-    private String userId;
+    @SerializedName("username")
+    private String username;
 
     @SerializedName("comment")
     private String comment;
@@ -27,16 +27,16 @@ public class PostComment implements Parcelable {
     public PostComment() {
     }
 
-    public PostComment(long postId, String userId, String comment) {
+    public PostComment(long postId, String username, String comment) {
         this.postId = postId;
-        this.userId = userId;
+        this.username = username;
         this.comment = comment;
     }
 
     protected PostComment(Parcel in) {
         id = in.readLong();
         postId = in.readLong();
-        userId = in.readString();
+        username = in.readString();
         comment = in.readString();
         createdAt = in.readString();
         updatedAt = in.readString();
@@ -62,8 +62,8 @@ public class PostComment implements Parcelable {
         return postId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
     public String getComment() {
@@ -87,7 +87,7 @@ public class PostComment implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
         parcel.writeLong(postId);
-        parcel.writeString(userId);
+        parcel.writeString(username);
         parcel.writeString(comment);
         parcel.writeString(createdAt);
         parcel.writeString(updatedAt);

@@ -17,8 +17,7 @@
         android:layout_margin="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:src="@drawable/img_about_ejak"
-        />
+        tools:src="@drawable/img_about_ejak" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -38,7 +37,7 @@
         android:layout_margin="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/about_civ_rheza"
-        tools:src="@drawable/img_about_dika"/>
+        tools:src="@drawable/img_about_dika" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -56,9 +55,10 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_margin="20dp"
+        android:src="@drawable/ic_person_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/about_civ_dika"
-        tools:src="@drawable/ic_person_24" />
+        app:tint="@color/grey" />
 
     <TextView
         android:layout_width="wrap_content"

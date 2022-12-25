@@ -70,10 +70,11 @@ class PostsController extends Controller
     public function show($id)
     {
         $posts = Post::find($id);
-        $post_like = PostLike::where('post_id', '=', $id)->orderBy('created_at', 'DESC')->get();
-        $post_comment = PostComment::where('post_id', '=', $id)->orderBy('created_at', 'DESC')->get();
-
+        
         if ($posts) {
+            $post_like = PostLike::where('post_id', '=', $id)->orderBy('created_at', 'DESC')->get();
+            $post_comment = PostComment::where('post_id', '=', $id)->orderBy('created_at', 'DESC')->get();
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',

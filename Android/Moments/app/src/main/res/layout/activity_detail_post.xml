@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,179 +7,195 @@
     android:fillViewport="true"
     tools:context=".ui.activities.detailpost.DetailPostActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/detail_post_iv_back"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_margin="15dp"
-            android:alpha="0.5"
-            android:src="@drawable/ic_back_circular"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/detail_post_iv_picture"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detail_post_cl_main"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
-            android:scaleType="fitCenter"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_camera_alt_24" />
+            android:layout_height="wrap_content">
 
-        <View
-            android:id="@+id/detail_post_view_tab"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="-50dp"
-            android:background="@drawable/bg_tab"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/detail_post_iv_picture" />
+            <ImageView
+                android:id="@+id/detail_post_iv_picture"
+                android:layout_width="match_parent"
+                android:layout_height="450dp"
+                android:scaleType="fitCenter"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_camera_alt_24" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/detail_post_civ_dp"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_margin="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/detail_post_view_tab"
-            tools:src="@drawable/ic_person_24" />
+            <View
+                android:id="@+id/detail_post_view_tab"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="-50dp"
+                android:background="@drawable/bg_tab"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_post_iv_picture" />
 
-        <TextView
-            android:id="@+id/detail_post_tv_username"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:fontFamily="@font/inter_black"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@id/detail_post_tv_followers"
-            app:layout_constraintEnd_toStartOf="@id/detail_post_btn_follow"
-            app:layout_constraintStart_toEndOf="@id/detail_post_civ_dp"
-            app:layout_constraintTop_toTopOf="@id/detail_post_civ_dp"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="\@r.za.101" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/detail_post_civ_dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="20dp"
+                android:src="@drawable/ic_person_grey_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/detail_post_view_tab" />
 
-        <TextView
-            android:id="@+id/detail_post_tv_followers"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/inter_semibold"
-            app:layout_constraintBottom_toBottomOf="@id/detail_post_civ_dp"
-            app:layout_constraintStart_toStartOf="@id/detail_post_tv_username"
-            app:layout_constraintTop_toBottomOf="@id/detail_post_tv_username"
-            tools:text="10k Followers" />
+            <TextView
+                android:id="@+id/detail_post_tv_username"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:fontFamily="@font/inter_black"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@id/detail_post_tv_followers"
+                app:layout_constraintEnd_toStartOf="@id/detail_post_btn_follow"
+                app:layout_constraintStart_toEndOf="@id/detail_post_civ_dp"
+                app:layout_constraintTop_toTopOf="@id/detail_post_civ_dp"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="\@r.za.101" />
 
-        <Button
-            android:id="@+id/detail_post_btn_follow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:backgroundTint="@color/blue"
-            android:fontFamily="@font/inter_bold"
-            android:text="@string/follow"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="@id/detail_post_civ_dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/detail_post_civ_dp" />
+            <TextView
+                android:id="@+id/detail_post_tv_followers"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/inter_semibold"
+                app:layout_constraintBottom_toBottomOf="@id/detail_post_civ_dp"
+                app:layout_constraintStart_toStartOf="@id/detail_post_tv_username"
+                app:layout_constraintTop_toBottomOf="@id/detail_post_tv_username"
+                tools:text="10k Followers" />
 
-        <TextView
-            android:id="@+id/detail_post_tv_captions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/inter_medium"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/detail_post_civ_dp"
-            tools:text="The quick brown fox jumps over the lazy dog" />
+            <Button
+                android:id="@+id/detail_post_btn_follow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:backgroundTint="@color/blue"
+                android:fontFamily="@font/inter_bold"
+                android:text="@string/follow"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="@id/detail_post_civ_dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/detail_post_civ_dp" />
 
-        <ImageView
-            android:id="@+id/detail_post_iv_like"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/ic_favorite_24"
-            app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
-            app:layout_constraintTop_toBottomOf="@id/detail_post_tv_captions"
-            app:tint="@color/color_red" />
+            <TextView
+                android:id="@+id/detail_post_tv_captions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/inter_medium"
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@id/detail_post_civ_dp"
+                tools:text="The quick brown fox jumps over the lazy dog" />
 
-        <TextView
-            android:id="@+id/detail_post_tv_like_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/inter_regular"
-            app:layout_constraintBottom_toBottomOf="@id/detail_post_iv_like"
-            app:layout_constraintStart_toEndOf="@id/detail_post_iv_like"
-            app:layout_constraintTop_toTopOf="@id/detail_post_iv_like"
-            tools:text="100,200,300 likes" />
+            <ImageView
+                android:id="@+id/detail_post_iv_like"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/ic_favorite_24"
+                app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
+                app:layout_constraintTop_toBottomOf="@id/detail_post_tv_captions"
+                app:tint="@color/color_red" />
 
-        <ImageView
-            android:id="@+id/detail_post_iv_save"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_bookmark_border_24"
-            app:layout_constraintBottom_toBottomOf="@id/detail_post_iv_like"
-            app:layout_constraintEnd_toEndOf="@id/detail_post_tv_captions"
-            app:layout_constraintTop_toTopOf="@id/detail_post_iv_like"
-            app:tint="@color/color_light_orange" />
+            <TextView
+                android:id="@+id/detail_post_tv_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/inter_regular"
+                app:layout_constraintBottom_toBottomOf="@id/detail_post_iv_like"
+                app:layout_constraintStart_toEndOf="@id/detail_post_iv_like"
+                app:layout_constraintTop_toTopOf="@id/detail_post_iv_like"
+                tools:text="100,200,300 likes" />
 
-        <TextView
-            android:id="@+id/detail_post_tv_comment_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:fontFamily="@font/inter_bold"
-            android:text="@string/comments"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
-            app:layout_constraintTop_toBottomOf="@id/detail_post_iv_like" />
+            <ImageView
+                android:id="@+id/detail_post_iv_save"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_bookmark_border_24"
+                app:layout_constraintBottom_toBottomOf="@id/detail_post_iv_like"
+                app:layout_constraintEnd_toEndOf="@id/detail_post_tv_captions"
+                app:layout_constraintTop_toTopOf="@id/detail_post_iv_like"
+                app:tint="@color/color_light_orange" />
 
-        <EditText
-            android:id="@+id/detail_post_et_comment"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:background="@null"
-            android:fontFamily="@font/inter_regular"
-            android:hint="@string/write_some_comment"
-            android:padding="10dp"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toStartOf="@id/detail_post_iv_send_comment"
-            app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
-            app:layout_constraintTop_toBottomOf="@id/detail_post_tv_comment_title" />
+            <TextView
+                android:id="@+id/detail_post_tv_comment_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/inter_bold"
+                android:text="@string/comments"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
+                app:layout_constraintTop_toBottomOf="@id/detail_post_iv_like" />
 
-        <ImageView
-            android:id="@+id/detail_post_iv_send_comment"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:layout_constraintBottom_toBottomOf="@id/detail_post_et_comment"
-            app:layout_constraintEnd_toEndOf="@id/detail_post_tv_captions"
-            app:layout_constraintTop_toTopOf="@id/detail_post_et_comment" />
+            <EditText
+                android:id="@+id/detail_post_et_comment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="@null"
+                android:fontFamily="@font/inter_regular"
+                android:hint="@string/write_some_comment"
+                android:padding="10dp"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@id/detail_post_iv_send_comment"
+                app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
+                app:layout_constraintTop_toBottomOf="@id/detail_post_tv_comment_title" />
 
-        <View
-            android:id="@+id/detail_post_view_comment_line"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:alpha="0.25"
-            android:background="@color/grey"
-            app:layout_constraintTop_toBottomOf="@id/detail_post_et_comment" />
+            <ImageView
+                android:id="@+id/detail_post_iv_send_comment"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintBottom_toBottomOf="@id/detail_post_et_comment"
+                app:layout_constraintEnd_toEndOf="@id/detail_post_tv_captions"
+                app:layout_constraintTop_toTopOf="@id/detail_post_et_comment" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/detail_post_rv_comments"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@id/detail_post_tv_captions"
-            app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
-            app:layout_constraintTop_toBottomOf="@id/detail_post_view_comment_line"
-            tools:listitem="@layout/item_comment" />
+            <View
+                android:id="@+id/detail_post_view_comment_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:alpha="0.25"
+                android:background="@color/grey"
+                app:layout_constraintTop_toBottomOf="@id/detail_post_et_comment" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/detail_post_rv_comments"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="@id/detail_post_tv_captions"
+                app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
+                app:layout_constraintTop_toBottomOf="@id/detail_post_view_comment_line"
+                tools:listitem="@layout/item_comment" />
 
-</ScrollView>
+            <ImageView
+                android:id="@+id/detail_post_iv_back"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="15dp"
+                android:alpha="0.5"
+                android:src="@drawable/ic_back_circular"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+<!--    <com.airbnb.lottie.LottieAnimationView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:lottie_fileName="loading" />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

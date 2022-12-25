@@ -74,9 +74,9 @@ public class LoginActivity extends AppCompatActivity {
                                         if (authTask.isSuccessful()) {
                                             APIUtil.getAPIService()
                                                     .updateUser(authTask.getResult().getUser().getUid(), fcmTask.getResult())
-                                                    .enqueue(new Callback<APIResponse<List<APIUser>>>() {
+                                                    .enqueue(new Callback<APIResponse<APIUser>>() {
                                                         @Override
-                                                        public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
+                                                        public void onResponse(Call<APIResponse<APIUser>> call, Response<APIResponse<APIUser>> response) {
                                                             if (response.isSuccessful()) {
                                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                                 startActivity(intent);
@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                                                         }
 
                                                         @Override
-                                                        public void onFailure(Call<APIResponse<List<APIUser>>> call, Throwable t) {
+                                                        public void onFailure(Call<APIResponse<APIUser>> call, Throwable t) {
                                                             call.clone().enqueue(this);
                                                         }
                                                     });

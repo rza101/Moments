@@ -78,11 +78,10 @@
                 android:id="@+id/register_iv_full_name"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_person_24"
+                android:src="@drawable/ic_person_grey_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/grey" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/register_et_full_name"
@@ -113,21 +112,20 @@
                 android:id="@+id/register_iv_username"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_person_24"
+                android:src="@drawable/ic_person_grey_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/grey" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/register_et_username"
                 android:layout_width="0dp"
-                android:maxLines="1"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
                 android:background="@android:color/transparent"
-                android:inputType="text"
                 android:hint="Username"
+                android:inputType="text"
+                android:maxLines="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/register_iv_username" />
 

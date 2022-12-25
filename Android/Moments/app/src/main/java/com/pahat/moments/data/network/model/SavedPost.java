@@ -9,8 +9,8 @@ public class SavedPost implements Parcelable {
     @SerializedName("id")
     private long id;
 
-    @SerializedName("user_id")
-    private String userId;
+    @SerializedName("username")
+    private String username;
 
     @SerializedName("post_id")
     private long postId;
@@ -24,14 +24,14 @@ public class SavedPost implements Parcelable {
     public SavedPost() {
     }
 
-    public SavedPost(String userId, long postId) {
-        this.userId = userId;
+    public SavedPost(String username, long postId) {
+        this.username = username;
         this.postId = postId;
     }
 
     protected SavedPost(Parcel in) {
         id = in.readLong();
-        userId = in.readString();
+        username = in.readString();
         postId = in.readLong();
         createdAt = in.readString();
         updatedAt = in.readString();
@@ -53,8 +53,8 @@ public class SavedPost implements Parcelable {
         return id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
     public long getPostId() {
@@ -77,7 +77,7 @@ public class SavedPost implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
-        parcel.writeString(userId);
+        parcel.writeString(username);
         parcel.writeLong(postId);
         parcel.writeString(createdAt);
         parcel.writeString(updatedAt);

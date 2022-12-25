@@ -35,6 +35,7 @@ import com.pahat.moments.data.network.APIUtil;
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.databinding.ActivityCreatePostBinding;
+import com.pahat.moments.util.Constants;
 import com.pahat.moments.util.Utilities;
 
 import java.io.File;
@@ -139,11 +140,12 @@ public class CreatePostActivity extends AppCompatActivity {
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 StorageReference storageReference = FirebaseStorage
                         .getInstance()
-                        .getReference(firebaseUser.getUid());
+                        .getReference(firebaseUser.getUid())
+                        .child(imageUri.getLastPathSegment());
 
                 FirebaseDatabase.getInstance()
                         .getReference()
-                        .child("/users")
+                        .child(Constants.FIREBASE_USERS_REF)
                         .child(firebaseUser.getUid())
                         .addValueEventListener(new ValueEventListener() {
                             @Override
