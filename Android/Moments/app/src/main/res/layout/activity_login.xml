@@ -50,6 +50,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
+            android:maxLines="1"
+            android:inputType="textEmailAddress"
             android:background="@android:color/transparent"
             android:hint="Email"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,11 +80,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/grey" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/login_iv_password_eye"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:background="@drawable/ic_visibility_off_24"
+            android:src="@drawable/ic_visibility_off_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -92,6 +94,8 @@
             android:id="@+id/login_et_password"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:inputType="text|textPassword"
+            android:maxLines="1"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
             android:hint="Password"

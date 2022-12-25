@@ -209,7 +209,17 @@ public class RegisterActivity extends AppCompatActivity {
         binding.registerIvConfirmPasswordEye.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                binding.registerEtConfirmPassword.setInputType(
+                        binding.registerEtConfirmPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
+                );
 
+                binding.registerIvConfirmPasswordEye.setImageDrawable(AppCompatResources.getDrawable(RegisterActivity.this,
+                        binding.registerEtConfirmPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                                R.drawable.ic_visibility_off_24 :
+                                R.drawable.ic_visibility_24
+                ));
             }
         });
     }

@@ -56,6 +56,8 @@
                 android:layout_marginStart="5dp"
                 android:background="@android:color/transparent"
                 android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/register_iv_email" />
 
@@ -89,6 +91,8 @@
                 android:layout_marginStart="5dp"
                 android:background="@android:color/transparent"
                 android:hint="Full Name"
+                android:inputType="text"
+                android:maxLines="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/register_iv_full_name" />
 
@@ -118,9 +122,11 @@
             <EditText
                 android:id="@+id/register_et_username"
                 android:layout_width="0dp"
+                android:maxLines="1"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
                 android:background="@android:color/transparent"
+                android:inputType="text"
                 android:hint="Username"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/register_iv_username" />
@@ -210,11 +216,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
-                android:inputType="text|textPassword"
                 android:background="@android:color/transparent"
                 android:hint="Confirm Password"
+                android:inputType="text|textPassword"
                 app:layout_constraintEnd_toStartOf="@id/register_iv_confirm_password_eye"
-                app:layout_constraintStart_toEndOf="@id/register_iv_confirm_password" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/register_iv_confirm_password"
+                tools:layout_editor_absoluteY="0dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

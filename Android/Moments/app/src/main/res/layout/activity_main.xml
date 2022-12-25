@@ -29,4 +29,13 @@
         app:itemIconTint="@color/color_bottom_nav"
         app:menu="@menu/menu_main_nav" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:lottie_loop="true"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

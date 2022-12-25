@@ -67,12 +67,14 @@
 
         <EditText
             android:id="@+id/change_pass_et_password"
+            android:inputType="text|textPassword"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/nunitosans_regular"
-            android:text="Password"
+            android:hint="Password"
+            android:maxLines="1"
             android:textColor="@color/grey"
             app:layout_constraintEnd_toStartOf="@id/change_pass_iv_password_eye"
             app:layout_constraintStart_toEndOf="@id/change_pass_iv_password" />
@@ -114,11 +116,13 @@
 
         <EditText
             android:id="@+id/change_pass_et_password_confirm"
+            android:inputType="text|textPassword"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
-            android:text="Confirm Password"
+            android:hint="Confirm Password"
+            android:maxLines="1"
             android:textColor="@color/grey"
             app:layout_constraintEnd_toStartOf="@+id/change_pass_iv_confirm_password_eye"
             app:layout_constraintStart_toEndOf="@id/change_pass_iv_password_confirm" />

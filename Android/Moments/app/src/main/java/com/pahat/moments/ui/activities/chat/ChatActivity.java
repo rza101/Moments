@@ -20,5 +20,29 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Utilities.initChildToolbar(this, binding.toolbar, "Fullname");
+
+        mAddedToCartAnimation.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                Log.e("Animation:","start");
+                lottieCatThrowsCup.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Log.e("Animation:","end");
+                lottieCatThrowsCup.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                Log.e("Animation:","cancel");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                Log.e("Animation:","repeat");
+            }
+        });
     }
 }

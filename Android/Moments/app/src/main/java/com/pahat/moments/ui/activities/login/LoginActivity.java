@@ -3,18 +3,21 @@ package com.pahat.moments.ui.activities.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.pahat.moments.R;
 import com.pahat.moments.data.network.APIUtil;
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.APIUser;
@@ -114,5 +117,23 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        binding.loginIvPasswordEye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.loginEtPassword.setInputType(
+                        binding.loginEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
+                );
+
+                binding.loginIvPasswordEye.setImageDrawable(AppCompatResources.getDrawable(LoginActivity.this,
+                        binding.loginEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                                R.drawable.ic_visibility_off_24 :
+                                R.drawable.ic_visibility_24
+                ));
+            }
+        });
+
     }
 }
