@@ -50,6 +50,7 @@
                 app:strokeWidth="2dp">
 
                 <EditText
+                    android:id="@+id/update_post_et_caption"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"

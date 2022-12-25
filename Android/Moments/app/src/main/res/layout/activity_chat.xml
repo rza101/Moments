@@ -18,7 +18,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:lottie_loop="true"/>
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"/>
 
     <ScrollView
         android:layout_width="match_parent"
