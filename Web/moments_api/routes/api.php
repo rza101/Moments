@@ -26,20 +26,20 @@ use App\Http\Controllers\API\UserFollowController;
 
 Route::get('posts', [PostsController::class, 'index']);
 Route::post('posts', [PostsController::class, 'store']);
-Route::get('posts/{user_id}', [PostsController::class, 'show']);
+Route::get('posts/{id}', [PostsController::class, 'show']);
 Route::post('posts/{id}/update', [PostsController::class, 'update']);
 Route::post('posts/{id}/delete', [PostsController::class, 'destroy']);
 
 Route::post('postlikes', [PostLikesController::class, 'store']);
-Route::get('postlikes/{post_id}', [PostLikesController::class, 'show']);
+Route::get('postlikes/{username}', [PostLikesController::class, 'show']);
 Route::post('postlikes/{id}/delete', [PostLikesController::class, 'destroy']);
 
 Route::post('postcomments', [PostCommentsController::class, 'store']);
-Route::get('postcomments/{post_id}', [PostCommentsController::class, 'show']);
+Route::get('postcomments/{username}', [PostCommentsController::class, 'show']);
 Route::post('postcomments/{id}/delete', [PostCommentsController::class, 'destroy']);
 
 Route::post('savedposts', [SavedPostsController::class, 'store']);
-Route::get('savedposts/{user_id}', [SavedPostsController::class, 'show']);
+Route::get('savedposts/{username}', [SavedPostsController::class, 'show']);
 Route::post('savedposts/{id}/delete', [SavedPostsController::class, 'destroy']);
 
 Route::post('users', [UserController::class, 'store']);
@@ -48,5 +48,5 @@ Route::post('users/{user_id}/update', [UserController::class, 'update']);
 // Route::post('users/{user_id}/delete', [UserController::class, 'destroy']);
 
 Route::post('userfollow', [UserFollowController::class, 'store']);
-Route::get('userfollow/{user_id}', [UserFollowController::class, 'show']);
+Route::get('userfollow/{username}', [UserFollowController::class, 'show']);
 Route::post('userfollow/{id}/delete', [UserFollowController::class, 'destroy']);

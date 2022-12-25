@@ -32,7 +32,7 @@ class PostCommentsController extends Controller
    {
        try {
            $post_comment = new PostComment();
-           $post_comment->user_id = $request->user_id;
+           $post_comment->username = $request->username;
            $post_comment->post_id = $request->post_id;
            $post_comment->comment = $request->comment;
            $post_comment->save();
@@ -57,7 +57,7 @@ class PostCommentsController extends Controller
     */
    public function show($post_id)
    {
-       $post_comment = PostComment::where('post_id', '=', $post_id)->get();
+       $post_comment = PostComment::where('post_id', '=', $post_id)->orderBy('created_at', 'DESC')->get();
 
        if ($post_comment) {
            return response()->json([

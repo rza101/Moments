@@ -1,5 +1,6 @@
 package com.pahat.moments.ui.fragments.mainhome;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +17,10 @@ import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.databinding.FragmentMainHomeBinding;
 import com.pahat.moments.ui.OnItemClick;
+import com.pahat.moments.ui.activities.detailpost.DetailPostActivity;
 import com.pahat.moments.ui.adapters.ItemPostAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -27,6 +30,7 @@ import retrofit2.Response;
 public class MainHomeFragment extends Fragment {
 
     private FragmentMainHomeBinding binding;
+    private ItemPostAdapter itemPostAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,10 +43,13 @@ public class MainHomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ItemPostAdapter itemPostAdapter = new ItemPostAdapter(new OnItemClick<Post>() {
+        itemPostAdapter = new ItemPostAdapter(new OnItemClick<Post>() {
             @Override
             public void onClick(View v, Post data) {
-                // TO DETAIL
+                // ON ITEM CLICK
+                startActivity(new Intent(requireContext(), DetailPostActivity.class)
+                        .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
+                );
             }
         }, new OnItemClick<Post>() {
             @Override
@@ -54,7 +61,13 @@ public class MainHomeFragment extends Fragment {
         binding.fragmentMainHomeRvPosts.setLayoutManager(
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         binding.fragmentMainHomeRvPosts.setAdapter(itemPostAdapter);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        itemPostAdapter.submitList(new ArrayList<>());
         APIUtil.getAPIService().getAllPost().enqueue(new Callback<APIResponse<List<Post>>>() {
             @Override
             public void onResponse(Call<APIResponse<List<Post>>> call, Response<APIResponse<List<Post>>> response) {

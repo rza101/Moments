@@ -10,9 +10,4 @@ class UserFollow extends Model
     use HasFactory;
 
     protected $table = "user_follow";
-
-    protected $fillable = [
-        'user_id',
-        'user_following'
-    ];
 }

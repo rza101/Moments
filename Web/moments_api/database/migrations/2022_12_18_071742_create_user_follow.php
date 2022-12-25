@@ -18,10 +18,10 @@ return new class extends Migration
         // user_following punya followers sebanyak user_id
         Schema::create('user_follow', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
-            $table->string('user_following');
-            $table->foreign('user_id')->references('user_id')->on('users')->cascadeOnDelete();
-            $table->foreign('user_following')->references('user_id')->on('users')->cascadeOnDelete();
+            $table->string('username');
+            $table->string('username_following');
+            $table->foreign('username')->references('username')->on('users')->cascadeOnDelete();
+            $table->foreign('username_following')->references('username')->on('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

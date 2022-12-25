@@ -2,7 +2,6 @@ package com.pahat.moments.ui.activities.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,10 +18,10 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pahat.moments.R;
+import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.ActivityMainBinding;
 import com.pahat.moments.ui.activities.about.AboutActivity;
 import com.pahat.moments.ui.activities.changepass.ChangePassActivity;
@@ -32,7 +31,10 @@ import com.pahat.moments.ui.activities.savedpost.SavedPostActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static String USER_INTENT_KEY = "USER_INTENT_KEY";
+
     private ActivityMainBinding binding;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +43,29 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        if (getIntent().getParcelableExtra(USER_INTENT_KEY) != null) {
+            user = getIntent().getParcelableExtra(USER_INTENT_KEY);
+        } else {
+            FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("/users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            user = snapshot.getValue(User.class);
+                            binding.toolbar.toolbarFullname.setText(user.getFullName());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+        }
+
         setSupportActionBar(binding.toolbar.getRoot());
-        binding.toolbar.toolbarFullname.setText("Fullname");
+        binding.toolbar.toolbarFullname.setText(user == null ? "" : user.getFullName());
 
         NavController navController = Navigation.findNavController(this, R.id.main_fragment);
         NavigationUI.setupWithNavController(binding.mainBnv, navController);

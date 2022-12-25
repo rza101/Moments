@@ -6,11 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
+import com.pahat.moments.R;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.databinding.ItemPostBinding;
 import com.pahat.moments.ui.OnItemClick;
@@ -49,6 +52,8 @@ public class ItemPostAdapter extends ListAdapter<Post, ItemPostAdapter.ViewHolde
 
         Glide.with(context)
                 .load(data.getImageUrl())
+                .placeholder(AppCompatResources.getDrawable(context, R.drawable.ic_broken_image_24))
+                .override(Target.SIZE_ORIGINAL)
                 .into(holder.binding.itemPostIvPicture);
 
         holder.binding.itemPostTvCaption.setText(data.getCaption());

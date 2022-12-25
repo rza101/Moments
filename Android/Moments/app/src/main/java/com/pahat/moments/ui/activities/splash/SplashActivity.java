@@ -4,9 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.ActivitySplashBinding;
 import com.pahat.moments.ui.activities.login.LoginActivity;
 import com.pahat.moments.ui.activities.main.MainActivity;
@@ -25,14 +31,33 @@ public class SplashActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        new Handler().postDelayed(() -> {
-            if (mAuth.getCurrentUser() == null) {
-                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-            } else {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            }
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("/users")
+                    .child(mAuth.getCurrentUser().getUid())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            User user = snapshot.getValue(User.class);
+                            startActivity(
+                                    new Intent(SplashActivity.this, MainActivity.class)
+                                            .putExtra(MainActivity.USER_INTENT_KEY, user)
+                            );
+                            finish();
+                        }
 
-            finish();
-        }, 1000);
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                            finish();
+                        }
+                    });
+        } else {
+            new Handler().postDelayed(() -> {
+                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                finish();
+            }, 1000);
+        }
     }
 }

@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('saved_posts', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
+            $table->string('username');
             $table->unsignedBigInteger('post_id');
-            $table->foreign('user_id')->references('user_id')->on('users')->cascadeOnDelete();
+            $table->foreign('username')->references('username')->on('users')->cascadeOnDelete();
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');;
             $table->timestamps();
         });

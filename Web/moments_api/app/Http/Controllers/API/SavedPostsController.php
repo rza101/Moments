@@ -31,8 +31,8 @@ class SavedPostsController extends Controller
     public function store(Request $request)
     {
         try {
-            $saved_post = SavedPost::firstOrNew(['user_id' => $request->user_id, 'post_id' => $request->post_id]);
-            $saved_post->user_id = $request->user_id;
+            $saved_post = SavedPost::firstOrNew(['username' => $request->username, 'post_id' => $request->post_id]);
+            $saved_post->username = $request->username;
             $saved_post->post_id = $request->post_id;
             $saved_post->save();
 
@@ -54,9 +54,9 @@ class SavedPostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($user_id)
+    public function show($username)
     {
-        $saved_post = SavedPost::where('user_id', '=', $user_id)->get();
+        $saved_post = SavedPost::where('username', '=', $username)->orderBy('created_at', 'DESC')->get();
 
         if ($saved_post) {
             return response()->json([

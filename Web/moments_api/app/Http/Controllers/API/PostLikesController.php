@@ -31,8 +31,8 @@ class PostLikesController extends Controller
     public function store(Request $request)
     {
         try {
-            $post_like = PostLike::firstOrNew(['user_id' => $request->user_id, 'post_id' => $request->post_id]);
-            $post_like->user_id = $request->user_id;
+            $post_like = PostLike::firstOrNew(['username' => $request->username, 'post_id' => $request->post_id]);
+            $post_like->username = $request->username;
             $post_like->post_id = $request->post_id;
             $post_like->save();
 
@@ -56,7 +56,7 @@ class PostLikesController extends Controller
      */
     public function show($post_id)
     {
-        $post_like = PostLike::where('post_id', '=', $post_id)->get();
+        $post_like = PostLike::where('post_id', '=', $post_id)->orderBy('created_at', 'DESC')->get();
 
         if ($post_like) {
             return response()->json([

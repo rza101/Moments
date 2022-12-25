@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\PostComment;
+use App\Models\PostLike;
 use Illuminate\Http\Request;
 use Exception;
 
@@ -14,13 +16,21 @@ class PostsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json([
-            'status' => 200,
-            'message' => 'Success',
-            'data' => Post::all()
-        ]);
+        if($request->username){
+            return response()->json([
+                'status' => 200,
+                'message' => 'Success',
+                'data' => Post::where('username', '=', $request->username)->orderBy('created_at', 'DESC')
+            ]);
+        }else{
+            return response()->json([
+                'status' => 200,
+                'message' => 'Success',
+                'data' => Post::all()
+            ]);
+        }
     }
 
     /**
@@ -33,7 +43,7 @@ class PostsController extends Controller
     {
         try {
             $posts = new Post();
-            $posts->user_id = $request->user_id;
+            $posts->username = $request->username;
             $posts->image_url = $request->image_url;
             $posts->caption = $request->caption;
             $posts->save();
@@ -57,15 +67,21 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($user_id)
+    public function show($id)
     {
-        $posts = Post::where('user_id', '=', $user_id)->get();
+        $posts = Post::find($id);
+        $post_like = PostLike::where('post_id', '=', $id)->orderBy('created_at', 'DESC')->get();
+        $post_comment = PostComment::where('post_id', '=', $id)->orderBy('created_at', 'DESC')->get();
 
         if ($posts) {
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',
-                'data' => $posts
+                'data' => [
+                    'post' => $posts,
+                    'post_like' => $post_like,
+                    'post_comment' => $post_comment
+                ]
             ]);
         } else {
             return response()->json([

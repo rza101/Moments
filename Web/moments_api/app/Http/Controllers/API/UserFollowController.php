@@ -32,9 +32,9 @@ class UserFollowController extends Controller
     public function store(Request $request)
     {
         try {
-            $user_follow = UserFollow::firstOrNew(['user_id' => $request->user_id, 'user_following' => $request->user_following]);
-            $user_follow->user_id = $request->user_id;
-            $user_follow->user_following = $request->user_following;
+            $user_follow = UserFollow::firstOrNew(['username' => $request->username, 'username_following' => $request->username_following]);
+            $user_follow->username = $request->username;
+            $user_follow->username_following = $request->username_following;
             $user_follow->save();
 
             return response()->json([
@@ -55,13 +55,13 @@ class UserFollowController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($user_id)
+    public function show($username)
     {
-        $user = User::where('user_id', '=', $user_id);
+        $user = User::where('username', '=', $username);
 
         if ($user) {
-            $following = UserFollow::where('user_id', '=', $user_id)->get();
-            $follower = UserFollow::where('user_following', '=', $user_id)->get();
+            $following = UserFollow::where('username', '=', $username)->get();
+            $follower = UserFollow::where('username_following', '=', $username)->get();
 
             return response()->json([
                 'status' => 200,

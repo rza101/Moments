@@ -10,9 +10,4 @@ class SavedPost extends Model
     use HasFactory;
 
     protected $table = "saved_posts";
-
-    protected $fillable = [
-        'user_id',
-        'post_id',
-    ];
 }
