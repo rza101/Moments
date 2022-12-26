@@ -7,12 +7,15 @@ import com.pahat.moments.data.network.model.PostComment;
 import com.pahat.moments.data.network.model.PostComposite;
 import com.pahat.moments.data.network.model.PostLike;
 import com.pahat.moments.data.network.model.SavedPost;
+import com.pahat.moments.data.network.model.Sender;
 import com.pahat.moments.data.network.model.UserFollow;
 import com.pahat.moments.data.network.model.UserFollowComposite;
+import com.pahat.moments.data.network.model.ViewData;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -109,4 +112,7 @@ public interface APIService {
     @POST("savedposts/{saved_post_id}/delete")
     @FormUrlEncoded
     Call<APIResponse<Post>> deleteSavedPost(@Path("saved_post_id") long saved_post_id);
+
+    @POST("fcm/send")
+    Call<ViewData> sendNotification(@Body Sender body);
 }
