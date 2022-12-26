@@ -7,10 +7,10 @@ import com.pahat.moments.data.network.model.PostComment;
 import com.pahat.moments.data.network.model.PostComposite;
 import com.pahat.moments.data.network.model.PostLike;
 import com.pahat.moments.data.network.model.SavedPost;
-import com.pahat.moments.data.network.model.Sender;
+import com.pahat.moments.data.firebase.model.Sender;
 import com.pahat.moments.data.network.model.UserFollow;
 import com.pahat.moments.data.network.model.UserFollowComposite;
-import com.pahat.moments.data.network.model.ViewData;
+import com.pahat.moments.data.firebase.model.ViewData;
 
 import java.util.List;
 

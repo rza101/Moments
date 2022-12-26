@@ -1,4 +1,4 @@
-package com.pahat.moments.data.network.model;
+package com.pahat.moments.data.firebase.model;
 
 public class Data {
     private String title;
