@@ -14,7 +14,7 @@ public class APIUtil {
             HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
             httpLoggingInterceptor.level(HttpLoggingInterceptor.Level.BODY);
 
-            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+            OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                     .addInterceptor(httpLoggingInterceptor)
                     .build();
 

@@ -10,6 +10,12 @@ class UserFollow extends Model
     use HasFactory;
 
     protected $table = "user_follow";
+
+    protected $fillable = [
+        'username',
+        'username_following'
+    ];
+
     function User(){
         return $this->belongsTo(User::class, "username", "username");
     }

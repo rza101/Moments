@@ -19,12 +19,14 @@ import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.data.network.model.PostComment;
 import com.pahat.moments.databinding.ItemCommentBinding;
 import com.pahat.moments.ui.OnItemClick;
+import com.pahat.moments.ui.OnLongClick;
 import com.pahat.moments.util.Constants;
 
 public class ItemCommentAdapter extends ListAdapter<PostComment, ItemCommentAdapter.ViewHolder> {
     private final OnItemClick<User> onUsernameClick;
+    private final OnLongClick<PostComment> onLongClick;
 
-    public ItemCommentAdapter(OnItemClick<User> onUsernameClick) {
+    public ItemCommentAdapter(OnItemClick<User> onUsernameClick, OnLongClick<PostComment> onLongClick) {
         super(new DiffUtil.ItemCallback<PostComment>() {
             @Override
             public boolean areItemsTheSame(@NonNull PostComment oldItem, @NonNull PostComment newItem) {
@@ -38,6 +40,7 @@ public class ItemCommentAdapter extends ListAdapter<PostComment, ItemCommentAdap
         });
 
         this.onUsernameClick = onUsernameClick;
+        this.onLongClick = onLongClick;
     }
 
     @NonNull
@@ -50,6 +53,23 @@ public class ItemCommentAdapter extends ListAdapter<PostComment, ItemCommentAdap
     public void onBindViewHolder(@NonNull ItemCommentAdapter.ViewHolder holder, int position) {
         PostComment postComment = getItem(position);
         Context context = holder.itemView.getContext();
+
+        holder.binding.itemCommentTvUsername.setText(postComment.getUsername());
+        holder.binding.itemCommentTvComment.setText(postComment.getComment());
+
+        holder.binding.itemCommentTvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onUsernameClick.onClick(v, new User(postComment.getUsername()));
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return onLongClick.onLongClick(v, postComment);
+            }
+        });
 
         FirebaseDatabase.getInstance()
                 .getReference()
@@ -66,16 +86,6 @@ public class ItemCommentAdapter extends ListAdapter<PostComment, ItemCommentAdap
                                     .load(user.getProfilePicture())
                                     .into(holder.binding.itemCommentCivDp);
                         }
-
-                        holder.binding.itemCommentTvUsername.setText(postComment.getUsername());
-                        holder.binding.itemCommentTvComment.setText(postComment.getComment());
-
-                        holder.binding.itemCommentTvUsername.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                onUsernameClick.onClick(v, user);
-                            }
-                        });
                     }
 
                     @Override

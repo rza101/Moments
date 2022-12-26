@@ -12,6 +12,10 @@ public class User implements Parcelable {
     public User() {
     }
 
+    public User(String username) {
+        this.username = username;
+    }
+
     public User(String fullName, String profilePicture) {
         this.fullName = fullName;
         this.profilePicture = profilePicture;

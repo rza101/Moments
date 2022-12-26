@@ -101,16 +101,16 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
 
-                        if (id == R.id.menu_main_popup_about) {
+                        if (id == R.id.menu_popup_main_about) {
                             startActivity(new Intent(MainActivity.this, AboutActivity.class));
                             return true;
-                        } else if (id == R.id.menu_main_popup_saved_posts) {
+                        } else if (id == R.id.menu_popup_main_saved_posts) {
                             startActivity(new Intent(MainActivity.this, SavedPostActivity.class));
                             return true;
-                        } else if (id == R.id.menu_main_popup_change_pass) {
+                        } else if (id == R.id.menu_popup_main_change_pass) {
                             startActivity(new Intent(MainActivity.this, ChangePassActivity.class));
                             return true;
-                        } else if (id == R.id.menu_main_popup_logout) {
+                        } else if (id == R.id.menu_popup_main_logout) {
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));
                             finish();
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 MenuInflater menuInflater = popupMenu.getMenuInflater();
-                menuInflater.inflate(R.menu.menu_main_popup, popupMenu.getMenu());
+                menuInflater.inflate(R.menu.menu_popup_main, popupMenu.getMenu());
                 popupMenu.show();
             }
         });

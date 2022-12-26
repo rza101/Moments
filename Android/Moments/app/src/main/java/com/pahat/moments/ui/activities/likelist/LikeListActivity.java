@@ -10,6 +10,8 @@ import com.pahat.moments.util.Utilities;
 
 public class LikeListActivity extends AppCompatActivity {
 
+    public static final String POST_COMPOSITE_INTENT_KEY = "POST_COMPOSITE_INTENT_KEY";
+
     private ActivityLikeListBinding binding;
 
     @Override

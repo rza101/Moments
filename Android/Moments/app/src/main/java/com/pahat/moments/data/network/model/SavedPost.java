@@ -15,6 +15,12 @@ public class SavedPost implements Parcelable {
     @SerializedName("post_id")
     private long postId;
 
+    @SerializedName("image_url")
+    private String imageUrl;
+
+    @SerializedName("caption")
+    private String caption;
+
     @SerializedName("created_at")
     private String createdAt;
 
@@ -33,6 +39,8 @@ public class SavedPost implements Parcelable {
         id = in.readLong();
         username = in.readString();
         postId = in.readLong();
+        imageUrl = in.readString();
+        caption = in.readString();
         createdAt = in.readString();
         updatedAt = in.readString();
     }
@@ -61,6 +69,14 @@ public class SavedPost implements Parcelable {
         return postId;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
@@ -75,11 +91,13 @@ public class SavedPost implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(username);
-        parcel.writeLong(postId);
-        parcel.writeString(createdAt);
-        parcel.writeString(updatedAt);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(username);
+        dest.writeLong(postId);
+        dest.writeString(imageUrl);
+        dest.writeString(caption);
+        dest.writeString(createdAt);
+        dest.writeString(updatedAt);
     }
 }

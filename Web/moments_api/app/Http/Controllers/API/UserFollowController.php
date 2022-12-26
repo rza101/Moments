@@ -32,6 +32,13 @@ class UserFollowController extends Controller
     public function store(Request $request)
     {
         try {
+            if($request->username == $request->username_following){
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Failed to store user follow'
+                ], 400);
+            }
+            
             $user_follow = UserFollow::firstOrNew(['username' => $request->username, 'username_following' => $request->username_following]);
             $user_follow->username = $request->username;
             $user_follow->username_following = $request->username_following;

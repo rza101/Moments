@@ -30,20 +30,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".OtherProfileActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".EditProfileActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".ui.activities.splash.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
@@ -104,6 +90,14 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ui.activities.otherprofile.OtherProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.activities.savedpost.SavedPostActivity"
             android:exported="false"
             android:screenOrientation="portrait">
@@ -137,6 +131,14 @@
         </activity>
         <activity
             android:name=".ui.activities.updatepost.UpdatePostActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ui.activities.editprofile.EditProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait">
             <meta-data

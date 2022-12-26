@@ -374,28 +374,28 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendNotification(Sender sender) {
-        APIService api = APIUtil.getRetrofit().create(APIService.class);
-        Call<ViewData> call = api.sendNotification(sender);
-        call.enqueue(new Callback<ViewData>() {
-            @Override
-            public void onResponse(Call<ViewData> call, Response<ViewData> response) {
-                if (response.code() == 200) {
-                    System.out.println("Response : " + response.body().getMessage_id());
-                    if (response.body().getMessage_id() != null) {
-//                        Toast.makeText(ChatActivity.this, "Pesan berhasil dikirim!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(ChatActivity.this, "Pesan gagal dikirim!", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(ChatActivity.this, "Response " + response.code(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ViewData> call, Throwable t) {
-                System.out.println("Retrofit Error : " + t.getMessage());
-                Toast.makeText(ChatActivity.this, "Retrofit Error : " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        APIService api = APIUtil.getRetrofit().create(APIService.class);
+//        Call<ViewData> call = api.sendNotification(sender);
+//        call.enqueue(new Callback<ViewData>() {
+//            @Override
+//            public void onResponse(Call<ViewData> call, Response<ViewData> response) {
+//                if (response.code() == 200) {
+//                    System.out.println("Response : " + response.body().getMessage_id());
+//                    if (response.body().getMessage_id() != null) {
+////                        Toast.makeText(ChatActivity.this, "Pesan berhasil dikirim!", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(ChatActivity.this, "Pesan gagal dikirim!", Toast.LENGTH_SHORT).show();
+//                    }
+//                } else {
+//                    Toast.makeText(ChatActivity.this, "Response " + response.code(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ViewData> call, Throwable t) {
+//                System.out.println("Retrofit Error : " + t.getMessage());
+//                Toast.makeText(ChatActivity.this, "Retrofit Error : " + t.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 }

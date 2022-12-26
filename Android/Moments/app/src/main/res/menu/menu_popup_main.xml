@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_main_popup_saved_posts"
+        android:id="@+id/menu_popup_main_saved_posts"
         android:title="Saved Posts"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_main_popup_about"
+        android:id="@+id/menu_popup_main_about"
         android:title="About"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_main_popup_change_pass"
+        android:id="@+id/menu_popup_main_change_pass"
         android:title="Change Password"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_main_popup_logout"
+        android:id="@+id/menu_popup_main_logout"
         android:title="Logout"
         app:showAsAction="never" />
 </menu>

@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:labelVisibilityMode="unlabeled"
         app:itemIconTint="@color/color_bottom_nav"
-        app:menu="@menu/menu_main_nav" />
+        app:menu="@menu/menu_nav_main" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:layout_width="50dp"

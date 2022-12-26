@@ -1,5 +1,7 @@
 package com.pahat.moments.data.network;
 
+import com.pahat.moments.data.firebase.model.Sender;
+import com.pahat.moments.data.firebase.model.ViewData;
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.APIUser;
 import com.pahat.moments.data.network.model.Post;
@@ -7,10 +9,8 @@ import com.pahat.moments.data.network.model.PostComment;
 import com.pahat.moments.data.network.model.PostComposite;
 import com.pahat.moments.data.network.model.PostLike;
 import com.pahat.moments.data.network.model.SavedPost;
-import com.pahat.moments.data.firebase.model.Sender;
 import com.pahat.moments.data.network.model.UserFollow;
 import com.pahat.moments.data.network.model.UserFollowComposite;
-import com.pahat.moments.data.firebase.model.ViewData;
 
 import java.util.List;
 
@@ -31,8 +31,8 @@ public interface APIService {
     @POST("users")
     @FormUrlEncoded
     Call<APIResponse<APIUser>> createUser(@Field("user_id") String user_id,
-                                                @Field("username") String username,
-                                                @Field("fcm_token") String fcm_token);
+                                          @Field("username") String username,
+                                          @Field("fcm_token") String fcm_token);
 
     @POST("users/{user_id}/update")
     @FormUrlEncoded
@@ -43,10 +43,11 @@ public interface APIService {
     Call<APIResponse<UserFollowComposite>> getUserFollow(@Path("username") String username);
 
     @POST("userfollow")
+    @FormUrlEncoded
     Call<APIResponse<UserFollow>> createUserFolloe(@Field("username") String username,
-                                                         @Field("username_following") String username_following);
+                                                   @Field("username_following") String username_following);
 
-    @POST("userfollow/{user_foll_id}/delete")
+    @GET("userfollow/{user_foll_id}/delete")
     Call<APIResponse<UserFollow>> deleteUserFollow(@Path("user_foll_id") long user_follow_id);
 
     // POSTS
@@ -70,7 +71,7 @@ public interface APIService {
     Call<APIResponse<Post>> updatePost(@Path("post_id") long post_id,
                                        @Field("caption") String caption);
 
-    @POST("posts/{post_id}/delete")
+    @GET("posts/{post_id}/delete")
     Call<APIResponse<Post>> deletePost(@Path("post_id") long post_id);
 
     // POST LIKE
@@ -80,10 +81,9 @@ public interface APIService {
     @POST("postlikes")
     @FormUrlEncoded
     Call<APIResponse<PostLike>> createPostLike(@Field("post_id") long post_id,
-                                           @Field("username") String username);
+                                               @Field("username") String username);
 
-    @POST("postlikes/{post_like_id}/delete")
-    @FormUrlEncoded
+    @GET("postlikes/{post_like_id}/delete")
     Call<APIResponse<PostLike>> deletePostLike(@Path("post_like_id") long post_like_id);
 
     // POST COMMENTS
@@ -93,26 +93,21 @@ public interface APIService {
     @POST("postcomments")
     @FormUrlEncoded
     Call<APIResponse<PostComment>> createPostComment(@Field("post_id") long post_id,
-                                              @Field("username") String username,
-                                              @Field("comment") String comment);
+                                                     @Field("username") String username,
+                                                     @Field("comment") String comment);
 
-    @POST("postcomments/{post_comment_id}/delete")
-    @FormUrlEncoded
+    @GET("postcomments/{post_comment_id}/delete")
     Call<APIResponse<PostComment>> deletePostComment(@Path("post_comment_id") long post_comment_id);
 
     // SAVED POSTS
     @GET("savedposts/{username}")
-    Call<APIResponse<List<SavedPost>>> getAllSavedPosts(@Path("username") long post_id);
+    Call<APIResponse<List<SavedPost>>> getAllSavedPosts(@Path("username") String username);
 
     @POST("savedposts")
     @FormUrlEncoded
     Call<APIResponse<Post>> createSavedPost(@Field("username") String username,
                                             @Field("post_id") long post_id);
 
-    @POST("savedposts/{saved_post_id}/delete")
-    @FormUrlEncoded
+    @GET("savedposts/{saved_post_id}/delete")
     Call<APIResponse<Post>> deleteSavedPost(@Path("saved_post_id") long saved_post_id);
-
-    @POST("fcm/send")
-    Call<ViewData> sendNotification(@Body Sender body);
 }

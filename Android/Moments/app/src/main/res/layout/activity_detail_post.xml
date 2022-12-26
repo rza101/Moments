@@ -96,7 +96,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/ic_favorite_24"
+                android:src="@drawable/ic_favorite_border_24"
                 app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
                 app:layout_constraintTop_toBottomOf="@id/detail_post_tv_captions"
                 app:tint="@color/color_red" />
@@ -152,9 +152,11 @@
                 android:id="@+id/detail_post_iv_send_comment"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:src="@drawable/ic_send_24"
                 app:layout_constraintBottom_toBottomOf="@id/detail_post_et_comment"
                 app:layout_constraintEnd_toEndOf="@id/detail_post_tv_captions"
-                app:layout_constraintTop_toTopOf="@id/detail_post_et_comment" />
+                app:layout_constraintTop_toTopOf="@id/detail_post_et_comment"
+                app:tint="@color/grey" />
 
             <View
                 android:id="@+id/detail_post_view_comment_line"
@@ -189,13 +191,13 @@
 
     </ScrollView>
 
-<!--    <com.airbnb.lottie.LottieAnimationView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:lottie_fileName="loading" />-->
+    <!--    <com.airbnb.lottie.LottieAnimationView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:lottie_fileName="loading" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
