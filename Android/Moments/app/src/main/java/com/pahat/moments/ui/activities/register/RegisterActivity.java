@@ -29,8 +29,7 @@ import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.APIUser;
 import com.pahat.moments.databinding.ActivityRegisterBinding;
 import com.pahat.moments.ui.activities.main.MainActivity;
-
-import java.util.List;
+import com.pahat.moments.util.Constants;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -97,25 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-//                mRef = mRoot.child("users");
-//                mRef.orderByChild("username").equalTo(username).addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        if()
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                    }
-//                });
-
-//                if(){
-//                    binding.registerEtUsername.setError("Username already exists!");
-//                    return;
-//                }
-
-                mRef = mRoot.child("users");
+                mRef = mRoot.child(Constants.FIREBASE_USERS_REF);
                 mRef.orderByChild("username").equalTo(username).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -139,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                         if (response.isSuccessful()) {
                                                                             // STORE TO API SUCCESS
                                                                             User user = new User(userId, username, fullName, null);
-                                                                            mRef = mRoot.child("users").child(userId);
+                                                                            mRef = mRoot.child(Constants.FIREBASE_USERS_REF).child(userId);
                                                                             mRef.setValue(user);
 
                                                                             Toast.makeText(RegisterActivity.this, "Register success!", Toast.LENGTH_SHORT).show();
