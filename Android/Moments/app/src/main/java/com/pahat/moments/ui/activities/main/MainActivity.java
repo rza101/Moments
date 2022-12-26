@@ -111,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(new Intent(MainActivity.this, ChangePassActivity.class));
                             return true;
                         } else if (id == R.id.menu_popup_main_logout) {
-                            FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            FirebaseAuth.getInstance().signOut();
                             finish();
                             return true;
                         }

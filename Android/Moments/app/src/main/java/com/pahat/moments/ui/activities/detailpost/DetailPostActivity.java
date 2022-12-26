@@ -402,7 +402,7 @@ public class DetailPostActivity extends AppCompatActivity {
                                             });
                                 } else {
                                     APIUtil.getAPIService()
-                                            .createUserFolloe(currentUser.getUsername(), post.getUsername())
+                                            .createUserFollow(currentUser.getUsername(), post.getUsername())
                                             .enqueue(new Callback<APIResponse<UserFollow>>() {
                                                 @Override
                                                 public void onResponse(Call<APIResponse<UserFollow>> call, Response<APIResponse<UserFollow>> response) {

@@ -2,6 +2,8 @@ package com.pahat.moments.ui.activities.otherprofile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.SearchManager;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.pahat.moments.databinding.ActivityEditProfileBinding;
@@ -18,5 +20,11 @@ public class OtherProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityOtherProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+        }
+
     }
 }
