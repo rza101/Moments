@@ -10,4 +10,7 @@ class SavedPost extends Model
     use HasFactory;
 
     protected $table = "saved_posts";
+    function Post(){
+        return $this->belongsTo(Post::class, "post_id", "id");
+    }
 }

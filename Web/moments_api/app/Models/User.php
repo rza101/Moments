@@ -20,4 +20,14 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $primaryKey = 'user_id';
     public $incrementing = false;
+
+    function Post(){
+        return $this->hasMany(Post::class, "username", "username");
+    }
+    function Following(){
+        return $this->hasMany(UserFollow::class, "username", "username");
+    }
+    function Follower(){
+        return $this->hasMany(UserFollow::class, "username", "username_following");
+    }
 }
