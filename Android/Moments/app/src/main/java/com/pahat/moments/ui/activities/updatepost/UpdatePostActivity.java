@@ -14,6 +14,8 @@ import com.pahat.moments.util.Utilities;
 
 public class UpdatePostActivity extends AppCompatActivity {
 
+    public static final String POST_INTENT_KEY = "POST_INTENT_KEY";
+
     private ActivityUpdatePostBinding binding;
 
     @Override

@@ -62,7 +62,7 @@ public interface APIService {
     Call<APIResponse<List<Post>>> getAllPost();
 
     @GET("posts")
-    Call<APIResponse<List<Post>>> getAllPostByUserId(@Query("username") String username);
+    Call<APIResponse<List<Post>>> getAllPostByUsername(@Query("username") String username);
 
     @GET("posts/{id}")
     Call<APIResponse<PostComposite>> getPostById(@Path("id") String id);

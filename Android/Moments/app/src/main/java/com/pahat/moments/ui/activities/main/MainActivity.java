@@ -3,15 +3,11 @@ package com.pahat.moments.ui.activities.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
@@ -71,67 +67,53 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.main_fragment);
         NavigationUI.setupWithNavController(binding.mainBnv, navController);
 
-        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-            @Override
-            public void onDestinationChanged(@NonNull NavController navController,
-                                             @NonNull NavDestination navDestination,
-                                             @Nullable Bundle bundle) {
-                String title = "";
+        navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
+            String title = "";
 
-                if (navDestination.getId() == R.id.main_nav_home) {
-                    title = "Home";
-                } else if (navDestination.getId() == R.id.main_nav_search) {
-                    title = "Search";
-                } else if (navDestination.getId() == R.id.main_nav_chat) {
-                    title = "Chat";
-                } else if (navDestination.getId() == R.id.main_nav_profile) {
-                    title = "Profile";
+            if (navDestination.getId() == R.id.main_nav_home) {
+                title = "Home";
+            } else if (navDestination.getId() == R.id.main_nav_search) {
+                title = "Search";
+            } else if (navDestination.getId() == R.id.main_nav_chat) {
+                title = "Chat";
+            } else if (navDestination.getId() == R.id.main_nav_profile) {
+                title = "Profile";
+            }
+
+            binding.toolbar.toolbarTitle.setText(title);
+        });
+
+        binding.toolbar.toolbarMenu.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(MainActivity.this, v);
+            popupMenu.setOnMenuItemClickListener(item -> {
+                int id = item.getItemId();
+
+                if (id == R.id.menu_popup_main_about) {
+                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                    return true;
+                } else if (id == R.id.menu_popup_main_saved_posts) {
+                    startActivity(new Intent(MainActivity.this, SavedPostActivity.class));
+                    return true;
+                } else if (id == R.id.menu_popup_main_change_pass) {
+                    startActivity(new Intent(MainActivity.this, ChangePassActivity.class));
+                    return true;
+                } else if (id == R.id.menu_popup_main_logout) {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    FirebaseAuth.getInstance().signOut();
+                    finish();
+                    return true;
                 }
 
-                binding.toolbar.toolbarTitle.setText(title);
-            }
+                return false;
+            });
+
+            MenuInflater menuInflater = popupMenu.getMenuInflater();
+            menuInflater.inflate(R.menu.menu_popup_main, popupMenu.getMenu());
+            popupMenu.show();
         });
 
-        binding.toolbar.toolbarMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(MainActivity.this, v);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        int id = item.getItemId();
-
-                        if (id == R.id.menu_popup_main_about) {
-                            startActivity(new Intent(MainActivity.this, AboutActivity.class));
-                            return true;
-                        } else if (id == R.id.menu_popup_main_saved_posts) {
-                            startActivity(new Intent(MainActivity.this, SavedPostActivity.class));
-                            return true;
-                        } else if (id == R.id.menu_popup_main_change_pass) {
-                            startActivity(new Intent(MainActivity.this, ChangePassActivity.class));
-                            return true;
-                        } else if (id == R.id.menu_popup_main_logout) {
-                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                            FirebaseAuth.getInstance().signOut();
-                            finish();
-                            return true;
-                        }
-
-                        return false;
-                    }
-                });
-
-                MenuInflater menuInflater = popupMenu.getMenuInflater();
-                menuInflater.inflate(R.menu.menu_popup_main, popupMenu.getMenu());
-                popupMenu.show();
-            }
-        });
-
-        binding.toolbar.toolbarAddPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CreatePostActivity.class));
-            }
-        });
+        binding.toolbar.toolbarAddPost.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, CreatePostActivity.class))
+        );
     }
 }

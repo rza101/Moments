@@ -22,7 +22,7 @@ class PostsController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',
-                'data' => Post::where('username', '=', $request->username)->orderBy('created_at', 'DESC')
+                'data' => Post::where('username', '=', $request->username)->orderBy('created_at', 'DESC')->get()
             ]);
         }else{
             return response()->json([

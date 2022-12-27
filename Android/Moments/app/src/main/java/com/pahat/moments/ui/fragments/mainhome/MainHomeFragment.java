@@ -43,14 +43,11 @@ public class MainHomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        itemPostAdapter = new ItemPostAdapter(new OnItemClick<Post>() {
-            @Override
-            public void onClick(View v, Post data) {
-                // ON ITEM CLICK
-                startActivity(new Intent(requireContext(), DetailPostActivity.class)
-                        .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
-                );
-            }
+        itemPostAdapter = new ItemPostAdapter((v, data) -> {
+            // ON ITEM CLICK
+            startActivity(new Intent(requireContext(), DetailPostActivity.class)
+                    .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
+            );
         });
 
         binding.fragmentMainHomeRvPosts.setLayoutManager(
