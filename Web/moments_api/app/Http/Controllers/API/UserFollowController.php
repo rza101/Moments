@@ -72,12 +72,12 @@ class UserFollowController extends Controller
             FROM user_follow 
             INNER JOIN users ON users.username = user_follow.username
             INNER JOIN users uf on uf.username = user_follow.username_following
-            Where user_follow.username = :username", ["username" => $request->query($username)]);
+            Where user_follow.username = ?", [$username]);
             $follower = DB::select("SELECT user_follow.id, user_follow.username, user_follow.username_following, users.full_name, users.image_url, uf.username as username_following, uf.full_name as full_name_following, uf.image_url as image_url_following
             FROM user_follow 
             INNER JOIN users ON users.username = user_follow.username
             INNER JOIN users uf on uf.username = user_follow.username_following
-            user_follow.username_following = :username", ["username" => $request->query($username)]);
+            user_follow.username_following = ?", [$username]);
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',
