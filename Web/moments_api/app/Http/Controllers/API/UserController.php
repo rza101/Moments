@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Exception;
+use PDO;
 
 class UserController extends Controller
 {
@@ -16,9 +17,22 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        if(!$request->q){
+            return response()->json([
+                'status' => 400,
+                'message' => 'Failed to get user'
+            ], 400);
+        }
+
+        $user = User::where(function ($query) use ($request) {
+            $query->where('full_name', 'like', '%' . $request->q . '%')
+                ->orWhere('username', 'like', '%' . $request->q . '%');
+        })->get();
+
         return response()->json([
             'status' => 200,
-            'message' => 'Success'
+            'message' => 'Success',
+            'data' => $user
         ]);
     }
 
@@ -35,7 +49,7 @@ class UserController extends Controller
             $user->user_id = $request->user_id;
             $user->username = $request->username;
             $user->full_name = $request->full_name;
-            $user->image_url = $request->image_url;
+            // $user->image_url = $request->image_url;
             $user->fcm_token = $request->fcm_token;
             $user->save();
 
@@ -128,7 +142,7 @@ class UserController extends Controller
 
         if ($user) {
             $user->delete();
-            
+
             return response()->json([
                 'status' => 200,
                 'message' => 'User deleted'

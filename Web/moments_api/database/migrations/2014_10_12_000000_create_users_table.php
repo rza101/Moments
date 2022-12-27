@@ -22,9 +22,9 @@ return new class extends Migration
             // $table->rememberToken();
             $table->string('user_id')->primary();
             $table->string('username')->unique();
-            $table->string('full_name',30);
-            $table->string('image_url',255);
-            $table->string('fcm_token')->nullable();
+            $table->string('full_name');
+            $table->string('image_url');
+            $table->string('fcm_token');
             $table->timestamps();
         });
     }

@@ -22,7 +22,10 @@ import retrofit2.http.Query;
 
 public interface APIService {
     // USER
-    @GET("users/{user_id}")
+    @GET("users/")
+    Call<APIResponse<List<APIUser>>> getUserByUsernameOrFullName(@Query("q") String query);
+
+    @GET("users/{query}")
     Call<APIResponse<APIUser>> getUserByUID(@Path("user_id") String user_id);
 
     @POST("users")
@@ -30,12 +33,17 @@ public interface APIService {
     Call<APIResponse<APIUser>> createUser(@Field("user_id") String user_id,
                                           @Field("username") String username,
                                           @Field("full_name") String full_name,
-                                          @Field("image_url") String image_url,
                                           @Field("fcm_token") String fcm_token);
 
     @POST("users/{user_id}/update")
     @FormUrlEncoded
     Call<APIResponse<APIUser>> updateUser(@Path("user_id") String user_id, @Field("fcm_token") String fcm_foken);
+
+    @POST("users/{user_id}/update")
+    @FormUrlEncoded
+    Call<APIResponse<APIUser>> updateUser(@Path("user_id") String user_id,
+                                          @Field("full_name") String full_name,
+                                          @Field("image_url") String image_url);
 
     // USER FOLLOW
     @GET("userfollow/{username}")

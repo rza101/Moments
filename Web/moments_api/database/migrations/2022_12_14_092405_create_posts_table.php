@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('username');
             $table->string('image_url');
-            $table->text('caption')->nullable();
+            $table->text('caption');
             $table->foreign('username')->references('username')->on('users')->cascadeOnDelete();
             $table->timestamps();
         });

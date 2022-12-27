@@ -336,7 +336,7 @@ public class DetailPostActivity extends AppCompatActivity {
                                     R.drawable.ic_broken_image_24))
                             .into(binding.detailPostIvPicture);
 
-                    if (postUser.getProfilePicture() != null) {
+                    if (!TextUtils.isEmpty(postUser.getProfilePicture())) {
                         Glide.with(DetailPostActivity.this)
                                 .load(postUser.getProfilePicture())
                                 .into(binding.detailPostCivDp);

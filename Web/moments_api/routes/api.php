@@ -42,6 +42,7 @@ Route::post('savedposts', [SavedPostsController::class, 'store']);
 Route::get('savedposts/{username}', [SavedPostsController::class, 'show']);
 Route::get('savedposts/{id}/delete', [SavedPostsController::class, 'destroy']);
 
+Route::get('users', [UserController::class, 'index']);
 Route::post('users', [UserController::class, 'store']);
 Route::get('users/{user_id}', [UserController::class, 'show']);
 Route::post('users/{user_id}/update', [UserController::class, 'update']);

@@ -1,9 +1,9 @@
 package com.pahat.moments.ui.activities.savedpost;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,9 +27,8 @@ import com.pahat.moments.util.Constants;
 import com.pahat.moments.util.Utilities;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.Function;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -81,13 +80,22 @@ public class SavedPostActivity extends AppCompatActivity {
             }
         });
 
-//        itemPostAdapter.submitList(new ArrayList<>());
+        binding.fragmentSavedPostRvPosts.setLayoutManager(
+                new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+        binding.fragmentSavedPostRvPosts.setAdapter(itemPostAdapter);
+
         APIUtil.getAPIService().getAllSavedPosts(currentUser.getUsername())
                 .enqueue(new Callback<APIResponse<List<SavedPost>>>() {
                     @Override
                     public void onResponse(Call<APIResponse<List<SavedPost>>> call, Response<APIResponse<List<SavedPost>>> response) {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
+                            List<Post> postList = new ArrayList<>();
 
+                            for (SavedPost savedPost : response.body().getData()) {
+                                postList.add(new Post(savedPost.getUsername(), savedPost.getImageUrl(), savedPost.getCaption()));
+                            }
+
+                            itemPostAdapter.submitList(postList);
                         } else {
                             Utilities.makeToast(SavedPostActivity.this, "Failed to load data");
                         }
@@ -95,13 +103,8 @@ public class SavedPostActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<APIResponse<List<SavedPost>>> call, Throwable t) {
-
+                        Utilities.makeToast(SavedPostActivity.this, "Failed to load data");
                     }
                 });
-
-        binding.fragmentSavedPostRvPosts.setLayoutManager(
-                new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-        binding.fragmentSavedPostRvPosts.setAdapter(itemPostAdapter);
-
     }
 }
