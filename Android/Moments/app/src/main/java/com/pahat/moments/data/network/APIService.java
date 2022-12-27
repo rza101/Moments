@@ -1,7 +1,5 @@
 package com.pahat.moments.data.network;
 
-import com.pahat.moments.data.firebase.model.Sender;
-import com.pahat.moments.data.firebase.model.ViewData;
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.APIUser;
 import com.pahat.moments.data.network.model.Post;
@@ -15,7 +13,6 @@ import com.pahat.moments.data.network.model.UserFollowComposite;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -44,7 +41,7 @@ public interface APIService {
 
     @POST("userfollow")
     @FormUrlEncoded
-    Call<APIResponse<UserFollow>> createUserFolloe(@Field("username") String username,
+    Call<APIResponse<UserFollow>> createUserFollow(@Field("username") String username,
                                                    @Field("username_following") String username_following);
 
     @GET("userfollow/{user_foll_id}/delete")
