@@ -34,6 +34,8 @@ class UserController extends Controller
             $user = new User();
             $user->user_id = $request->user_id;
             $user->username = $request->username;
+            $user->full_name = $request->full_name;
+            $user->image_url = $request->image_url;
             $user->fcm_token = $request->fcm_token;
             $user->save();
 
@@ -85,7 +87,15 @@ class UserController extends Controller
             $user = User::find($user_id);
 
             if ($user) {
-                $user->fcm_token = $request->fcm_token;
+                if ($request->fcm_token) {
+                    $user->fcm_token = $request->fcm_token;
+                }
+                if ($request->full_name) {
+                    $user->full_name = $request->full_name;
+                }
+                if ($request->image_url) {
+                    $user->image_url = $request->image_url;
+                }
                 $user->save();
 
                 return response()->json([

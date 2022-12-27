@@ -29,6 +29,8 @@ public interface APIService {
     @FormUrlEncoded
     Call<APIResponse<APIUser>> createUser(@Field("user_id") String user_id,
                                           @Field("username") String username,
+                                          @Field("full_name") String full_name,
+                                          @Field("image_url") String image_url,
                                           @Field("fcm_token") String fcm_token);
 
     @POST("users/{user_id}/update")

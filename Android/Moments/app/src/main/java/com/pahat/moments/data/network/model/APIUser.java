@@ -12,6 +12,12 @@ public class APIUser implements Parcelable {
     @SerializedName("username")
     private String username;
 
+    @SerializedName("full_name")
+    private String full_name;
+
+    @SerializedName("image_url")
+    private String image_url;
+
     @SerializedName("fcm_token")
     private String fcmToken;
 
@@ -23,15 +29,19 @@ public class APIUser implements Parcelable {
         this.fcmToken = fcmToken;
     }
 
-    public APIUser(String userId, String username, String fcmToken) {
+    public APIUser(String userId, String username, String full_name, String image_url, String fcmToken) {
         this.userId = userId;
         this.username = username;
+        this.full_name = full_name;
+        this.image_url = image_url;
         this.fcmToken = fcmToken;
     }
 
     protected APIUser(Parcel in) {
         userId = in.readString();
         username = in.readString();
+        full_name = in.readString();
+        image_url = in.readString();
         fcmToken = in.readString();
     }
 
@@ -59,6 +69,14 @@ public class APIUser implements Parcelable {
         return fcmToken;
     }
 
+    public String getFull_name() {
+        return full_name;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -68,6 +86,8 @@ public class APIUser implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(userId);
         dest.writeString(username);
+        dest.writeString(full_name);
+        dest.writeString(image_url);
         dest.writeString(fcmToken);
     }
 }

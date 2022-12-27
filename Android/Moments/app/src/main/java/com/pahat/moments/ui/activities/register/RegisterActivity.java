@@ -114,7 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                 // SUCCESSFULLY REGISTERED
                                                                 String userId = authTask.getResult().getUser().getUid();
 
-                                                                APIUtil.getAPIService().createUser(userId, username, fcmTask.getResult()).enqueue(new Callback<APIResponse<APIUser>>() {
+                                                                APIUtil.getAPIService().createUser(userId, username, fullName, null ,fcmTask.getResult()).enqueue(new Callback<APIResponse<APIUser>>() {
                                                                     @Override
                                                                     public void onResponse(Call<APIResponse<APIUser>> call, Response<APIResponse<APIUser>> response) {
                                                                         if (response.isSuccessful()) {
