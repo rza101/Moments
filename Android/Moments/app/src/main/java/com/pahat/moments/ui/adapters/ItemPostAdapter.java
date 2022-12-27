@@ -22,6 +22,23 @@ public class ItemPostAdapter extends ListAdapter<Post, ItemPostAdapter.ViewHolde
     private final OnItemClick<Post> onItemClick;
     private final OnItemClick<Post> onMoreClick;
 
+    public ItemPostAdapter(OnItemClick<Post> onItemClick) {
+        super(new DiffUtil.ItemCallback<Post>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull Post oldItem, @NonNull Post newItem) {
+                return false;
+            }
+
+            @Override
+            public boolean areContentsTheSame(@NonNull Post oldItem, @NonNull Post newItem) {
+                return false;
+            }
+        });
+
+        this.onItemClick = onItemClick;
+        this.onMoreClick = null;
+    }
+
     public ItemPostAdapter(OnItemClick<Post> onItemClick, OnItemClick<Post> onMoreClick) {
         super(new DiffUtil.ItemCallback<Post>() {
             @Override
@@ -57,12 +74,16 @@ public class ItemPostAdapter extends ListAdapter<Post, ItemPostAdapter.ViewHolde
                 .into(holder.binding.itemPostIvPicture);
 
         holder.binding.itemPostTvCaption.setText(data.getCaption());
-        holder.binding.itemPostIvMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onMoreClick.onClick(v, data);
-            }
-        });
+        if (onMoreClick != null) {
+            holder.binding.itemPostIvMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onMoreClick.onClick(v, data);
+                }
+            });
+        } else {
+            holder.binding.itemPostIvMore.setVisibility(View.INVISIBLE);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

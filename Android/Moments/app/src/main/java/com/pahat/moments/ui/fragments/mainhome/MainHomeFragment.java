@@ -51,11 +51,6 @@ public class MainHomeFragment extends Fragment {
                         .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
                 );
             }
-        }, new OnItemClick<Post>() {
-            @Override
-            public void onClick(View v, Post data) {
-                // ON MORE CLICK
-            }
         });
 
         binding.fragmentMainHomeRvPosts.setLayoutManager(
@@ -67,7 +62,6 @@ public class MainHomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        itemPostAdapter.submitList(new ArrayList<>());
         APIUtil.getAPIService().getAllPost().enqueue(new Callback<APIResponse<List<Post>>>() {
             @Override
             public void onResponse(Call<APIResponse<List<Post>>> call, Response<APIResponse<List<Post>>> response) {

@@ -30,6 +30,9 @@ import com.pahat.moments.data.network.model.APIUser;
 import com.pahat.moments.databinding.ActivityRegisterBinding;
 import com.pahat.moments.ui.activities.main.MainActivity;
 import com.pahat.moments.util.Constants;
+import com.pahat.moments.util.Utilities;
+
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,39 +63,52 @@ public class RegisterActivity extends AppCompatActivity {
         binding.registerBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean valid = true;
                 final String email = binding.registerEtEmail.getText().toString();
                 final String fullName = binding.registerEtFullName.getText().toString();
-                String username = binding.registerEtUsername.getText().toString();
+                String username = binding.registerEtUsername.getText().toString().toLowerCase(Locale.ROOT);
                 String password = binding.registerEtPassword.getText().toString();
                 String confirmPassword = binding.registerEtConfirmPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
                     binding.registerEtEmail.setError("Enter your email address!");
-                    return;
+                    valid = false;
                 }
                 if (TextUtils.isEmpty(fullName)) {
                     binding.registerEtFullName.setError("Enter your full name!");
-                    return;
+                    valid = false;
                 }
                 if (TextUtils.isEmpty(username)) {
                     binding.registerEtUsername.setError("Enter your username!");
-                    return;
+                    valid = false;
                 }
                 if (TextUtils.isEmpty(password)) {
                     binding.registerEtPassword.setError("Enter your password!");
-                    return;
+                    valid = false;
                 }
                 if (TextUtils.isEmpty(confirmPassword)) {
                     binding.registerEtConfirmPassword.setError("Enter your confirm password!");
-                    return;
+                    valid = false;
                 }
                 if (password.length() < 6) {
                     binding.registerEtPassword.setError("Password too short, enter minimum 6 characters!");
-                    return;
+                    valid = false;
                 }
 
                 if (!confirmPassword.equals(password)) {
                     binding.registerEtConfirmPassword.setError("Password doesn't match!");
+                    valid = false;
+                }
+
+                for (char c : username.toCharArray()) {
+                    if (!Character.isAlphabetic(c) && !Character.isDigit(c) && c != '.' && c != '_') {
+                        Utilities.makeToast(RegisterActivity.this, "Username contains invalid character");
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if (!valid) {
                     return;
                 }
 

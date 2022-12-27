@@ -15,6 +15,9 @@ public class SavedPost implements Parcelable {
     @SerializedName("post_id")
     private long postId;
 
+    @SerializedName("post_username")
+    private String postUsername;
+
     @SerializedName("image_url")
     private String imageUrl;
 
@@ -39,6 +42,7 @@ public class SavedPost implements Parcelable {
         id = in.readLong();
         username = in.readString();
         postId = in.readLong();
+        postUsername = in.readString();
         imageUrl = in.readString();
         caption = in.readString();
         createdAt = in.readString();
@@ -69,6 +73,10 @@ public class SavedPost implements Parcelable {
         return postId;
     }
 
+    public String getPostUsername() {
+        return postUsername;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -95,6 +103,7 @@ public class SavedPost implements Parcelable {
         dest.writeLong(id);
         dest.writeString(username);
         dest.writeLong(postId);
+        dest.writeString(postUsername);
         dest.writeString(imageUrl);
         dest.writeString(caption);
         dest.writeString(createdAt);

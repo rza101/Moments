@@ -56,9 +56,15 @@ class SavedPostsController extends Controller
      */
     public function show($username)
     {
-        $saved_post = SavedPost::where('username', '=', $username)
+        $saved_post = SavedPost::where('saved_posts.username', '=', $username)
         ->join('posts', 'saved_posts.post_id','=','posts.id')
-        ->orderBy('created_at', 'DESC')
+        ->select([
+            'saved_posts.*',
+            'posts.username AS post_username',
+            'posts.image_url',
+            'posts.caption'
+        ])
+        ->orderBy('saved_posts.created_at', 'DESC')
         ->get();
 
         if ($saved_post) {

@@ -60,7 +60,7 @@ public class Utilities {
                 .setText(text)
                 .setDuration(Style.DURATION_LONG)
                 .setFrame(Style.FRAME_STANDARD)
-                .setTextColor(Color.parseColor("#9F9F9F"))
+                .setTextColor(Color.BLACK)
                 .setColor(Color.parseColor("#3FBDF1"))
                 .setAnimations(Style.ANIMATIONS_FADE)
                 .show();

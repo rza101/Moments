@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -70,6 +71,8 @@ public class DetailPostActivity extends AppCompatActivity {
     private long saveId = -1;
     private boolean isSaved = false;
 
+    private boolean loadSuccess = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +112,7 @@ public class DetailPostActivity extends AppCompatActivity {
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
                                 Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                                loadSuccess = false;
                                 countDownLatch1.countDown();
                             }
                         });
@@ -126,6 +130,7 @@ public class DetailPostActivity extends AppCompatActivity {
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
                                 Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                                loadSuccess = false;
                                 countDownLatch1.countDown();
                             }
                         });
@@ -149,6 +154,7 @@ public class DetailPostActivity extends AppCompatActivity {
                                     postComposite = response.body().getData();
                                 } else {
                                     Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                                    loadSuccess = false;
                                 }
 
                                 countDownLatch2.countDown();
@@ -157,6 +163,7 @@ public class DetailPostActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(Call<APIResponse<PostComposite>> call, Throwable t) {
                                 Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                                loadSuccess = false;
                                 countDownLatch2.countDown();
                             }
                         });
@@ -180,6 +187,7 @@ public class DetailPostActivity extends AppCompatActivity {
                                     postUserFollowerList = responseFollow.body().getData().getFollower();
                                 } else {
                                     Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                                    loadSuccess = false;
                                 }
                                 countDownLatch3.countDown();
                             }
@@ -187,6 +195,7 @@ public class DetailPostActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(Call<APIResponse<UserFollowComposite>> call, Throwable t) {
                                 Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                                loadSuccess = false;
                                 countDownLatch3.countDown();
                             }
                         });
@@ -213,12 +222,18 @@ public class DetailPostActivity extends AppCompatActivity {
                                             break;
                                         }
                                     }
+                                } else {
+                                    Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                                    loadSuccess = false;
                                 }
+
                                 countDownLatch4.countDown();
                             }
 
                             @Override
                             public void onFailure(Call<APIResponse<List<SavedPost>>> call, Throwable t) {
+                                Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                                loadSuccess = false;
                                 countDownLatch4.countDown();
                             }
                         });
@@ -231,7 +246,12 @@ public class DetailPostActivity extends AppCompatActivity {
                 }
 
                 runOnUiThread(() -> {
+                    if (!loadSuccess) {
+                        return;
+                    }
+
                     binding.detailPostClMain.setVisibility(View.VISIBLE);
+
                     for (UserFollow userFollow : postUserFollowerList) {
                         if (userFollow.getUsername().equals(currentUser.getUsername())) {
                             isFollowing = true;
