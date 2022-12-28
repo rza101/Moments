@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private User user;
-    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
+
+        
 
         setSupportActionBar(binding.toolbar.getRoot());
         binding.toolbar.toolbarFullname.setText(user == null ? "" : user.getFullName());
