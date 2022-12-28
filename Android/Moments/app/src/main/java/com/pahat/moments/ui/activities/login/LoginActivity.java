@@ -6,6 +6,7 @@ import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private FirebaseAuth mAuth;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,10 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginTvRegister.setText(Html.fromHtml(register));
 
         mAuth = FirebaseAuth.getInstance();
+
+        binding.loginLoadingLottie.setVisibility(View.GONE);
+
+
 
         binding.loginBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                     binding.loginEtPassword.setError("Enter your password!");
                     return;
                 }
-
+                showLoading();
                 FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> fcmTask) {
@@ -77,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     .enqueue(new Callback<APIResponse<APIUser>>() {
                                                         @Override
                                                         public void onResponse(Call<APIResponse<APIUser>> call, Response<APIResponse<APIUser>> response) {
+                                                            hideLoading();
                                                             if (response.isSuccessful()) {
                                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                                 startActivity(intent);
@@ -135,5 +142,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
+
+    public void showLoading(){
+        binding.loginLoadingLottie.setVisibility(View.VISIBLE);
+    };
+    public void hideLoading(){
+        binding.loginLoadingLottie.setVisibility(View.GONE);
+    };
+
+
 }
