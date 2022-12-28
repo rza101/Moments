@@ -4,14 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.ActivitySplashBinding;
 import com.pahat.moments.ui.activities.login.LoginActivity;
@@ -37,22 +33,18 @@ public class SplashActivity extends AppCompatActivity {
                     .getReference()
                     .child(Constants.FIREBASE_USERS_REF)
                     .child(mAuth.getCurrentUser().getUid())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            User user = snapshot.getValue(User.class);
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            User user = task.getResult().getValue(User.class);
                             startActivity(
                                     new Intent(SplashActivity.this, MainActivity.class)
                                             .putExtra(MainActivity.USER_INTENT_KEY, user)
                             );
-                            finish();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                        } else {
                             startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                            finish();
                         }
+                        finish();
                     });
         } else {
             new Handler().postDelayed(() -> {

@@ -21,10 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -147,10 +144,10 @@ public class CreatePostActivity extends AppCompatActivity {
                         .getReference()
                         .child(Constants.FIREBASE_USERS_REF)
                         .child(firebaseUser.getUid())
-                        .addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String username = snapshot.getValue(User.class).getUsername();
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                String username = task.getResult().getValue(User.class).getUsername();
 
                                 storageReference.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                     @Override
@@ -192,11 +189,8 @@ public class CreatePostActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
+                            } else {
+                                Utilities.makeToast(CreatePostActivity.this, "Failed to create post");
                             }
                         });
             }

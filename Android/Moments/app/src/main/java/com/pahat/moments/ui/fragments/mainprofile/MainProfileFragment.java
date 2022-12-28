@@ -17,10 +17,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.pahat.moments.R;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.data.network.APIUtil;
@@ -30,6 +27,7 @@ import com.pahat.moments.data.network.model.UserFollowComposite;
 import com.pahat.moments.databinding.FragmentMainProfileBinding;
 import com.pahat.moments.ui.activities.detailpost.DetailPostActivity;
 import com.pahat.moments.ui.activities.updatepost.UpdatePostActivity;
+import com.pahat.moments.ui.activities.userlist.UserListActivity;
 import com.pahat.moments.ui.adapters.ItemPostAdapter;
 import com.pahat.moments.util.Constants;
 import com.pahat.moments.util.Utilities;
@@ -157,18 +155,14 @@ public class MainProfileFragment extends Fragment {
             FirebaseDatabase.getInstance().getReference()
                     .child(Constants.FIREBASE_USERS_REF)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            user = snapshot.getValue(User.class);
-                            countDownLatch1.countDown();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            user = task.getResult().getValue(User.class);
+                        } else {
                             showErrorToast();
-                            countDownLatch1.countDown();
                         }
+                        countDownLatch1.countDown();
                     });
 
             try {
@@ -268,6 +262,20 @@ public class MainProfileFragment extends Fragment {
                                 Utilities.numberToText(userFollowComposite.getFollowing().size())
                         )
                 );
+
+                binding.fragmentMainProfileTvFollowers.setOnClickListener(v -> {
+                    Intent intent = new Intent(requireContext(), UserListActivity.class);
+                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_LIKE);
+                    intent.putExtra(UserListActivity.USER_LIST_INTENT_KEY, Utilities.followerListToUserList(userFollowComposite.getFollower()));
+                    startActivity(intent);
+                });
+
+                binding.fragmentMainProfileTvFollowing.setOnClickListener(v -> {
+                    Intent intent = new Intent(requireContext(), UserListActivity.class);
+                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_LIKE);
+                    intent.putExtra(UserListActivity.USER_LIST_INTENT_KEY, Utilities.followingListToUserList(userFollowComposite.getFollowing()));
+                    startActivity(intent);
+                });
             });
         }).start();
     }

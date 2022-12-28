@@ -15,6 +15,12 @@ public class PostComment implements Parcelable {
     @SerializedName("username")
     private String username;
 
+    @SerializedName("full_name")
+    private String fullName;
+
+    @SerializedName("image_url")
+    private String imageUrl;
+
     @SerializedName("comment")
     private String comment;
 
@@ -37,6 +43,8 @@ public class PostComment implements Parcelable {
         id = in.readLong();
         postId = in.readLong();
         username = in.readString();
+        fullName = in.readString();
+        imageUrl = in.readString();
         comment = in.readString();
         createdAt = in.readString();
         updatedAt = in.readString();
@@ -66,6 +74,14 @@ public class PostComment implements Parcelable {
         return username;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public String getComment() {
         return comment;
     }
@@ -84,12 +100,14 @@ public class PostComment implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeLong(postId);
-        parcel.writeString(username);
-        parcel.writeString(comment);
-        parcel.writeString(createdAt);
-        parcel.writeString(updatedAt);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(postId);
+        dest.writeString(username);
+        dest.writeString(fullName);
+        dest.writeString(imageUrl);
+        dest.writeString(comment);
+        dest.writeString(createdAt);
+        dest.writeString(updatedAt);
     }
 }

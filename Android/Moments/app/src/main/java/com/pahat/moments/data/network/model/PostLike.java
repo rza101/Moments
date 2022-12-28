@@ -15,6 +15,12 @@ public class PostLike implements Parcelable {
     @SerializedName("username")
     private String username;
 
+    @SerializedName("full_name")
+    private String fullName;
+
+    @SerializedName("image_url")
+    private String imageUrl;
+
     @SerializedName("created_at")
     private String createdAt;
 
@@ -33,8 +39,26 @@ public class PostLike implements Parcelable {
         id = in.readLong();
         postId = in.readLong();
         username = in.readString();
+        fullName = in.readString();
+        imageUrl = in.readString();
         createdAt = in.readString();
         updatedAt = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(postId);
+        dest.writeString(username);
+        dest.writeString(fullName);
+        dest.writeString(imageUrl);
+        dest.writeString(createdAt);
+        dest.writeString(updatedAt);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<PostLike> CREATOR = new Creator<PostLike>() {
@@ -61,25 +85,19 @@ public class PostLike implements Parcelable {
         return username;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
 
     public String getUpdatedAt() {
         return updatedAt;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeLong(postId);
-        parcel.writeString(username);
-        parcel.writeString(createdAt);
-        parcel.writeString(updatedAt);
     }
 }

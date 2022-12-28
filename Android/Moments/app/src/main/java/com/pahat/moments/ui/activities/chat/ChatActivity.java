@@ -55,9 +55,10 @@ import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private ActivityChatBinding binding;
-
     private static final String TAG = ChatActivity.class.getSimpleName();
+    public static final String USER_INTENT_KEY = "USER_INTENT_KEY";
+
+    private ActivityChatBinding binding;
 
     private String mUsername;
     private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";

@@ -1,16 +1,15 @@
 package com.pahat.moments.ui.activities.detailpost;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -18,10 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.pahat.moments.R;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.data.network.APIUtil;
@@ -34,8 +30,8 @@ import com.pahat.moments.data.network.model.SavedPost;
 import com.pahat.moments.data.network.model.UserFollow;
 import com.pahat.moments.data.network.model.UserFollowComposite;
 import com.pahat.moments.databinding.ActivityDetailPostBinding;
-import com.pahat.moments.ui.activities.likelist.LikeListActivity;
 import com.pahat.moments.ui.activities.otherprofile.OtherProfileActivity;
+import com.pahat.moments.ui.activities.userlist.UserListActivity;
 import com.pahat.moments.ui.adapters.ItemCommentAdapter;
 import com.pahat.moments.util.Constants;
 import com.pahat.moments.util.Utilities;
@@ -97,43 +93,37 @@ public class DetailPostActivity extends AppCompatActivity {
                     .child(Constants.FIREBASE_USERS_REF)
                     .orderByChild("username")
                     .equalTo(post.getUsername())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            postUser = snapshot.getValue(User.class);
-                            countDownLatch1.countDown();
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            postUser = task.getResult().getValue(User.class);
+                        } else {
+                            showError();
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
-                            loadSuccess = false;
-                            countDownLatch1.countDown();
-                        }
+                        countDownLatch1.countDown();
                     });
 
             FirebaseDatabase.getInstance().getReference()
                     .child(Constants.FIREBASE_USERS_REF)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            currentUser = snapshot.getValue(User.class);
-                            countDownLatch1.countDown();
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            currentUser = task.getResult().getValue(User.class);
+                        } else {
+                            showError();
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
-                            loadSuccess = false;
-                            countDownLatch1.countDown();
-                        }
+                        countDownLatch1.countDown();
                     });
 
             try {
                 countDownLatch1.await();
             } catch (InterruptedException e) {
-                Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                showError();
+                return;
+            }
+
+            if (!loadSuccess) {
                 return;
             }
 
@@ -148,8 +138,7 @@ public class DetailPostActivity extends AppCompatActivity {
                             if (response.isSuccessful()) {
                                 postComposite = response.body().getData();
                             } else {
-                                Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
-                                loadSuccess = false;
+                                showError();
                             }
 
                             countDownLatch2.countDown();
@@ -157,8 +146,7 @@ public class DetailPostActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<APIResponse<PostComposite>> call, Throwable t) {
-                            Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
-                            loadSuccess = false;
+                            showError();
                             countDownLatch2.countDown();
                         }
                     });
@@ -166,7 +154,7 @@ public class DetailPostActivity extends AppCompatActivity {
             try {
                 countDownLatch2.await();
             } catch (InterruptedException e) {
-                Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                showError();
                 return;
             }
 
@@ -181,16 +169,14 @@ public class DetailPostActivity extends AppCompatActivity {
                             if (responseFollow.isSuccessful()) {
                                 postUserFollowerList = responseFollow.body().getData().getFollower();
                             } else {
-                                Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
-                                loadSuccess = false;
+                                showError();
                             }
                             countDownLatch3.countDown();
                         }
 
                         @Override
                         public void onFailure(Call<APIResponse<UserFollowComposite>> call, Throwable t) {
-                            Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
-                            loadSuccess = false;
+                            showError();
                             countDownLatch3.countDown();
                         }
                     });
@@ -198,7 +184,7 @@ public class DetailPostActivity extends AppCompatActivity {
             try {
                 countDownLatch3.await();
             } catch (InterruptedException e) {
-                Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                showError();
                 return;
             }
 
@@ -218,8 +204,7 @@ public class DetailPostActivity extends AppCompatActivity {
                                     }
                                 }
                             } else {
-                                Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
-                                loadSuccess = false;
+                                showError();
                             }
 
                             countDownLatch4.countDown();
@@ -227,8 +212,7 @@ public class DetailPostActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<APIResponse<List<SavedPost>>> call, Throwable t) {
-                            Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
-                            loadSuccess = false;
+                            showError();
                             countDownLatch4.countDown();
                         }
                     });
@@ -236,7 +220,7 @@ public class DetailPostActivity extends AppCompatActivity {
             try {
                 countDownLatch4.await();
             } catch (InterruptedException e) {
-                Utilities.makeToast(DetailPostActivity.this, "Failed to show post detail");
+                showError();
                 return;
             }
 
@@ -272,64 +256,56 @@ public class DetailPostActivity extends AppCompatActivity {
                             currentUser.getUsername().equals(post.getUsername())) {
                         // pemilik comment ATAU yg punya post
                         PopupMenu popupMenu = new PopupMenu(DetailPostActivity.this, v);
-                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                int id = item.getItemId();
+                        popupMenu.setOnMenuItemClickListener(item -> {
+                            int id = item.getItemId();
 
-                                if (id == R.id.menu_popup_comment_delete) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(DetailPostActivity.this);
-                                    builder.setTitle("Delete Comment");
-                                    builder.setMessage("Are you sure to delete this comment?");
-                                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            APIUtil.getAPIService()
-                                                    .deletePostComment(data.getId())
-                                                    .enqueue(new Callback<APIResponse<PostComment>>() {
-                                                        @Override
-                                                        public void onResponse(Call<APIResponse<PostComment>> call, Response<APIResponse<PostComment>> response) {
-                                                            if (response.isSuccessful()) {
-                                                                Utilities.makeToast(DetailPostActivity.this, "Comment deleted");
+                            if (id == R.id.menu_popup_comment_delete) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(DetailPostActivity.this);
+                                builder.setTitle("Delete Comment");
+                                builder.setMessage("Are you sure to delete this comment?");
+                                builder.setPositiveButton("Yes", (dialog, which) -> APIUtil.getAPIService()
+                                        .deletePostComment(data.getId())
+                                        .enqueue(new Callback<APIResponse<PostComment>>() {
+                                            @Override
+                                            public void onResponse(Call<APIResponse<PostComment>> call, Response<APIResponse<PostComment>> response) {
+                                                if (response.isSuccessful()) {
+                                                    Utilities.makeToast(DetailPostActivity.this, "Comment deleted");
 
-                                                                APIUtil.getAPIService()
-                                                                        .getPostById(String.valueOf(post.getId()))
-                                                                        .enqueue(new Callback<APIResponse<PostComposite>>() {
-                                                                            @Override
-                                                                            public void onResponse(Call<APIResponse<PostComposite>> call,
-                                                                                                   Response<APIResponse<PostComposite>> response) {
-                                                                                if (response.isSuccessful()) {
-                                                                                    postComposite = response.body().getData();
-                                                                                    itemCommentAdapter.submitList(postComposite.getPostComment());
-                                                                                }
-                                                                            }
+                                                    APIUtil.getAPIService()
+                                                            .getPostById(String.valueOf(post.getId()))
+                                                            .enqueue(new Callback<APIResponse<PostComposite>>() {
+                                                                @Override
+                                                                public void onResponse(Call<APIResponse<PostComposite>> call,
+                                                                                       Response<APIResponse<PostComposite>> response) {
+                                                                    if (response.isSuccessful()) {
+                                                                        postComposite = response.body().getData();
+                                                                        itemCommentAdapter.submitList(postComposite.getPostComment());
+                                                                    }
+                                                                }
 
-                                                                            @Override
-                                                                            public void onFailure(Call<APIResponse<PostComposite>> call, Throwable t) {
-                                                                            }
-                                                                        });
-                                                            } else {
-                                                                Utilities.makeToast(DetailPostActivity.this, "Failed to delete comment");
-                                                            }
-                                                        }
+                                                                @Override
+                                                                public void onFailure(Call<APIResponse<PostComposite>> call, Throwable t) {
+                                                                }
+                                                            });
+                                                } else {
+                                                    Utilities.makeToast(DetailPostActivity.this, "Failed to delete comment");
+                                                }
+                                            }
 
-                                                        @Override
-                                                        public void onFailure(Call<APIResponse<PostComment>> call, Throwable t) {
-                                                            Utilities.makeToast(DetailPostActivity.this, "Failed to delete comment");
-                                                        }
-                                                    });
-                                        }
-                                    });
-                                    builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+                                            @Override
+                                            public void onFailure(Call<APIResponse<PostComment>> call, Throwable t) {
+                                                Utilities.makeToast(DetailPostActivity.this, "Failed to delete comment");
+                                            }
+                                        }));
+                                builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
 
-                                    if (!DetailPostActivity.this.isFinishing()) {
-                                        builder.create().show();
-                                    }
-                                    return true;
+                                if (!DetailPostActivity.this.isFinishing()) {
+                                    builder.create().show();
                                 }
-
-                                return false;
+                                return true;
                             }
+
+                            return false;
                         });
 
                         MenuInflater menuInflater = popupMenu.getMenuInflater();
@@ -353,6 +329,7 @@ public class DetailPostActivity extends AppCompatActivity {
                 }
 
                 binding.detailPostTvCaptions.setText(post.getCaption());
+                binding.detailPostTvDate.setText(Utilities.isoDateToPrettyDate(post.getCreatedAt()));
                 binding.detailPostTvUsername.setText(post.getUsername());
 
                 binding.detailPostTvUsername.setOnClickListener(v -> {
@@ -362,8 +339,9 @@ public class DetailPostActivity extends AppCompatActivity {
                 });
 
                 binding.detailPostTvLikeCount.setOnClickListener(v -> {
-                    Intent intent = new Intent(DetailPostActivity.this, LikeListActivity.class);
-                    intent.putExtra(DetailPostActivity.POST_INTENT_KEY, postComposite);
+                    Intent intent = new Intent(DetailPostActivity.this, UserListActivity.class);
+                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_LIKE);
+                    intent.putExtra(UserListActivity.USER_LIST_INTENT_KEY, Utilities.likeListToUserList(postComposite.getPostLike()));
                     startActivity(intent);
                 });
 
@@ -753,5 +731,12 @@ public class DetailPostActivity extends AppCompatActivity {
         } else {
             binding.detailPostIvSave.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_bookmark_border_24));
         }
+    }
+
+    private void showError() {
+        runOnUiThread(() -> {
+            Utilities.makeToast(this, "Failed to show post detail");
+            loadSuccess = false;
+        });
     }
 }

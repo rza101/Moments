@@ -1,6 +1,7 @@
 package com.pahat.moments.ui.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +12,11 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.data.network.model.PostComment;
 import com.pahat.moments.databinding.ItemCommentBinding;
 import com.pahat.moments.ui.OnItemClick;
 import com.pahat.moments.ui.OnLongClick;
-import com.pahat.moments.util.Constants;
 
 public class ItemCommentAdapter extends ListAdapter<PostComment, ItemCommentAdapter.ViewHolder> {
     private final OnItemClick<User> onUsernameClick;
@@ -54,6 +50,12 @@ public class ItemCommentAdapter extends ListAdapter<PostComment, ItemCommentAdap
         PostComment postComment = getItem(position);
         Context context = holder.itemView.getContext();
 
+        if (!TextUtils.isEmpty(postComment.getImageUrl())) {
+            Glide.with(context)
+                    .load(postComment.getImageUrl())
+                    .into(holder.binding.itemCommentCivDp);
+        }
+
         holder.binding.itemCommentTvUsername.setText(postComment.getUsername());
         holder.binding.itemCommentTvComment.setText(postComment.getComment());
 
@@ -70,29 +72,6 @@ public class ItemCommentAdapter extends ListAdapter<PostComment, ItemCommentAdap
                 return onLongClick.onLongClick(v, postComment);
             }
         });
-
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.FIREBASE_USERS_REF)
-                .orderByChild("username")
-                .equalTo(postComment.getUsername())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        User user = snapshot.getValue(User.class);
-
-                        if (user.getProfilePicture() != null) {
-                            Glide.with(context)
-                                    .load(user.getProfilePicture())
-                                    .into(holder.binding.itemCommentCivDp);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

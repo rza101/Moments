@@ -91,6 +91,17 @@
                 app:layout_constraintTop_toBottomOf="@id/detail_post_civ_dp"
                 tools:text="The quick brown fox jumps over the lazy dog" />
 
+            <TextView
+                android:id="@+id/detail_post_tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/inter_medium"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
+                app:layout_constraintTop_toBottomOf="@id/detail_post_tv_captions"
+                tools:text="2022-12-31 15:00" />
+
             <ImageView
                 android:id="@+id/detail_post_iv_like"
                 android:layout_width="30dp"
@@ -98,7 +109,7 @@
                 android:layout_marginTop="15dp"
                 android:src="@drawable/ic_favorite_border_24"
                 app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
-                app:layout_constraintTop_toBottomOf="@id/detail_post_tv_captions"
+                app:layout_constraintTop_toBottomOf="@id/detail_post_tv_date"
                 app:tint="@color/color_red" />
 
             <TextView

@@ -9,16 +9,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.pahat.moments.data.firebase.model.User;
+import com.pahat.moments.data.firebase.model.UserList;
+import com.pahat.moments.data.network.model.PostLike;
+import com.pahat.moments.data.network.model.UserFollow;
 import com.pahat.moments.databinding.ToolbarChildrenBinding;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
 public class Utilities {
     private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
+
     static {
         suffixes.put(1_000L, "K");
         suffixes.put(1_000_000L, "M");
@@ -44,15 +55,24 @@ public class Utilities {
         return file;
     }
 
+    public static String isoDateToPrettyDate(String isoDate) {
+        String result = "";
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.ROOT);
+        try {
+            Date date = simpleDateFormat.parse(isoDate);
+            result = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ROOT).format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     public static void initChildToolbar(AppCompatActivity activity, ToolbarChildrenBinding binding, String title) {
         activity.setSupportActionBar(binding.getRoot());
         binding.toolbarTitle.setText(title);
-        binding.toolbarBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity.finish();
-            }
-        });
+        binding.toolbarBack.setOnClickListener(v -> activity.finish());
     }
 
     public static void makeToast(Context context, String text) {
@@ -78,5 +98,35 @@ public class Utilities {
         long truncated = value / (divideBy / 10);
         boolean hasDecimal = truncated < 100 && (truncated / 10d) != (truncated / 10);
         return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
+    }
+
+    public static UserList likeListToUserList(List<PostLike> postLikeList) {
+        List<User> userList = new ArrayList<>();
+
+        for (PostLike postLike : postLikeList) {
+            userList.add(new User(null, postLike.getUsername(), postLike.getFullName(), postLike.getImageUrl()));
+        }
+
+        return new UserList(userList);
+    }
+
+    public static UserList followerListToUserList(List<UserFollow> userFollowList) {
+        List<User> userList = new ArrayList<>();
+
+        for (UserFollow userFollow : userFollowList) {
+            userList.add(new User(null, userFollow.getUsername(), userFollow.getFullName(), userFollow.getImageUrl()));
+        }
+
+        return new UserList(userList);
+    }
+
+    public static UserList followingListToUserList(List<UserFollow> userFollowList) {
+        List<User> userList = new ArrayList<>();
+
+        for (UserFollow userFollow : userFollowList) {
+            userList.add(new User(null, userFollow.getUsernameFollowing(), userFollow.getFullNameFollowing(), userFollow.getImageUrlFollowing()));
+        }
+
+        return new UserList(userList);
     }
 }

@@ -4,15 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.data.network.APIUtil;
 import com.pahat.moments.data.network.model.APIResponse;
@@ -70,15 +66,16 @@ public class SavedPostActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference()
                 .child(Constants.FIREBASE_USERS_REF)
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        currentUser = snapshot.getValue(User.class);
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        currentUser = task.getResult().getValue(User.class);
 
                         APIUtil.getAPIService().getAllSavedPosts(currentUser.getUsername())
                                 .enqueue(new Callback<APIResponse<List<SavedPost>>>() {
                                     @Override
-                                    public void onResponse(Call<APIResponse<List<SavedPost>>> call, Response<APIResponse<List<SavedPost>>> response) {
+                                    public void onResponse(Call<APIResponse<List<SavedPost>>> call,
+                                                           Response<APIResponse<List<SavedPost>>> response) {
                                         if (response.isSuccessful()) {
                                             List<Post> postList = new ArrayList<>();
 
@@ -104,10 +101,7 @@ public class SavedPostActivity extends AppCompatActivity {
                                         Utilities.makeToast(SavedPostActivity.this, "Failed to load saved posts");
                                     }
                                 });
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                    } else {
                         Utilities.makeToast(SavedPostActivity.this, "Failed to load saved posts");
                     }
                 });

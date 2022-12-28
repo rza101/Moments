@@ -12,8 +12,20 @@ public class UserFollow implements Parcelable {
     @SerializedName("username")
     private String username;
 
+    @SerializedName("full_name")
+    private String fullName;
+
+    @SerializedName("image_url")
+    private String imageUrl;
+
     @SerializedName("username_following")
     private String usernameFollowing;
+
+    @SerializedName("full_name_following")
+    private String fullNameFollowing;
+
+    @SerializedName("image_url_following")
+    private String imageUrlFollowing;
 
     public UserFollow() {
     }
@@ -49,8 +61,24 @@ public class UserFollow implements Parcelable {
         return username;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public String getUsernameFollowing() {
         return usernameFollowing;
+    }
+
+    public String getFullNameFollowing() {
+        return fullNameFollowing;
+    }
+
+    public String getImageUrlFollowing() {
+        return imageUrlFollowing;
     }
 
     @Override
@@ -62,6 +90,10 @@ public class UserFollow implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeString(username);
+        dest.writeString(fullName);
+        dest.writeString(imageUrl);
         dest.writeString(usernameFollowing);
+        dest.writeString(fullNameFollowing);
+        dest.writeString(imageUrlFollowing);
     }
 }
