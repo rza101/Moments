@@ -79,6 +79,8 @@ public class CreatePostActivity extends AppCompatActivity {
 
         Utilities.initChildToolbar(this, binding.toolbar, "Create Post");
 
+        binding.createPostLoadingLottie.setVisibility(View.GONE);
+
         binding.createPostIbCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +135,7 @@ public class CreatePostActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(caption) || imageUri == null) {
                     return;
                 }
+                showLoading();
 
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 StorageReference storageReference = FirebaseStorage
@@ -160,6 +163,7 @@ public class CreatePostActivity extends AppCompatActivity {
                                                     .addOnCompleteListener(new OnCompleteListener<Uri>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Uri> task) {
+                                                            hideLoading();
                                                             if (task.isSuccessful()) {
                                                                 APIUtil.getAPIService()
                                                                         .createPost(username, task.getResult().toString(), caption)
@@ -196,6 +200,13 @@ public class CreatePostActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void showLoading(){
+        binding.createPostLoadingLottie.setVisibility(View.VISIBLE);
+    };
+    public void hideLoading(){
+        binding.createPostLoadingLottie.setVisibility(View.GONE);
+    };
 
     private void setImagePreview(Uri uri) {
         Glide.with(CreatePostActivity.this)

@@ -57,6 +57,8 @@ public class RegisterActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mRoot = mDatabase.getReference();
 
+        binding.registerLoadingLottie.setVisibility(View.GONE);
+
         binding.registerBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (!valid) {
                     return;
                 }
-
+                showLoading();
                 mRef = mRoot.child(Constants.FIREBASE_USERS_REF);
                 mRef.orderByChild("username").equalTo(username)
                         .get()
@@ -131,6 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                         APIUtil.getAPIService().createUser(userId, username, fullName, fcmTask.getResult()).enqueue(new Callback<APIResponse<APIUser>>() {
                                                                             @Override
                                                                             public void onResponse(Call<APIResponse<APIUser>> call, Response<APIResponse<APIUser>> response) {
+                                                                                hideLoading();
                                                                                 if (response.isSuccessful()) {
                                                                                     // STORE TO API SUCCESS
                                                                                     User user = new User(userId, username, fullName, null);
@@ -214,4 +217,10 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+    public void showLoading(){
+        binding.registerLoadingLottie.setVisibility(View.VISIBLE);
+    };
+    public void hideLoading(){
+        binding.registerLoadingLottie.setVisibility(View.GONE);
+    };
 }

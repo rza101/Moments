@@ -27,6 +27,7 @@ public class ForgotPassActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
+        binding.forgotPassLoadingLottie.setVisibility(View.GONE);
 
         binding.forgotPassBtnSendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,11 +38,12 @@ public class ForgotPassActivity extends AppCompatActivity {
                     binding.forgotPassEtEmail.setError("Enter your email address!");
                     return;
                 }
-
+                showLoading();
                 mAuth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
+                                hideLoading();
                                 if (task.isSuccessful()) {
                                     Toast.makeText(ForgotPassActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
                                 } else {
@@ -52,4 +54,11 @@ public class ForgotPassActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void showLoading(){
+        binding.forgotPassLoadingLottie.setVisibility(View.VISIBLE);
+    };
+    public void hideLoading(){
+        binding.forgotPassLoadingLottie.setVisibility(View.GONE);
+    };
 }

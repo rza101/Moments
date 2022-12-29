@@ -1,6 +1,7 @@
 package com.pahat.moments.ui.activities.userlist;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,6 +30,7 @@ public class UserListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivityUserListBinding.inflate(getLayoutInflater());
+        binding.userListLoadingLottie.setVisibility(View.GONE);
         setContentView(binding.getRoot());
 
         if (!getIntent().hasExtra(USER_LIST_INTENT_KEY) ||
@@ -42,6 +44,7 @@ public class UserListActivity extends AppCompatActivity {
             Utilities.makeToast(getApplicationContext(), "Invalid access");
             finish();
         }
+        showLoading();
 
         String title = "";
 
@@ -56,9 +59,16 @@ public class UserListActivity extends AppCompatActivity {
                 title = "Following";
                 break;
         }
+        hideLoading();
 
         userList = ((UserList) getIntent().getParcelableExtra(USER_LIST_INTENT_KEY)).getUserList();
 
         Utilities.initChildToolbar(this, binding.toolbar, title);
     }
+    public void showLoading(){
+        binding.userListLoadingLottie.setVisibility(View.VISIBLE);
+    };
+    public void hideLoading(){
+        binding.userListLoadingLottie.setVisibility(View.GONE);
+    };
 }

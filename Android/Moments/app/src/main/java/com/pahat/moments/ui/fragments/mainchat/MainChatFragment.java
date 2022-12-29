@@ -42,15 +42,17 @@ public class MainChatFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE);
         binding = FragmentMainChatBinding.inflate(inflater, container, false);
         return binding.getRoot();
+
     }
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        showLoading();
         itemUserAdapter = new ItemUserAdapter(new OnItemClick<User>() {
             @Override
             public void onClick(View v, User data) {
@@ -129,4 +131,11 @@ public class MainChatFragment extends Fragment {
             loadSuccess = false;
         });
     }
+
+    public void showLoading(){
+        binding.fragmentMainChatLoadingLottie.setVisibility(View.VISIBLE);
+    };
+    public void hideLoading(){
+        binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE);
+    };
 }

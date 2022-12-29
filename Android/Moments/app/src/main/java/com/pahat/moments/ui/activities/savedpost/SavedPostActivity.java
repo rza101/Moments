@@ -42,6 +42,8 @@ public class SavedPostActivity extends AppCompatActivity {
         binding = ActivitySavedPostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.savedPostLoadingLottie.setVisibility(View.GONE);
+
         Utilities.initChildToolbar(this, binding.toolbar, "Saved Posts");
 
         itemPostAdapter = new ItemPostAdapter(new OnItemClick<Post>() {
@@ -62,6 +64,7 @@ public class SavedPostActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        showLoading();
 
         FirebaseDatabase.getInstance().getReference()
                 .child(Constants.FIREBASE_USERS_REF)
@@ -76,6 +79,7 @@ public class SavedPostActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<APIResponse<List<SavedPost>>> call,
                                                            Response<APIResponse<List<SavedPost>>> response) {
+                                        hideLoading();
                                         if (response.isSuccessful()) {
                                             List<Post> postList = new ArrayList<>();
 
@@ -106,4 +110,11 @@ public class SavedPostActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    public void showLoading(){
+        binding.savedPostLoadingLottie.setVisibility(View.VISIBLE);
+    };
+    public void hideLoading(){
+        binding.savedPostLoadingLottie.setVisibility(View.GONE);
+    };
 }

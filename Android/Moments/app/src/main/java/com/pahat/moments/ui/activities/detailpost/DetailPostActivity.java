@@ -76,6 +76,7 @@ public class DetailPostActivity extends AppCompatActivity {
         binding.detailPostClMain.setVisibility(View.GONE);
 
         setContentView(binding.getRoot());
+        binding.detailPostLoadingLottie.setVisibility(View.GONE);
 
         if (getIntent().getParcelableExtra(POST_INTENT_KEY) == null) {
             Utilities.makeToast(this, "Invalid access");
@@ -85,7 +86,7 @@ public class DetailPostActivity extends AppCompatActivity {
         post = getIntent().getParcelableExtra(POST_INTENT_KEY);
 
         binding.detailPostIvBack.setOnClickListener(v -> finish());
-
+        showLoading();
         new Thread(() -> {
             CountDownLatch countDownLatch1 = new CountDownLatch(2);
 
@@ -135,6 +136,7 @@ public class DetailPostActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<APIResponse<PostComposite>> call,
                                                Response<APIResponse<PostComposite>> response) {
+
                             if (response.isSuccessful()) {
                                 postComposite = response.body().getData();
                             } else {
@@ -230,6 +232,7 @@ public class DetailPostActivity extends AppCompatActivity {
                 }
 
                 binding.detailPostClMain.setVisibility(View.VISIBLE);
+                hideLoading();
 
                 for (UserFollow userFollow : postUserFollowerList) {
                     if (userFollow.getUsername().equals(currentUser.getUsername())) {
@@ -739,4 +742,12 @@ public class DetailPostActivity extends AppCompatActivity {
             loadSuccess = false;
         });
     }
+
+    public void showLoading(){
+        binding.detailPostLoadingLottie.setVisibility(View.VISIBLE);
+    };
+    public void hideLoading(){
+        binding.detailPostLoadingLottie.setVisibility(View.GONE);
+    };
+
 }

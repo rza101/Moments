@@ -36,6 +36,7 @@ public class ChangePassActivity extends AppCompatActivity {
         Utilities.initChildToolbar(this, binding.toolbar, "Change Password");
 
         mAuth = FirebaseAuth.getInstance();
+        binding.changePassLoadingLottie.setVisibility(View.GONE);
 
         binding.changePassBtnChangePass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +53,7 @@ public class ChangePassActivity extends AppCompatActivity {
                     binding.changePassEtPasswordConfirm.setError("Password doesn't match!");
                     return;
                 }
-
+                showLoading();
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 AuthCredential credential = EmailAuthProvider
                         .getCredential(user.getEmail(), password);
@@ -65,6 +66,7 @@ public class ChangePassActivity extends AppCompatActivity {
                                     user.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
+                                            hideLoading();
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(ChangePassActivity.this, "Password updated!", Toast.LENGTH_SHORT).show();
                                                 finish();
@@ -81,4 +83,11 @@ public class ChangePassActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void showLoading(){
+        binding.changePassLoadingLottie.setVisibility(View.VISIBLE);
+    };
+    public void hideLoading(){
+        binding.changePassLoadingLottie.setVisibility(View.GONE);
+    };
 }

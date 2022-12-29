@@ -114,6 +114,7 @@ public class ChatActivity extends AppCompatActivity {
 
         FirebaseMessaging.getInstance().subscribeToTopic("messages");
 
+
         userId = mAuth.getCurrentUser().getUid();
         mRoot = FirebaseDatabase.getInstance().getReference();
         mRef = mRoot.child("users").child(userId);
@@ -373,6 +374,7 @@ public class ChatActivity extends AppCompatActivity {
             return "" + firstName.charAt(0) + lastName.charAt(0);
         }
     }
+
 
     private void sendNotification(Sender sender) {
 //        APIService api = APIUtil.getRetrofit().create(APIService.class);
