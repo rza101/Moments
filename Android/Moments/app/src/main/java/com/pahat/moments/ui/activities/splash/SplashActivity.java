@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             FirebaseDatabase.getInstance()
                     .getReference()
-                    .child(Constants.FIREBASE_USERS_REF)
+                    .child(Constants.FIREBASE_USERS_DB_REF)
                     .child(mAuth.getCurrentUser().getUid())
                     .get()
                     .addOnCompleteListener(task -> {

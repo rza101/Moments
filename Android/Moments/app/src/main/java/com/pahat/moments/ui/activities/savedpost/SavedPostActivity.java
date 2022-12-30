@@ -64,7 +64,7 @@ public class SavedPostActivity extends AppCompatActivity {
         super.onResume();
 
         FirebaseDatabase.getInstance().getReference()
-                .child(Constants.FIREBASE_USERS_REF)
+                .child(Constants.FIREBASE_USERS_DB_REF)
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .get()
                 .addOnCompleteListener(task -> {

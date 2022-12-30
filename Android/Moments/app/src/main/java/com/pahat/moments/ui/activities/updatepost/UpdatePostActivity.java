@@ -62,39 +62,34 @@ public class UpdatePostActivity extends AppCompatActivity {
                 .placeholder(AppCompatResources.getDrawable(UpdatePostActivity.this, R.drawable.ic_broken_image_24))
                 .into(binding.updatePostIvPreview);
 
-        binding.updatePostBtnPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String caption = binding.updatePostEtCaption.getText().toString();
-                if (TextUtils.isEmpty(caption)) {
-                    binding.updatePostEtCaption.setError("Enter a caption");
-                    return;
+        binding.updatePostBtnPost.setOnClickListener(view -> {
+            String caption = binding.updatePostEtCaption.getText().toString();
+            if (TextUtils.isEmpty(caption)) {
+                binding.updatePostEtCaption.setError("Enter a caption");
+                return;
+            }
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            APIUtil.getAPIService().updatePost(post.getId(), caption).enqueue(new Callback<APIResponse<Post>>() {
+                @Override
+                public void onResponse(Call<APIResponse<Post>> call, Response<APIResponse<Post>> response) {
+                    if (response.isSuccessful()) {
+                        Utilities.makeToast(UpdatePostActivity.this, "Success to update posts");
+                        finish();
+                    } else {
+                        Utilities.makeToast(UpdatePostActivity.this, "Failed to update posts");
+                    }
                 }
-                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                StorageReference storageReference = FirebaseStorage
-                        .getInstance()
-                        .getReference(firebaseUser.getUid());
 
-                APIUtil.getAPIService().updatePost(post.getId(), caption).enqueue(new Callback<APIResponse<Post>>() {
-                    @Override
-                    public void onResponse(Call<APIResponse<Post>> call, Response<APIResponse<Post>> response) {
-                        if (response.isSuccessful()) {
-                            Utilities.makeToast(UpdatePostActivity.this, "Success to update posts");
-                        } else {
-                            Utilities.makeToast(UpdatePostActivity.this, "Failed to update posts");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<APIResponse<Post>> call, Throwable t) {
-                        Utilities.makeToast(UpdatePostActivity.this, "API ERROR");
-                    }
-                });
+                @Override
+                public void onFailure(Call<APIResponse<Post>> call, Throwable t) {
+                    Utilities.makeToast(UpdatePostActivity.this, "API ERROR");
+                }
+            });
 //                if (caption ==) {
 //                    binding.updatePostEtCaption.setError("Caption cannot be same as before");
 //                    return;
 //                }
-            }
         });
     }
 }

@@ -31,11 +31,7 @@ import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.data.network.APIUtil;
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.APIUser;
-import com.pahat.moments.data.network.model.Post;
-import com.pahat.moments.databinding.ActivityDetailPostBinding;
 import com.pahat.moments.databinding.ActivityEditProfileBinding;
-import com.pahat.moments.ui.activities.editprofile.EditProfileActivity;
-import com.pahat.moments.ui.activities.otherprofile.OtherProfileActivity;
 import com.pahat.moments.util.Constants;
 import com.pahat.moments.util.Utilities;
 
@@ -81,46 +77,35 @@ public class EditProfileActivity extends AppCompatActivity {
         binding = ActivityEditProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.editProfileIbCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                File tempFile = Utilities.createTempImageFile(EditProfileActivity.this);
-                tempCameraUri = FileProvider.getUriForFile(EditProfileActivity.this,
-                        BuildConfig.APPLICATION_ID,
-                        tempFile);
+        binding.editProfileIbCamera.setOnClickListener(v -> {
+            File tempFile = Utilities.createTempImageFile(EditProfileActivity.this);
+            tempCameraUri = FileProvider.getUriForFile(EditProfileActivity.this,
+                    BuildConfig.APPLICATION_ID,
+                    tempFile);
 
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.resolveActivity(getPackageManager());
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, tempCameraUri);
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.resolveActivity(getPackageManager());
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, tempCameraUri);
 
-                cameraIntent.launch(intent);
-            }
+            cameraIntent.launch(intent);
         });
 
-        binding.editProfileIbGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                galleryIntent.launch(
-                        Intent.createChooser(
-                                new Intent(Intent.ACTION_GET_CONTENT).setType("image/*"),
-                                "Select an image"
-                        )
-                );
-            }
-        });
+        binding.editProfileIbGallery.setOnClickListener(v -> galleryIntent.launch(
+                Intent.createChooser(
+                        new Intent(Intent.ACTION_GET_CONTENT).setType("image/*"),
+                        "Select an image"
+                )
+        ));
 
-        binding.editProfileIbClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageUri = null;
-                binding.editProfileIvPreview.setImageDrawable(null);
-                binding.editProfileIvCameraInfo.setVisibility(View.VISIBLE);
-                binding.editProfileTvTextInfo.setVisibility(View.VISIBLE);
-            }
+        binding.editProfileIbClear.setOnClickListener(v -> {
+            imageUri = null;
+            binding.editProfileIvPreview.setImageDrawable(null);
+            binding.editProfileIvCameraInfo.setVisibility(View.VISIBLE);
+            binding.editProfileTvTextInfo.setVisibility(View.VISIBLE);
         });
 
         FirebaseDatabase.getInstance().getReference()
-                .child(Constants.FIREBASE_USERS_REF)
+                .child(Constants.FIREBASE_USERS_DB_REF)
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .get()
                 .addOnCompleteListener(task -> {
@@ -159,17 +144,18 @@ public class EditProfileActivity extends AppCompatActivity {
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 StorageReference storageReference = FirebaseStorage
                         .getInstance()
-                        .getReference(firebaseUser.getUid())
+                        .getReference()
+                        .child(Constants.FIREBASE_PROFILE_PICTURES_STORAGE_REF)
+                        .child(firebaseUser.getUid())
                         .child(imageUri.getLastPathSegment());
 
                 FirebaseDatabase.getInstance()
                         .getReference()
-                        .child(Constants.FIREBASE_USERS_REF)
+                        .child(Constants.FIREBASE_USERS_DB_REF)
                         .child(firebaseUser.getUid())
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-
                                 storageReference.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {

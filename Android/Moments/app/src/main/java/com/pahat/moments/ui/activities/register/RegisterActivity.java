@@ -109,12 +109,12 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                mRef = mRoot.child(Constants.FIREBASE_USERS_REF);
+                mRef = mRoot.child(Constants.FIREBASE_USERS_DB_REF);
                 mRef.orderByChild("username").equalTo(username)
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                if (task.getResult().getValue() != null) {
+                                if (task.getResult().getValue(User.class) == null) {
                                     // USERNAME NOT DUPLICATE
                                     FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                                         @Override
@@ -134,7 +134,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                                 if (response.isSuccessful()) {
                                                                                     // STORE TO API SUCCESS
                                                                                     User user = new User(userId, username, fullName, null);
-                                                                                    mRef = mRoot.child(Constants.FIREBASE_USERS_REF).child(userId);
+                                                                                    mRef = mRoot.child(Constants.FIREBASE_USERS_DB_REF).child(userId);
                                                                                     mRef.setValue(user);
 
                                                                                     Toast.makeText(RegisterActivity.this, "Register success!", Toast.LENGTH_SHORT).show();
@@ -167,7 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     binding.registerEtUsername.setError("Username already exists!");
                                 }
                             } else {
-                                Utilities.makeToast(getApplicationContext(), "Failed to register");
+                                Utilities.makeToast(RegisterActivity.this, "Failed to register");
                             }
                         });
             }

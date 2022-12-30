@@ -19,6 +19,7 @@ import com.pahat.moments.databinding.FragmentMainHomeBinding;
 import com.pahat.moments.ui.OnItemClick;
 import com.pahat.moments.ui.activities.detailpost.DetailPostActivity;
 import com.pahat.moments.ui.adapters.ItemPostAdapter;
+import com.pahat.moments.util.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;

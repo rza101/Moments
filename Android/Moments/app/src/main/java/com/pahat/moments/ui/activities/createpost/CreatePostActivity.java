@@ -137,12 +137,14 @@ public class CreatePostActivity extends AppCompatActivity {
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 StorageReference storageReference = FirebaseStorage
                         .getInstance()
-                        .getReference(firebaseUser.getUid())
+                        .getReference()
+                        .child(Constants.FIREBASE_POST_PICTURES_STORAGE_REF)
+                        .child(firebaseUser.getUid())
                         .child(imageUri.getLastPathSegment());
 
                 FirebaseDatabase.getInstance()
                         .getReference()
-                        .child(Constants.FIREBASE_USERS_REF)
+                        .child(Constants.FIREBASE_USERS_DB_REF)
                         .child(firebaseUser.getUid())
                         .get()
                         .addOnCompleteListener(task -> {

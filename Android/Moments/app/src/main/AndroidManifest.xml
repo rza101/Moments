@@ -76,6 +76,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ui.activities.chatadd.ChatAddActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.activities.chat.ChatActivity"
             android:exported="false"
             android:screenOrientation="portrait">

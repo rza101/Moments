@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,6 +78,7 @@ public class DetailPostActivity extends AppCompatActivity {
         if (getIntent().getParcelableExtra(POST_INTENT_KEY) == null) {
             Utilities.makeToast(this, "Invalid access");
             finish();
+            return;
         }
 
         post = getIntent().getParcelableExtra(POST_INTENT_KEY);
@@ -90,7 +89,7 @@ public class DetailPostActivity extends AppCompatActivity {
             CountDownLatch countDownLatch1 = new CountDownLatch(2);
 
             FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.FIREBASE_USERS_REF)
+                    .child(Constants.FIREBASE_USERS_DB_REF)
                     .orderByChild("username")
                     .equalTo(post.getUsername())
                     .get()
@@ -104,7 +103,7 @@ public class DetailPostActivity extends AppCompatActivity {
                     });
 
             FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.FIREBASE_USERS_REF)
+                    .child(Constants.FIREBASE_USERS_DB_REF)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .get()
                     .addOnCompleteListener(task -> {

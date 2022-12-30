@@ -33,14 +33,16 @@ public class UserListActivity extends AppCompatActivity {
 
         if (!getIntent().hasExtra(USER_LIST_INTENT_KEY) ||
                 !getIntent().hasExtra(TYPE_INTENT_KEY)) {
-            Utilities.makeToast(getApplicationContext(), "Invalid access");
+            Utilities.makeToast(this, "Invalid access");
             finish();
+            return;
         }
 
         if (getIntent().getIntExtra(TYPE_INTENT_KEY, -1) < 1 ||
                 getIntent().getIntExtra(TYPE_INTENT_KEY, -1) > 3) {
-            Utilities.makeToast(getApplicationContext(), "Invalid access");
+            Utilities.makeToast(this, "Invalid access");
             finish();
+            return;
         }
 
         String title = "";

@@ -55,6 +55,23 @@ public class Utilities {
         return file;
     }
 
+    public static String getInitialName(String fullName) {
+        String[] splitName = fullName.split("\\s+");
+        int splitCount = splitName.length;
+
+        if (splitCount == 1) {
+            return "" + fullName.charAt(0) + fullName.charAt(0);
+        } else {
+            int firstSpace = fullName.indexOf(" ");
+            String firstName = fullName.substring(0, firstSpace);
+
+            int lastSpace = fullName.lastIndexOf(" ");
+            String lastName = fullName.substring(lastSpace + 1);
+
+            return "" + firstName.charAt(0) + lastName.charAt(0);
+        }
+    }
+
     public static String isoDateToPrettyDate(String isoDate) {
         String result = "";
 
