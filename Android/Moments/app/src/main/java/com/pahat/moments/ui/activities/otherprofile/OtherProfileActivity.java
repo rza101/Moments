@@ -52,6 +52,8 @@ public class OtherProfileActivity extends AppCompatActivity {
         binding = ActivityOtherProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        user = getIntent().getParcelableExtra(USER_INTENT_KEY);
+
         itemPostAdapter = new ItemPostAdapter((v, data) -> {
             startActivity(new Intent(OtherProfileActivity.this, DetailPostActivity.class)
                     .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
@@ -255,14 +257,14 @@ public class OtherProfileActivity extends AppCompatActivity {
 
                 binding.otherProfileProfileTvFollowers.setOnClickListener(v -> {
                     Intent intent = new Intent(OtherProfileActivity.this, UserListActivity.class);
-                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_LIKE);
+                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_FOLLOWER);
                     intent.putExtra(UserListActivity.USER_LIST_INTENT_KEY, Utilities.followerListToUserList(userFollowComposite.getFollower()));
                     startActivity(intent);
                 });
 
                 binding.otherProfileProfileTvFollowing.setOnClickListener(v -> {
                     Intent intent = new Intent(OtherProfileActivity.this, UserListActivity.class);
-                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_LIKE);
+                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_FOLLOWING);
                     intent.putExtra(UserListActivity.USER_LIST_INTENT_KEY, Utilities.followingListToUserList(userFollowComposite.getFollowing()));
                     startActivity(intent);
                 });
