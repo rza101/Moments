@@ -2,7 +2,6 @@ package com.pahat.moments.ui.fragments.mainchat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,52 +17,54 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pahat.moments.data.firebase.model.Chat;
+import com.pahat.moments.data.firebase.model.ChatRoom;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.FragmentMainChatBinding;
-import com.pahat.moments.ui.OnItemClick;
 import com.pahat.moments.ui.activities.chat.ChatActivity;
-import com.pahat.moments.ui.adapters.ItemUserAdapter;
+import com.pahat.moments.ui.adapters.ItemChatRoomAdapter;
 import com.pahat.moments.util.Constants;
 import com.pahat.moments.util.Utilities;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 public class MainChatFragment extends Fragment {
 
     private FragmentMainChatBinding binding;
-    private ItemUserAdapter itemUserAdapter;
+    private ItemChatRoomAdapter itemChatRoomAdapter;
 
     private User currentUser;
-    private List<Chat> chatList;
+    private List<ChatRoom> chatRoomList;
 
     private boolean loadSuccess = true;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMainChatBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        showLoading();
-        itemUserAdapter = new ItemUserAdapter(new OnItemClick<User>() {
-            @Override
-            public void onClick(View v, User data) {
-                startActivity(new Intent(requireContext(), ChatActivity.class)
-                        .putExtra(ChatActivity.USER_INTENT_KEY, data)
-                );
-            }
+
+        itemChatRoomAdapter = new ItemChatRoomAdapter((v, data) -> {
+            Intent intent = new Intent(requireContext(), ChatActivity.class);
+            intent.putExtra(ChatActivity.USER_INTENT_KEY,
+                    new User(null,
+                            data.getUsername(),
+                            data.getFullname(),
+                            data.getProfilePicture())
+            );
+            startActivity(intent);
         });
 
         binding.fragmentMainChatRvChats.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.fragmentMainChatRvChats.setAdapter(itemUserAdapter);
+        binding.fragmentMainChatRvChats.setAdapter(itemChatRoomAdapter);
 
         new Thread(() -> {
             CountDownLatch countDownLatch1 = new CountDownLatch(1);
@@ -95,23 +96,52 @@ public class MainChatFragment extends Fragment {
 
             FirebaseDatabase.getInstance()
                     .getReference(Constants.FIREBASE_CHATS_DB_REF)
-                    .orderByChild("sender")
-//                    .equalTo(currentUser.getUsername())
-                    .equalTo("5lgV4E1oDVWSHtG3gPjflkHdXU32")
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Log.d("chat", "onDataChange: " + snapshot);
+                            List<Chat> chats = new ArrayList<>();
+
+                            for (DataSnapshot child : snapshot.getChildren()) {
+                                chats.add(child.getValue(Chat.class));
+                            }
+
+                            Collections.sort(chats, (o1, o2) ->
+                                    (int) (o2.getTimestamp() - o1.getTimestamp()));
+
+                            Set<ChatRoom> chatRoomSet = new HashSet<>();
+
+                            for (Chat chat : chats) {
+                                // karena sorted descending jadi operasi set tdk
+                                // menghilangkan message terbaru
+                                if (chat.getSender().equals(currentUser.getUsername())) {
+                                    chatRoomSet.add(new ChatRoom(
+                                            chat.getReceiver(),
+                                            chat.getReceiverFullName(),
+                                            chat.getReceiverProfilePicture(),
+                                            chat.getMessage(),
+                                            chat.getTimestamp()
+                                    ));
+                                } else {
+                                    chatRoomSet.add(new ChatRoom(
+                                            chat.getSender(),
+                                            chat.getSenderFullName(),
+                                            chat.getSenderProfilePicture(),
+                                            chat.getMessage(),
+                                            chat.getTimestamp()
+                                    ));
+                                }
+                            }
+
+                            itemChatRoomAdapter.submitList(new ArrayList<>(chatRoomSet));
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-
+                            requireActivity().runOnUiThread(() ->
+                                    Utilities.makeToast(requireContext(), "Failed to get chat data"));
                         }
                     });
         }).start();
-
-
     }
 
     @Override
@@ -120,22 +150,18 @@ public class MainChatFragment extends Fragment {
         binding = null;
     }
 
-    private void goToChat(View v) {
-        Intent intent = new Intent(getActivity(), ChatActivity.class);
-        startActivity(intent);
-    }
-
     private void showError() {
         requireActivity().runOnUiThread(() -> {
-            Utilities.makeToast(requireActivity().getApplicationContext(), "Failed to get chats");
+            Utilities.makeToast(requireContext(), "Failed to get chats");
             loadSuccess = false;
         });
     }
 
-    public void showLoading(){
+    public void showLoading() {
         binding.fragmentMainChatLoadingLottie.setVisibility(View.VISIBLE);
-    };
-    public void hideLoading(){
+    }
+
+    public void hideLoading() {
         binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE);
-    };
+    }
 }

@@ -116,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                if (task.getResult().getValue() != null) {
+                                if (task.getResult().getValue(User.class) != null) {
                                     // USERNAME NOT DUPLICATE
                                     FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                                         @Override
