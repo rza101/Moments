@@ -11,7 +11,6 @@ public class Chat implements Parcelable {
     private String receiver;
     private String receiverFullName;
     private String receiverProfilePicture;
-    private String senderReceiver;
     private String message;
     private String imageUrl;
     private long timestamp;

@@ -111,7 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
                 showLoading();
-                mRef = mRoot.child(Constants.FIREBASE_USERS_REF);
+                mRef = mRoot.child(Constants.FIREBASE_USERS_DB_REF);
                 mRef.orderByChild("username").equalTo(username)
                         .get()
                         .addOnCompleteListener(task -> {
@@ -137,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                                 if (response.isSuccessful()) {
                                                                                     // STORE TO API SUCCESS
                                                                                     User user = new User(userId, username, fullName, null);
-                                                                                    mRef = mRoot.child(Constants.FIREBASE_USERS_REF).child(userId);
+                                                                                    mRef = mRoot.child(Constants.FIREBASE_USERS_DB_REF).child(userId);
                                                                                     mRef.setValue(user);
 
                                                                                     Toast.makeText(RegisterActivity.this, "Register success!", Toast.LENGTH_SHORT).show();
@@ -217,10 +217,16 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-    public void showLoading(){
+
+    public void showLoading() {
         binding.registerLoadingLottie.setVisibility(View.VISIBLE);
-    };
-    public void hideLoading(){
+    }
+
+    ;
+
+    public void hideLoading() {
         binding.registerLoadingLottie.setVisibility(View.GONE);
-    };
+    }
+
+    ;
 }

@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,14 +21,24 @@ import com.pahat.moments.data.firebase.model.Chat;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.ItemChatBinding;
 
-public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseChatAdapter.ViewHolder> {
+public class FirebaseChatAdapter extends ListAdapter<Chat, FirebaseChatAdapter.ViewHolder> {
     private static final String TAG = FirebaseChatAdapter.class.getSimpleName();
 
     private User senderUser;
     private User receiverUser;
 
-    public FirebaseChatAdapter(@NonNull FirebaseRecyclerOptions<Chat> options, User senderUser, User receiverUser) {
-        super(options);
+    public FirebaseChatAdapter(User senderUser, User receiverUser) {
+        super(new DiffUtil.ItemCallback<Chat>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull Chat oldItem, @NonNull Chat newItem) {
+                return false;
+            }
+
+            @Override
+            public boolean areContentsTheSame(@NonNull Chat oldItem, @NonNull Chat newItem) {
+                return false;
+            }
+        });
         this.senderUser = senderUser;
         this.receiverUser = receiverUser;
     }
@@ -38,15 +50,11 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull FirebaseChatAdapter.ViewHolder holder, int position, @NonNull Chat model) {
-        if(model.getSender() == null){
-            holder.itemView.setVisibility(View.GONE);
-            return;
-        }
-
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Context context = holder.itemView.getContext();
+        Chat data = getItem(position);
 
-        if (model.getSender().equals(senderUser.getUsername())) {
+        if (data.getSender().equals(senderUser.getUsername())) {
             // sisi sender
             holder.binding.itemChatClChatBoxLeft.setVisibility(View.GONE);
             holder.binding.itemChatCivProfileLeft.setVisibility(View.GONE);
@@ -60,18 +68,18 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                         .into(holder.binding.itemChatCivProfileRight);
             }
 
-            if (model.getMessage() != null) {
+            if (data.getMessage() != null) {
                 holder.binding.itemChatTvChatBoxRight.setVisibility(View.VISIBLE);
                 holder.binding.itemChatIvImageRight.setVisibility(View.GONE);
 
-                holder.binding.itemChatTvChatBoxRight.setText(model.getMessage());
-            } else if (model.getImageUrl() != null) {
+                holder.binding.itemChatTvChatBoxRight.setText(data.getMessage());
+            } else if (data.getImageUrl() != null) {
                 holder.binding.itemChatTvChatBoxRight.setVisibility(View.GONE);
                 holder.binding.itemChatIvImageRight.setVisibility(View.VISIBLE);
 
-                if (model.getImageUrl().startsWith("gs://")) {
+                if (data.getImageUrl().startsWith("gs://")) {
                     FirebaseStorage.getInstance()
-                            .getReferenceFromUrl(model.getImageUrl())
+                            .getReferenceFromUrl(data.getImageUrl())
                             .getDownloadUrl()
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
@@ -85,7 +93,7 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                             });
                 } else {
                     Glide.with(context)
-                            .load(model.getImageUrl())
+                            .load(data.getImageUrl())
                             .into(holder.binding.itemChatIvImageRight);
                 }
             }
@@ -103,18 +111,18 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                         .into(holder.binding.itemChatCivProfileLeft);
             }
 
-            if (model.getMessage() != null) {
+            if (data.getMessage() != null) {
                 holder.binding.itemChatTvChatBoxLeft.setVisibility(View.VISIBLE);
                 holder.binding.itemChatIvImageLeft.setVisibility(View.GONE);
 
-                holder.binding.itemChatTvChatBoxLeft.setText(model.getMessage());
-            } else if (model.getImageUrl() != null) {
+                holder.binding.itemChatTvChatBoxLeft.setText(data.getMessage());
+            } else if (data.getImageUrl() != null) {
                 holder.binding.itemChatTvChatBoxLeft.setVisibility(View.GONE);
                 holder.binding.itemChatIvImageLeft.setVisibility(View.VISIBLE);
 
-                if (model.getImageUrl().startsWith("gs://")) {
+                if (data.getImageUrl().startsWith("gs://")) {
                     FirebaseStorage.getInstance()
-                            .getReferenceFromUrl(model.getImageUrl())
+                            .getReferenceFromUrl(data.getImageUrl())
                             .getDownloadUrl()
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
@@ -128,7 +136,7 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                             });
                 } else {
                     Glide.with(context)
-                            .load(model.getImageUrl())
+                            .load(data.getImageUrl())
                             .into(holder.binding.itemChatIvImageLeft);
                 }
             }

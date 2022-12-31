@@ -12,6 +12,7 @@
         layout="@layout/toolbar_children" />
 
     <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/chat_lottie_loading"
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"

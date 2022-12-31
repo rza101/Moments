@@ -70,7 +70,7 @@ public class MainChatFragment extends Fragment {
 
             FirebaseDatabase.getInstance()
                     .getReference()
-                    .child(Constants.FIREBASE_USERS_REF)
+                    .child(Constants.FIREBASE_USERS_DB_REF)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .get()
                     .addOnCompleteListener(task -> {
@@ -94,7 +94,7 @@ public class MainChatFragment extends Fragment {
             }
 
             FirebaseDatabase.getInstance()
-                    .getReference(Constants.FIREBASE_CHATS_REF)
+                    .getReference(Constants.FIREBASE_CHATS_DB_REF)
                     .orderByChild("sender")
 //                    .equalTo(currentUser.getUsername())
                     .equalTo("5lgV4E1oDVWSHtG3gPjflkHdXU32")
