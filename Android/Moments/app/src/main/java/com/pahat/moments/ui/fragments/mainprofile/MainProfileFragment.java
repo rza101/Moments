@@ -265,14 +265,14 @@ public class MainProfileFragment extends Fragment {
 
                 binding.fragmentMainProfileTvFollowers.setOnClickListener(v -> {
                     Intent intent = new Intent(requireContext(), UserListActivity.class);
-                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_LIKE);
+                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_FOLLOWER);
                     intent.putExtra(UserListActivity.USER_LIST_INTENT_KEY, Utilities.followerListToUserList(userFollowComposite.getFollower()));
                     startActivity(intent);
                 });
 
                 binding.fragmentMainProfileTvFollowing.setOnClickListener(v -> {
                     Intent intent = new Intent(requireContext(), UserListActivity.class);
-                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_LIKE);
+                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_FOLLOWING);
                     intent.putExtra(UserListActivity.USER_LIST_INTENT_KEY, Utilities.followingListToUserList(userFollowComposite.getFollowing()));
                     startActivity(intent);
                 });

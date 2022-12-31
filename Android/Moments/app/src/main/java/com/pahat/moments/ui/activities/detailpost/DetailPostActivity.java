@@ -334,6 +334,19 @@ public class DetailPostActivity extends AppCompatActivity {
                 binding.detailPostTvDate.setText(Utilities.isoDateToPrettyDate(post.getCreatedAt()));
                 binding.detailPostTvUsername.setText(post.getUsername());
 
+                binding.detailPostCivDp.setOnClickListener(v -> {
+                    Intent intent = new Intent(DetailPostActivity.this, OtherProfileActivity.class);
+                    intent.putExtra(OtherProfileActivity.USER_INTENT_KEY, postUser);
+                    startActivity(intent);
+                });
+
+                binding.detailPostTvFollowers.setOnClickListener(v -> {
+                    Intent intent = new Intent(DetailPostActivity.this, UserListActivity.class);
+                    intent.putExtra(UserListActivity.TYPE_INTENT_KEY, UserListActivity.TYPE_FOLLOWER);
+                    intent.putExtra(UserListActivity.USER_LIST_INTENT_KEY, Utilities.followerListToUserList(postUserFollowerList));
+                    startActivity(intent);
+                });
+
                 binding.detailPostTvUsername.setOnClickListener(v -> {
                     Intent intent = new Intent(DetailPostActivity.this, OtherProfileActivity.class);
                     intent.putExtra(OtherProfileActivity.USER_INTENT_KEY, postUser);
