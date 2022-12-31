@@ -91,52 +91,9 @@ public class UserListActivity extends AppCompatActivity {
         });
 
         userList = ((UserList) getIntent().getParcelableExtra(USER_LIST_INTENT_KEY)).getUserList();
-        String username = userList.get(2).getUsername(); //butuh id user
         Utilities.initChildToolbar(this, binding.toolbar, title);
+        itemUserAdapter.submitList(userList);
 
-        if (type == TYPE_FOLLOWER || type == TYPE_FOLLOWING){
-            Utilities.makeToast(UserListActivity.this, "Loading");
-            APIUtil.getAPIService().getUserFollow(username).enqueue(new Callback<APIResponse<UserFollowComposite>>() {
-                @Override
-                public void onResponse(Call<APIResponse<UserFollowComposite>> call, Response<APIResponse<UserFollowComposite>> response) {
-                    if (response.isSuccessful()){
-                        switch (type) {
-                            case TYPE_FOLLOWER:
-                                itemUserAdapter.submitList(Utilities.followerListToUserList(response.body().getData().getFollower()).getUserList());
-                                break;
-                            case TYPE_FOLLOWING:
-                                itemUserAdapter.submitList(Utilities.followingListToUserList(response.body().getData().getFollowing()).getUserList());
-                                break;
-                        }
-                    }else {
-                        Utilities.makeToast(UserListActivity.this, "Failed to connect");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<APIResponse<UserFollowComposite>> call, Throwable t) {
-                    Utilities.makeToast(UserListActivity.this, "Failed to connect");
-                }
-            });
-        }
-        if (type == TYPE_LIKE) {
-            Utilities.makeToast(UserListActivity.this, "Loading");
-            APIUtil.getAPIService().getAllPostLikes(1).enqueue(new Callback<APIResponse<List<PostLike>>>() {
-                @Override
-                public void onResponse(Call<APIResponse<List<PostLike>>> call, Response<APIResponse<List<PostLike>>> response) {
-                    if (response.isSuccessful()){
-                        itemUserAdapter.submitList(Utilities.likeListToUserList(response.body().getData()).getUserList());
-                    } else {
-                        Utilities.makeToast(UserListActivity.this, "Failed to connect");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<APIResponse<List<PostLike>>> call, Throwable t) {
-                    Utilities.makeToast(UserListActivity.this, "Failed to connect");
-                }
-            });
-        }
         RecyclerView recyclerView = binding.likeListRvLikes;
         recyclerView.setLayoutManager(new LinearLayoutManager(UserListActivity.this));
         recyclerView.setAdapter(itemUserAdapter);
