@@ -6,10 +6,14 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+<<<<<<< Updated upstream
 import android.text.TextUtils;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.PopupMenu;
+=======
+import android.view.View;
+>>>>>>> Stashed changes
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,7 +54,9 @@ public class OtherProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityOtherProfileBinding.inflate(getLayoutInflater());
+        binding.otherProfileLoadingLottie.setVisibility(View.GONE);
         setContentView(binding.getRoot());
+
 
         itemPostAdapter = new ItemPostAdapter((v, data) -> {
             startActivity(new Intent(OtherProfileActivity.this, DetailPostActivity.class)
@@ -283,8 +289,24 @@ public class OtherProfileActivity extends AppCompatActivity {
         });
     }
 
+        Intent intent = getIntent();
+        showLoading();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+        }
+        hideLoading();
+
+
     private void submitList() {
         binding.otherProfileProfileTvNoPost.setVisibility(postList.size() == 0 ? View.VISIBLE : View.GONE);
         itemPostAdapter.submitList(postList);
     }
+
+
+    public void showLoading(){
+        binding.otherProfileLoadingLottie.setVisibility(View.VISIBLE);
+    };
+    public void hideLoading(){
+        binding.otherProfileLoadingLottie.setVisibility(View.GONE);
+    };
 }
