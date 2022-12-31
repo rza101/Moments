@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('user_id')->primary();
             $table->string('username')->unique();
             $table->string('full_name');
-            $table->string('image_url');
+            $table->string('image_url', 512);
             $table->string('fcm_token');
             $table->timestamps();
         });

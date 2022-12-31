@@ -2,10 +2,8 @@ package com.pahat.moments.ui.activities.otherprofile;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,7 +20,6 @@ import com.pahat.moments.data.network.APIUtil;
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.data.network.model.UserFollowComposite;
-import com.pahat.moments.databinding.ActivityEditProfileBinding;
 import com.pahat.moments.databinding.ActivityOtherProfileBinding;
 import com.pahat.moments.ui.activities.detailpost.DetailPostActivity;
 import com.pahat.moments.ui.activities.updatepost.UpdatePostActivity;
@@ -146,7 +143,7 @@ public class OtherProfileActivity extends AppCompatActivity {
             CountDownLatch countDownLatch1 = new CountDownLatch(1);
 
             FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.FIREBASE_USERS_REF)
+                    .child(Constants.FIREBASE_USERS_DB_REF)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .get()
                     .addOnCompleteListener(task -> {

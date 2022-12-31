@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.widget.PopupMenu;
-import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             FirebaseDatabase.getInstance()
                     .getReference()
-                    .child(Constants.FIREBASE_USERS_REF)
+                    .child(Constants.FIREBASE_USERS_DB_REF)
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .get()
                     .addOnCompleteListener(task -> {

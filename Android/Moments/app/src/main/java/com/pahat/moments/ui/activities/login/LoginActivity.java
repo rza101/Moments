@@ -6,7 +6,6 @@ import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,8 +26,6 @@ import com.pahat.moments.ui.activities.forgotpass.ForgotPassActivity;
 import com.pahat.moments.ui.activities.main.MainActivity;
 import com.pahat.moments.ui.activities.register.RegisterActivity;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private FirebaseAuth mAuth;
-    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         binding.loginLoadingLottie.setVisibility(View.GONE);
-
-
 
         binding.loginBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     });
                                         } else {
                                             Toast.makeText(LoginActivity.this, "Authentication failed, check your email and password or sign up", Toast.LENGTH_SHORT).show();
+                                            hideLoading();
                                         }
                                     }
                                 });
@@ -109,49 +104,36 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        binding.loginTvRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
+        binding.loginTvRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
 
-        binding.loginBtnForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, ForgotPassActivity.class);
-                startActivity(intent);
-            }
+        binding.loginBtnForgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPassActivity.class);
+            startActivity(intent);
         });
 
-        binding.loginIvPasswordEye.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.loginEtPassword.setInputType(
-                        binding.loginEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
-                                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
-                                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
-                );
+        binding.loginIvPasswordEye.setOnClickListener(v -> {
+            binding.loginEtPassword.setInputType(
+                    binding.loginEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                            InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
+            );
 
-                binding.loginIvPasswordEye.setImageDrawable(AppCompatResources.getDrawable(LoginActivity.this,
-                        binding.loginEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
-                                R.drawable.ic_visibility_off_24 :
-                                R.drawable.ic_visibility_24
-                ));
-            }
+            binding.loginIvPasswordEye.setImageDrawable(AppCompatResources.getDrawable(LoginActivity.this,
+                    binding.loginEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                            R.drawable.ic_visibility_off_24 :
+                            R.drawable.ic_visibility_24
+            ));
         });
-
-
-
     }
 
     public void showLoading(){
         binding.loginLoadingLottie.setVisibility(View.VISIBLE);
     };
+
     public void hideLoading(){
         binding.loginLoadingLottie.setVisibility(View.GONE);
     };
-
-
 }
