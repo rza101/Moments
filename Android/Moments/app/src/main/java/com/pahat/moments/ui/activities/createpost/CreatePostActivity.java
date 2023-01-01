@@ -81,42 +81,31 @@ public class CreatePostActivity extends AppCompatActivity {
 
         binding.createPostLoadingLottie.setVisibility(View.GONE);
 
-        binding.createPostIbCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                File tempFile = Utilities.createTempImageFile(CreatePostActivity.this);
-                tempCameraUri = FileProvider.getUriForFile(CreatePostActivity.this,
-                        BuildConfig.APPLICATION_ID,
-                        tempFile);
+        binding.createPostIbCamera.setOnClickListener(v -> {
+            File tempFile = Utilities.createTempImageFile(CreatePostActivity.this);
+            tempCameraUri = FileProvider.getUriForFile(CreatePostActivity.this,
+                    BuildConfig.APPLICATION_ID,
+                    tempFile);
 
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.resolveActivity(getPackageManager());
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, tempCameraUri);
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.resolveActivity(getPackageManager());
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, tempCameraUri);
 
-                cameraIntent.launch(intent);
-            }
+            cameraIntent.launch(intent);
         });
 
-        binding.createPostIbGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                galleryIntent.launch(
-                        Intent.createChooser(
-                                new Intent(Intent.ACTION_GET_CONTENT).setType("image/*"),
-                                "Select an image"
-                        )
-                );
-            }
-        });
+        binding.createPostIbGallery.setOnClickListener(v -> galleryIntent.launch(
+                Intent.createChooser(
+                        new Intent(Intent.ACTION_GET_CONTENT).setType("image/*"),
+                        "Select an image"
+                )
+        ));
 
-        binding.createPostIbClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageUri = null;
-                binding.createPostIvPreview.setImageDrawable(null);
-                binding.createPostIvCameraInfo.setVisibility(View.VISIBLE);
-                binding.createPostTvTextInfo.setVisibility(View.VISIBLE);
-            }
+        binding.createPostIbClear.setOnClickListener(v -> {
+            imageUri = null;
+            binding.createPostIvPreview.setImageDrawable(null);
+            binding.createPostIvCameraInfo.setVisibility(View.VISIBLE);
+            binding.createPostTvTextInfo.setVisibility(View.VISIBLE);
         });
 
         binding.createPostBtnPost.setOnClickListener(new View.OnClickListener() {

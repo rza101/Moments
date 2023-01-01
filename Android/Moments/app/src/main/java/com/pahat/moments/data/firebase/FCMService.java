@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -27,7 +28,12 @@ public class FCMService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
-        super.onMessageReceived(message);
+//        super.onMessageReceived(message);
+        String title = message.getData().get("title");
+        String content = message.getData().get("content");
+        sendNotification(title, content);
+
+        Log.d("fcm", "onMessageReceived: " + message.getData());
     }
 
     @Override
@@ -65,7 +71,6 @@ public class FCMService extends FirebaseMessagingService {
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                 .setLights(Color.RED, 1000, 300)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 

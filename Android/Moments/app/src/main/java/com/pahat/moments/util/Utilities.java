@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.TimeZone;
 import java.util.TreeMap;
 
 public class Utilities {
@@ -102,9 +103,13 @@ public class Utilities {
         String result = "";
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ROOT);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
         try {
             Date date = simpleDateFormat.parse(isoDate);
-            result = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ROOT).format(date);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ROOT);
+            formatter.setTimeZone(TimeZone.getDefault());
+            result = formatter.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

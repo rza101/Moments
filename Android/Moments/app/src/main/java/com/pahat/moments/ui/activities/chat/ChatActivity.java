@@ -3,6 +3,7 @@ package com.pahat.moments.ui.activities.chat;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -11,30 +12,36 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.pahat.moments.BuildConfig;
 import com.pahat.moments.data.firebase.model.Chat;
 import com.pahat.moments.data.firebase.model.ChatRoom;
 import com.pahat.moments.data.firebase.model.User;
+import com.pahat.moments.data.network.APIUtil;
+import com.pahat.moments.data.network.model.APIResponse;
+import com.pahat.moments.data.network.model.FCMResponse;
 import com.pahat.moments.databinding.ActivityChatBinding;
 import com.pahat.moments.ui.adapters.FirebaseChatAdapter;
 import com.pahat.moments.util.Constants;
 import com.pahat.moments.util.Utilities;
 
+import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -45,48 +52,22 @@ public class ChatActivity extends AppCompatActivity {
     private ActivityChatBinding binding;
     private FirebaseChatAdapter firebaseChatAdapter;
 
+    private DatabaseReference chatRef, senderRoomRef, receiverRoomRef;
+
     private User senderUser;
     private User receiverUser;
-
     private ChatRoom chatRoom;
 
     private Uri tempCameraUri;
 
     private boolean loadSuccess = true;
 
-    private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == RESULT_OK) {
-                if (result.getData() != null) {
-                    final Uri uri = result.getData().getData();
-                    Log.d(TAG, "Uri : " + uri.toString());
-
-//                    ChatMessage tempMessage = new ChatMessage(null, userId, LOADING_IMAGE_URL);
-//                    mRoot.child("messages").push()
-//                            .setValue(tempMessage, (databaseError, databaseReference) -> {
-//                                if (databaseError == null) {
-//                                    String key = databaseReference.getKey();
-//                                    StorageReference storageReference = FirebaseStorage.getInstance()
-//                                            .getReference(mAuth.getCurrentUser().getUid())
-//                                            .child(key)
-//                                            .child(uri.getLastPathSegment());
-//
-//                                    putImageInStorage(storageReference, uri, key);
-//                                } else {
-//                                    Log.w(TAG, "Unable to write database", databaseError.toException());
-//                                }
-//                            });
-                }
-            }
-        }
-    });
-
     private ActivityResultLauncher<Intent> cameraIntent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == RESULT_OK) {
                 final Uri imageUri = tempCameraUri;
+                sendImageMessage(imageUri);
             }
         }
     });
@@ -97,6 +78,7 @@ public class ChatActivity extends AppCompatActivity {
             if (result.getResultCode() == RESULT_OK) {
                 if (result.getData() != null) {
                     final Uri imageUri = result.getData().getData();
+                    sendImageMessage(imageUri);
                 }
             }
         }
@@ -172,9 +154,18 @@ public class ChatActivity extends AppCompatActivity {
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
                 linearLayoutManager.setStackFromEnd(true);
 
-                DatabaseReference chatRef = FirebaseDatabase.getInstance()
+                chatRef = FirebaseDatabase.getInstance()
                         .getReference(Constants.FIREBASE_CHATS_DB_REF)
                         .child(chatRoom.getChatRoomId());
+                senderRoomRef = FirebaseDatabase.getInstance()
+                        .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
+                        .child(senderUser.getUserId())
+                        .child(chatRoom.getChatRoomId());
+                receiverRoomRef = FirebaseDatabase.getInstance()
+                        .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
+                        .child(receiverUser.getUserId())
+                        .child(chatRoom.getChatRoomId());
+
                 FirebaseRecyclerOptions<Chat> firebaseRecyclerOptions = new FirebaseRecyclerOptions.Builder<Chat>()
                         .setLifecycleOwner(ChatActivity.this)
                         .setQuery(chatRef, snapshot -> {
@@ -236,40 +227,48 @@ public class ChatActivity extends AppCompatActivity {
                             timestamp
                     );
 
-                    chatRef.push().setValue(chat);
+                    chatRef.push().setValue(chat, (error, ref) -> {
+                        if (error != null) {
+                            Utilities.makeToast(ChatActivity.this, "Failed to send message");
+                        } else {
+                            HashMap<String, Object> lastMessageMap = new HashMap<>();
+                            lastMessageMap.put("lastMessage", message);
 
-                    DatabaseReference senderRoomRef = FirebaseDatabase.getInstance()
-                            .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
-                            .child(senderUser.getUserId())
-                            .child(chatRoom.getChatRoomId());
+                            HashMap<String, Object> lastTimestampMap = new HashMap<>();
+                            lastTimestampMap.put("lastMessageTimestamp", timestamp);
 
-                    DatabaseReference receiverRoomRef = FirebaseDatabase.getInstance()
-                            .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
-                            .child(receiverUser.getUserId())
-                            .child(chatRoom.getChatRoomId());
+                            senderRoomRef.updateChildren(lastMessageMap);
+                            senderRoomRef.updateChildren(lastTimestampMap);
+                            receiverRoomRef.updateChildren(lastMessageMap);
+                            receiverRoomRef.updateChildren(lastTimestampMap);
 
-                    HashMap<String, Object> lastMessageMap = new HashMap<>();
-                    lastMessageMap.put("lastMessage", message);
-
-                    HashMap<String, Object> lastTimestampMap = new HashMap<>();
-                    lastTimestampMap.put("lastMessageTimestamp", timestamp);
-
-                    senderRoomRef.updateChildren(lastMessageMap);
-                    senderRoomRef.updateChildren(lastTimestampMap);
-                    receiverRoomRef.updateChildren(lastMessageMap);
-                    receiverRoomRef.updateChildren(lastTimestampMap);
+                            sendNotification(receiverUser.getUsername(), message);
+                        }
+                    });
 
                     binding.chatEtMessage.setText("");
-
-                    // SEND FCM API
-
                 });
 
                 binding.chatIbImage.setOnClickListener(v -> {
-                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("image/*");
-                    activityResultLauncher.launch(intent);
+                    galleryIntent.launch(
+                            Intent.createChooser(
+                                    new Intent(Intent.ACTION_GET_CONTENT).setType("image/*"),
+                                    "Select an image"
+                            )
+                    );
+                });
+
+                binding.chatIbCamera.setOnClickListener(v -> {
+                    File tempFile = Utilities.createTempImageFile(ChatActivity.this);
+                    tempCameraUri = FileProvider.getUriForFile(ChatActivity.this,
+                            BuildConfig.APPLICATION_ID,
+                            tempFile);
+
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.resolveActivity(getPackageManager());
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, tempCameraUri);
+
+                    cameraIntent.launch(intent);
                 });
             });
         }).start();
@@ -285,57 +284,93 @@ public class ChatActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
-        storageReference.putFile(uri).addOnCompleteListener(ChatActivity.this, task -> {
-            if (task.isSuccessful()) {
-                task.getResult()
-                        .getMetadata()
-                        .getReference()
-                        .getDownloadUrl()
-                        .addOnCompleteListener(ChatActivity.this, task1 -> {
-                            if (task1.isSuccessful()) {
-//                                ChatMessage chatMessage = new ChatMessage(null, senderUser.getUsername(), task1.getResult().toString());
-//                                FirebaseDatabase.getInstance()
-//                                        .getReference()
-//                                        .child(Constants.FIREBASE_CHATS_DB_REF)
-//                                        .child(key)
-//                                        .setValue(chatMessage);
+    private void sendImageMessage(Uri uri) {
+        new Thread(() -> {
+            String[] imageUrl = {"https://rhezarijaya.000webhostapp.com/broken_image.png"};
+            boolean[] isSuccess = {true};
 
-                                // SEND FCM
-//                                Data data = new Data(mUsername, "Image Message", userId, task1.getResult().toString());
-//                                Sender sender = new Sender(data, "/topics/messages");
-//                                sendNotification(sender);
-                            }
-                        });
-            } else {
-                Log.w(TAG, "Image upload task failed!", task.getException());
+            CountDownLatch countDownLatch = new CountDownLatch(1);
+
+            FirebaseStorage.getInstance()
+                    .getReference()
+                    .child(Constants.FIREBASE_MESSAGE_PICTURES_STORAGE_REF)
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(uri.getLastPathSegment())
+                    .putFile(uri)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            task.getResult()
+                                    .getMetadata()
+                                    .getReference()
+                                    .getDownloadUrl()
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            imageUrl[0] = task1.getResult().toString();
+                                        }else{
+                                            isSuccess[0] = false;
+                                        }
+                                        countDownLatch.countDown();
+                                    });
+                        } else {
+                            runOnUiThread(() -> Utilities.makeToast(ChatActivity.this, "Failed to upload image"));
+                            countDownLatch.countDown();
+                        }
+                    });
+
+            try {
+                countDownLatch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                isSuccess[0] = false;
             }
-        });
+
+            if(!isSuccess[0]){
+                return;
+            }
+
+            long timestamp = System.currentTimeMillis();
+
+            Chat chat = new Chat(
+                    senderUser.getUsername(),
+                    null,
+                    imageUrl[0],
+                    timestamp
+            );
+
+            chatRef.push().setValue(chat, (error, ref) -> {
+                if (error != null) {
+                    runOnUiThread(() -> Utilities.makeToast(ChatActivity.this, "Failed to send message"));
+                } else {
+                    HashMap<String, Object> lastMessageMap = new HashMap<>();
+                    lastMessageMap.put("lastMessage", "📷 Image");
+
+                    HashMap<String, Object> lastTimestampMap = new HashMap<>();
+                    lastTimestampMap.put("lastMessageTimestamp", timestamp);
+
+                    senderRoomRef.updateChildren(lastMessageMap);
+                    senderRoomRef.updateChildren(lastTimestampMap);
+                    receiverRoomRef.updateChildren(lastMessageMap);
+                    receiverRoomRef.updateChildren(lastTimestampMap);
+
+                    sendNotification(receiverUser.getUsername(), "📷 Image");
+                }
+            });
+        }).start();
     }
 
-    private void sendNotification() {
-//        APIService api = APIUtil.getRetrofit().create(APIService.class);
-//        Call<ViewData> call = api.sendNotification(sender);
-//        call.enqueue(new Callback<ViewData>() {
-//            @Override
-//            public void onResponse(Call<ViewData> call, Response<ViewData> response) {
-//                if (response.code() == 200) {
-//                    System.out.println("Response : " + response.body().getMessage_id());
-//                    if (response.body().getMessage_id() != null) {
-////                        Toast.makeText(ChatActivity.this, "Pesan berhasil dikirim!", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(ChatActivity.this, "Pesan gagal dikirim!", Toast.LENGTH_SHORT).show();
-//                    }
-//                } else {
-//                    Toast.makeText(ChatActivity.this, "Response " + response.code(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ViewData> call, Throwable t) {
-//                System.out.println("Retrofit Error : " + t.getMessage());
-//                Toast.makeText(ChatActivity.this, "Retrofit Error : " + t.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
+    private void sendNotification(String username, String message) {
+        APIUtil.getAPIService()
+                .sendFCM(username, "Chat from " + username, message)
+                .enqueue(new Callback<APIResponse<FCMResponse>>() {
+                    @Override
+                    public void onResponse(Call<APIResponse<FCMResponse>> call, Response<APIResponse<FCMResponse>> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<APIResponse<FCMResponse>> call, Throwable t) {
+
+                    }
+                });
     }
 }

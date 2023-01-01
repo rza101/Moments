@@ -2,6 +2,7 @@ package com.pahat.moments.data.network;
 
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.APIUser;
+import com.pahat.moments.data.network.model.FCMResponse;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.data.network.model.PostComment;
 import com.pahat.moments.data.network.model.PostComposite;
@@ -117,4 +118,11 @@ public interface APIService {
 
     @GET("savedposts/{saved_post_id}/delete")
     Call<APIResponse<Post>> deleteSavedPost(@Path("saved_post_id") long saved_post_id);
+
+    // FCM
+    @POST("sendfcm")
+    @FormUrlEncoded
+    Call<APIResponse<FCMResponse>> sendFCM(@Field("username") String username,
+                                           @Field("title") String title,
+                                           @Field("content") String content);
 }

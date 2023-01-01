@@ -139,7 +139,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 if (imageUri == null) {
                     Utilities.makeToast(EditProfileActivity.this, "Please enter an image");
                 }
-                
+
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 StorageReference storageReference = FirebaseStorage
                         .getInstance()

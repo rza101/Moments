@@ -53,4 +53,4 @@ Route::post('userfollow', [UserFollowController::class, 'store']);
 Route::get('userfollow/{username}', [UserFollowController::class, 'show']);
 Route::get('userfollow/{id}/delete', [UserFollowController::class, 'destroy']);
 
-Route::post('sendFCM', [FCMController::class, 'FCM']);
+Route::post('sendfcm', [FCMController::class, 'FCM']);

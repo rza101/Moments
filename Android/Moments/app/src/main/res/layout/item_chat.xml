@@ -3,96 +3,98 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/item_chat_civ_profile_left"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:src="@drawable/ic_person_grey_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_chat_cl_chat_box_left"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
-        android:background="@drawable/bg_border_chat_person"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/item_chat_civ_profile_left"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.45">
 
-        <TextView
-            android:id="@+id/item_chat_tv_chat_box_left"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_chat_cl_text_box_left"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/bg_border_chat_person"
+            android:minHeight="50dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Hello!" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/item_chat_tv_chat_box_left"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:textAlignment="textStart"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Hello!" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/item_chat_iv_image_left"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_gravity="end"
-            android:scaleType="fitCenter" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/item_chat_civ_profile_right"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:src="@drawable/ic_person_grey_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_chat_cl_chat_box_right"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/bg_border_chat_us"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/item_chat_civ_profile_right"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.45">
 
-        <TextView
-            android:id="@+id/item_chat_tv_chat_box_right"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_chat_cl_text_box_right"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
-            android:textColor="@color/black"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/bg_border_chat_us"
+            android:minHeight="50dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Hello!"/>
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/item_chat_tv_chat_box_right"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:textAlignment="textEnd"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Hello!" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/item_chat_iv_image_right"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_gravity="end"
-            android:scaleType="fitCenter" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -46,25 +47,12 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
         if (model.getSender().equals(senderUser.getUsername())) {
             // sender side
             holder.binding.itemChatClChatBoxLeft.setVisibility(View.GONE);
-            holder.binding.itemChatCivProfileLeft.setVisibility(View.GONE);
-
-            holder.binding.itemChatTvChatBoxRight.setVisibility(View.VISIBLE);
-            holder.binding.itemChatCivProfileRight.setVisibility(View.VISIBLE);
-
-            if(!TextUtils.isEmpty(senderUser.getProfilePicture())){
-                Glide.with(context)
-                        .load(senderUser.getProfilePicture())
-                        .into(holder.binding.itemChatCivProfileRight);
-            }
 
             if (model.getMessage() != null) {
-                holder.binding.itemChatTvChatBoxRight.setVisibility(View.VISIBLE);
                 holder.binding.itemChatIvImageRight.setVisibility(View.GONE);
-
                 holder.binding.itemChatTvChatBoxRight.setText(model.getMessage());
             } else if (model.getImageUrl() != null) {
-                holder.binding.itemChatTvChatBoxRight.setVisibility(View.GONE);
-                holder.binding.itemChatIvImageRight.setVisibility(View.VISIBLE);
+                holder.binding.itemChatClTextBoxRight.setVisibility(View.GONE);
 
                 if (model.getImageUrl().startsWith("gs://")) {
                     FirebaseStorage.getInstance()
@@ -75,6 +63,7 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                                     String downloadUrl = task.getResult().toString();
                                     Glide.with(context)
                                             .load(downloadUrl)
+                                            .override(Target.SIZE_ORIGINAL)
                                             .into(holder.binding.itemChatIvImageRight);
                                 } else {
                                     Log.w(TAG, "Getting download url failed!", task.getException());
@@ -83,31 +72,19 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                 } else {
                     Glide.with(context)
                             .load(model.getImageUrl())
+                            .override(Target.SIZE_ORIGINAL)
                             .into(holder.binding.itemChatIvImageRight);
                 }
             }
         } else {
             // receiver side
             holder.binding.itemChatClChatBoxRight.setVisibility(View.GONE);
-            holder.binding.itemChatCivProfileRight.setVisibility(View.GONE);
-
-            holder.binding.itemChatTvChatBoxLeft.setVisibility(View.VISIBLE);
-            holder.binding.itemChatCivProfileLeft.setVisibility(View.VISIBLE);
-
-            if(!TextUtils.isEmpty(receiverUser.getProfilePicture())){
-                Glide.with(context)
-                        .load(receiverUser.getProfilePicture())
-                        .into(holder.binding.itemChatCivProfileLeft);
-            }
 
             if (model.getMessage() != null) {
-                holder.binding.itemChatTvChatBoxLeft.setVisibility(View.VISIBLE);
                 holder.binding.itemChatIvImageLeft.setVisibility(View.GONE);
-
                 holder.binding.itemChatTvChatBoxLeft.setText(model.getMessage());
             } else if (model.getImageUrl() != null) {
-                holder.binding.itemChatTvChatBoxLeft.setVisibility(View.GONE);
-                holder.binding.itemChatIvImageLeft.setVisibility(View.VISIBLE);
+                holder.binding.itemChatClTextBoxLeft.setVisibility(View.GONE);
 
                 if (model.getImageUrl().startsWith("gs://")) {
                     FirebaseStorage.getInstance()
@@ -118,6 +95,7 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                                     String downloadUrl = task.getResult().toString();
                                     Glide.with(context)
                                             .load(downloadUrl)
+                                            .override(Target.SIZE_ORIGINAL)
                                             .into(holder.binding.itemChatIvImageLeft);
                                 } else {
                                     Log.w(TAG, "Getting download url failed!", task.getException());
@@ -126,6 +104,7 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                 } else {
                     Glide.with(context)
                             .load(model.getImageUrl())
+                            .override(Target.SIZE_ORIGINAL)
                             .into(holder.binding.itemChatIvImageLeft);
                 }
             }
@@ -137,7 +116,6 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
 
         public ViewHolder(@NonNull ItemChatBinding binding) {
             super(binding.getRoot());
-
             this.binding = binding;
         }
     }
