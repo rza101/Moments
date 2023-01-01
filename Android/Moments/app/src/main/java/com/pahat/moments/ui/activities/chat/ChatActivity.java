@@ -23,9 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.pahat.moments.data.firebase.model.Chat;
-import com.pahat.moments.data.firebase.model.ChatMessage;
-import com.pahat.moments.data.firebase.model.ChatRoom;
-import com.pahat.moments.data.firebase.model.Sender;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.ActivityChatBinding;
 import com.pahat.moments.ui.adapters.FirebaseChatAdapter;
@@ -34,9 +31,7 @@ import com.pahat.moments.util.Utilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 public class ChatActivity extends AppCompatActivity {
@@ -276,12 +271,12 @@ public class ChatActivity extends AppCompatActivity {
                         .getDownloadUrl()
                         .addOnCompleteListener(ChatActivity.this, task1 -> {
                             if (task1.isSuccessful()) {
-                                ChatMessage chatMessage = new ChatMessage(null, senderUser.getUsername(), task1.getResult().toString());
-                                FirebaseDatabase.getInstance()
-                                        .getReference()
-                                        .child(Constants.FIREBASE_CHATS_DB_REF)
-                                        .child(key)
-                                        .setValue(chatMessage);
+//                                ChatMessage chatMessage = new ChatMessage(null, senderUser.getUsername(), task1.getResult().toString());
+//                                FirebaseDatabase.getInstance()
+//                                        .getReference()
+//                                        .child(Constants.FIREBASE_CHATS_DB_REF)
+//                                        .child(key)
+//                                        .setValue(chatMessage);
 
                                 // SEND FCM
 //                                Data data = new Data(mUsername, "Image Message", userId, task1.getResult().toString());
@@ -295,7 +290,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void sendNotification(Sender sender) {
+    private void sendNotification() {
 //        APIService api = APIUtil.getRetrofit().create(APIService.class);
 //        Call<ViewData> call = api.sendNotification(sender);
 //        call.enqueue(new Callback<ViewData>() {

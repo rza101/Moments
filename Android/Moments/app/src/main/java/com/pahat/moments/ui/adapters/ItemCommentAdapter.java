@@ -3,7 +3,6 @@ package com.pahat.moments.ui.adapters;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -17,6 +16,7 @@ import com.pahat.moments.data.network.model.PostComment;
 import com.pahat.moments.databinding.ItemCommentBinding;
 import com.pahat.moments.ui.OnItemClick;
 import com.pahat.moments.ui.OnLongClick;
+import com.pahat.moments.util.Utilities;
 
 public class ItemCommentAdapter extends ListAdapter<PostComment, ItemCommentAdapter.ViewHolder> {
     private final OnItemClick<User> onUsernameClick;
@@ -58,20 +58,12 @@ public class ItemCommentAdapter extends ListAdapter<PostComment, ItemCommentAdap
 
         holder.binding.itemCommentTvUsername.setText(postComment.getUsername());
         holder.binding.itemCommentTvComment.setText(postComment.getComment());
+        holder.binding.itemCommentTvDate.setText(Utilities.isoDateToPrettyDate(postComment.getCreatedAt()));
 
-        holder.binding.itemCommentTvUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onUsernameClick.onClick(v, new User(postComment.getUsername()));
-            }
-        });
+        holder.binding.itemCommentTvUsername.setOnClickListener(v ->
+                onUsernameClick.onClick(v, new User(postComment.getUsername())));
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return onLongClick.onLongClick(v, postComment);
-            }
-        });
+        holder.itemView.setOnLongClickListener(v -> onLongClick.onLongClick(v, postComment));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

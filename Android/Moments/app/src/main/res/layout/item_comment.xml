@@ -45,11 +45,10 @@
         android:layout_marginTop="5dp"
         android:fontFamily="@font/inter_medium"
         android:textSize="12sp"
-        android:layout_marginStart="10dp"
         app:layout_constraintEnd_toEndOf="@id/item_comment_tv_username"
         app:layout_constraintStart_toStartOf="@id/item_comment_tv_comment"
         app:layout_constraintTop_toBottomOf="@id/item_comment_tv_comment"
-        tools:text="12-12-2022" />
+        tools:text="2022-12-31 23:59" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
