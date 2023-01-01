@@ -8,6 +8,7 @@ use App\Http\Controllers\API\PostCommentsController;
 use App\Http\Controllers\API\SavedPostsController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\UserFollowController;
+use App\Http\Controllers\FCMController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,3 +52,5 @@ Route::post('users/{user_id}/update', [UserController::class, 'update']);
 Route::post('userfollow', [UserFollowController::class, 'store']);
 Route::get('userfollow/{username}', [UserFollowController::class, 'show']);
 Route::get('userfollow/{id}/delete', [UserFollowController::class, 'destroy']);
+
+Route::post('sendFCM', [FCMController::class, 'FCM']);
