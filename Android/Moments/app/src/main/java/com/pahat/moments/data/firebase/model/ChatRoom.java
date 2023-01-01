@@ -3,46 +3,37 @@ package com.pahat.moments.data.firebase.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class ChatRoom implements Parcelable {
-    private String username;
-    private String fullname;
-    private String profilePicture;
-    private String message;
-    private long time;
+    private String chatRoomId;
+    private String lastMessage;
+    private long lastMessageTimestamp;
+    private Map<String, User> participants;
 
     public ChatRoom() {
     }
 
-    public ChatRoom(String username, String fullname, String profilePicture, String message, long time) {
-        this.username = username;
-        this.fullname = fullname;
-        this.profilePicture = profilePicture;
-        this.message = message;
-        this.time = time;
+    public ChatRoom(Map<String, User> participants) {
+        this.participants = participants;
+    }
+
+    public ChatRoom(String lastMessage, long lastMessageTimestamp) {
+        this.lastMessage = lastMessage;
+        this.lastMessageTimestamp = lastMessageTimestamp;
+    }
+
+    public ChatRoom(String lastMessage, long lastMessageTimestamp, Map<String, User> participants) {
+        this.lastMessage = lastMessage;
+        this.lastMessageTimestamp = lastMessageTimestamp;
+        this.participants = participants;
     }
 
     protected ChatRoom(Parcel in) {
-        username = in.readString();
-        fullname = in.readString();
-        profilePicture = in.readString();
-        message = in.readString();
-        time = in.readLong();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(username);
-        dest.writeString(fullname);
-        dest.writeString(profilePicture);
-        dest.writeString(message);
-        dest.writeLong(time);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        chatRoomId = in.readString();
+        lastMessage = in.readString();
+        lastMessageTimestamp = in.readLong();
     }
 
     public static final Creator<ChatRoom> CREATOR = new Creator<ChatRoom>() {
@@ -57,36 +48,45 @@ public class ChatRoom implements Parcelable {
         }
     };
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public long getTime() {
-        return time;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ChatRoom chatRoom = (ChatRoom) o;
-        return Objects.equals(username, chatRoom.username) && Objects.equals(fullname, chatRoom.fullname) && Objects.equals(profilePicture, chatRoom.profilePicture);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(chatRoomId);
+        dest.writeString(lastMessage);
+        dest.writeLong(lastMessageTimestamp);
+    }
+
+    public String getChatRoomId() {
+        return chatRoomId;
+    }
+
+    public void setChatRoomId(String chatRoomId) {
+        this.chatRoomId = chatRoomId;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public long getLastMessageTimestamp() {
+        return lastMessageTimestamp;
+    }
+
+    public Map<String, User> getParticipants() {
+        return participants;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(username, fullname, profilePicture);
+    public String toString() {
+        return "ChatRoom{" +
+                "chatRoomId='" + chatRoomId + '\'' +
+                ", lastMessage='" + lastMessage + '\'' +
+                ", lastMessageTimestamp=" + lastMessageTimestamp +
+                ", participants=" + participants +
+                '}';
     }
 }

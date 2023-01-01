@@ -5,12 +5,8 @@ import android.os.Parcelable;
 
 public class Chat implements Parcelable {
     private String chatId;
+    private String roomId;
     private String sender;
-    private String senderFullName;
-    private String senderProfilePicture;
-    private String receiver;
-    private String receiverFullName;
-    private String receiverProfilePicture;
     private String message;
     private String imageUrl;
     private long timestamp;
@@ -19,20 +15,10 @@ public class Chat implements Parcelable {
     }
 
     public Chat(String sender,
-                String senderFullName,
-                String senderProfilePicture,
-                String receiver,
-                String receiverFullName,
-                String receiverProfilePicture,
                 String message,
                 String imageUrl,
                 long timestamp) {
         this.sender = sender;
-        this.senderFullName = senderFullName;
-        this.senderProfilePicture = senderProfilePicture;
-        this.receiver = receiver;
-        this.receiverFullName = receiverFullName;
-        this.receiverProfilePicture = receiverProfilePicture;
         this.message = message;
         this.imageUrl = imageUrl;
         this.timestamp = timestamp;
@@ -41,11 +27,6 @@ public class Chat implements Parcelable {
     protected Chat(Parcel in) {
         chatId = in.readString();
         sender = in.readString();
-        senderFullName = in.readString();
-        senderProfilePicture = in.readString();
-        receiver = in.readString();
-        receiverFullName = in.readString();
-        receiverProfilePicture = in.readString();
         message = in.readString();
         imageUrl = in.readString();
         timestamp = in.readLong();
@@ -55,11 +36,6 @@ public class Chat implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(chatId);
         dest.writeString(sender);
-        dest.writeString(senderFullName);
-        dest.writeString(senderProfilePicture);
-        dest.writeString(receiver);
-        dest.writeString(receiverFullName);
-        dest.writeString(receiverProfilePicture);
         dest.writeString(message);
         dest.writeString(imageUrl);
         dest.writeLong(timestamp);
@@ -86,28 +62,20 @@ public class Chat implements Parcelable {
         return chatId;
     }
 
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
     public String getSender() {
         return sender;
-    }
-
-    public String getSenderFullName() {
-        return senderFullName;
-    }
-
-    public String getSenderProfilePicture() {
-        return senderProfilePicture;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public String getReceiverFullName() {
-        return receiverFullName;
-    }
-
-    public String getReceiverProfilePicture() {
-        return receiverProfilePicture;
     }
 
     public String getMessage() {
@@ -120,9 +88,5 @@ public class Chat implements Parcelable {
 
     public long getTimestamp() {
         return timestamp;
-    }
-
-    public void setChatId(String chatId) {
-        this.chatId = chatId;
     }
 }

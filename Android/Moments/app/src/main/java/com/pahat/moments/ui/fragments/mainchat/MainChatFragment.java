@@ -2,6 +2,7 @@ package com.pahat.moments.ui.fragments.mainchat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,20 +17,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.pahat.moments.data.firebase.model.Chat;
 import com.pahat.moments.data.firebase.model.ChatRoom;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.FragmentMainChatBinding;
 import com.pahat.moments.ui.activities.chat.ChatActivity;
+import com.pahat.moments.ui.activities.chatadd.ChatAddActivity;
 import com.pahat.moments.ui.adapters.ItemChatRoomAdapter;
 import com.pahat.moments.util.Constants;
 import com.pahat.moments.util.Utilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 public class MainChatFragment extends Fragment {
@@ -54,17 +53,15 @@ public class MainChatFragment extends Fragment {
 
         itemChatRoomAdapter = new ItemChatRoomAdapter((v, data) -> {
             Intent intent = new Intent(requireContext(), ChatActivity.class);
-            intent.putExtra(ChatActivity.USER_INTENT_KEY,
-                    new User(null,
-                            data.getUsername(),
-                            data.getFullname(),
-                            data.getProfilePicture())
-            );
+            intent.putExtra(ChatActivity.CHAT_ROOM_INTENT_KEY, data);
             startActivity(intent);
         });
 
         binding.fragmentMainChatRvChats.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.fragmentMainChatRvChats.setAdapter(itemChatRoomAdapter);
+
+        binding.fragmentMainChatFabAdd.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), ChatAddActivity.class)));
 
         new Thread(() -> {
             CountDownLatch countDownLatch1 = new CountDownLatch(1);
@@ -95,44 +92,28 @@ public class MainChatFragment extends Fragment {
             }
 
             FirebaseDatabase.getInstance()
-                    .getReference(Constants.FIREBASE_CHATS_DB_REF)
+                    .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
+                    .child(currentUser.getUserId())
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            List<Chat> chats = new ArrayList<>();
+                            chatRoomList = new ArrayList<>();
 
                             for (DataSnapshot child : snapshot.getChildren()) {
-                                chats.add(child.getValue(Chat.class));
-                            }
+                                ChatRoom chatRoom = child.getValue(ChatRoom.class);
 
-                            Collections.sort(chats, (o1, o2) ->
-                                    (int) (o2.getTimestamp() - o1.getTimestamp()));
-
-                            Set<ChatRoom> chatRoomSet = new HashSet<>();
-
-                            for (Chat chat : chats) {
-                                // karena sorted descending jadi operasi set tdk
-                                // menghilangkan message terbaru
-                                if (chat.getSender().equals(currentUser.getUsername())) {
-                                    chatRoomSet.add(new ChatRoom(
-                                            chat.getReceiver(),
-                                            chat.getReceiverFullName(),
-                                            chat.getReceiverProfilePicture(),
-                                            chat.getMessage(),
-                                            chat.getTimestamp()
-                                    ));
-                                } else {
-                                    chatRoomSet.add(new ChatRoom(
-                                            chat.getSender(),
-                                            chat.getSenderFullName(),
-                                            chat.getSenderProfilePicture(),
-                                            chat.getMessage(),
-                                            chat.getTimestamp()
-                                    ));
+                                if(chatRoom.getLastMessage() != null){
+                                    chatRoom.setChatRoomId(child.getKey());
+                                    chatRoomList.add(chatRoom);
                                 }
                             }
 
-                            itemChatRoomAdapter.submitList(new ArrayList<>(chatRoomSet));
+                            Log.d("t", "onDataChange: " + chatRoomList);
+
+                            Collections.sort(chatRoomList, (o1, o2) ->
+                                    (int) (o1.getLastMessageTimestamp() - o2.getLastMessageTimestamp()));
+
+                            itemChatRoomAdapter.submitList(chatRoomList);
                         }
 
                         @Override

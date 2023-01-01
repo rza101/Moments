@@ -12,25 +12,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/item_user" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/fragment_main_chat_loading_lottie"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/loading_spinner"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_rawRes="@raw/loading_spinner" />
+    <!--    <Button-->
+    <!--        android:id="@+id/fragment_main_chat_btn_chat"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/fragment_main_chat_rv_chats"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        android:text="goToChat"/>-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fragment_main_chat_fab_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/blue"
+        android:src="@drawable/ic_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-<!--    <Button-->
-<!--        android:id="@+id/fragment_main_chat_btn_chat"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/fragment_main_chat_rv_chats"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:text="goToChat"/>-->
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

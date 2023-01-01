@@ -139,8 +139,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 if (imageUri == null) {
                     Utilities.makeToast(EditProfileActivity.this, "Please enter an image");
                 }
-
-
+                
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 StorageReference storageReference = FirebaseStorage
                         .getInstance()
@@ -174,10 +173,10 @@ public class EditProfileActivity extends AppCompatActivity {
                                                                             @Override
                                                                             public void onResponse(Call<APIResponse<APIUser>> call, Response<APIResponse<APIUser>> response) {
                                                                                 if (response.isSuccessful()) {
-                                                                                    Utilities.makeToast(EditProfileActivity.this, "Post updated!");
+                                                                                    Utilities.makeToast(EditProfileActivity.this, "Profile updated!");
                                                                                     finish();
                                                                                 } else {
-                                                                                    Utilities.makeToast(EditProfileActivity.this, "Failed to update post");
+                                                                                    Utilities.makeToast(EditProfileActivity.this, "Failed to update profile");
                                                                                 }
                                                                             }
 
@@ -198,13 +197,14 @@ public class EditProfileActivity extends AppCompatActivity {
                                     }
                                 });
                             } else {
-                                Utilities.makeToast(EditProfileActivity.this, "Failed to create post");
+                                Utilities.makeToast(EditProfileActivity.this, "Failed to update profile");
                             }
                         });
             }
         });
 
     }
+
     private void setImagePreview(Uri uri) {
         Glide.with(EditProfileActivity.this)
                 .load(uri)
@@ -213,7 +213,8 @@ public class EditProfileActivity extends AppCompatActivity {
         binding.editProfileIvCameraInfo.setVisibility(View.GONE);
         binding.editProfileTvTextInfo.setVisibility(View.GONE);
     }
+
     private void showError() {
-        Utilities.makeToast(this, "Failed to show post detail");
+        Utilities.makeToast(this, "Failed to edit profile");
     }
 }

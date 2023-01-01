@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.pahat.moments.data.firebase.model.ChatRoom;
+import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.ItemChatRoomBinding;
 import com.pahat.moments.ui.OnItemClick;
+import com.pahat.moments.util.Utilities;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +28,7 @@ public class ItemChatRoomAdapter extends ListAdapter<ChatRoom, ItemChatRoomAdapt
         super(new DiffUtil.ItemCallback<ChatRoom>() {
             @Override
             public boolean areItemsTheSame(@NonNull ChatRoom oldItem, @NonNull ChatRoom newItem) {
-                return oldItem.getUsername().equals(newItem.getUsername());
+                return oldItem.getChatRoomId().equals(newItem.getChatRoomId());
             }
 
             @Override
@@ -49,17 +51,17 @@ public class ItemChatRoomAdapter extends ListAdapter<ChatRoom, ItemChatRoomAdapt
         Context context = holder.itemView.getContext();
         ChatRoom data = getItem(position);
 
-        if (!TextUtils.isEmpty(data.getProfilePicture())) {
+        User user = data.getParticipants().entrySet().iterator().next().getValue();
+
+        if (!TextUtils.isEmpty(user.getProfilePicture())) {
             Glide.with(context)
-                    .load(data.getProfilePicture())
+                    .load(user.getProfilePicture())
                     .into(holder.binding.itemChatRoomCivDp);
         }
 
-        holder.binding.itemChatRoomTvUsername.setText(data.getUsername());
-        holder.binding.itemChatRoomTvMessage.setText(data.getMessage());
-        holder.binding.itemChatRoomTvTime.setText(
-                new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ROOT).format(new Date(data.getTime()))
-        );
+        holder.binding.itemChatRoomTvUsername.setText(user.getUsername());
+        holder.binding.itemChatRoomTvMessage.setText(data.getLastMessage());
+        holder.binding.itemChatRoomTvTime.setText(Utilities.timestampToPrettyDate(data.getLastMessageTimestamp()));
 
         holder.itemView.setOnClickListener(v -> onItemClick.onClick(v, data));
     }

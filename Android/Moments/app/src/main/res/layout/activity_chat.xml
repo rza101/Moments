@@ -11,18 +11,6 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_children" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/chat_lottie_loading"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/loading"/>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -107,17 +95,16 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/chat_loading_lottie"
+        android:id="@+id/chat_lottie_loading"
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/loading_spinner"
+        app:lottie_rawRes="@raw/loading"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

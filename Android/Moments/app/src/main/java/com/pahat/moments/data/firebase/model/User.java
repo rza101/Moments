@@ -3,6 +3,7 @@ package com.pahat.moments.data.firebase.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class User implements Parcelable {

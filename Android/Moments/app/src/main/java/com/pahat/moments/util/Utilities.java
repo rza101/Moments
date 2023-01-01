@@ -55,6 +55,26 @@ public class Utilities {
         return file;
     }
 
+    public static UserList followerListToUserList(List<UserFollow> userFollowList) {
+        List<User> userList = new ArrayList<>();
+
+        for (UserFollow userFollow : userFollowList) {
+            userList.add(new User(null, userFollow.getUsername(), userFollow.getFullName(), userFollow.getImageUrl()));
+        }
+
+        return new UserList(userList);
+    }
+
+    public static UserList followingListToUserList(List<UserFollow> userFollowList) {
+        List<User> userList = new ArrayList<>();
+
+        for (UserFollow userFollow : userFollowList) {
+            userList.add(new User(null, userFollow.getUsernameFollowing(), userFollow.getFullNameFollowing(), userFollow.getImageUrlFollowing()));
+        }
+
+        return new UserList(userList);
+    }
+
     public static String getInitialName(String fullName) {
         String[] splitName = fullName.split("\\s+");
         int splitCount = splitName.length;
@@ -72,13 +92,19 @@ public class Utilities {
         }
     }
 
+    public static void initChildToolbar(AppCompatActivity activity, ToolbarChildrenBinding binding, String title) {
+        activity.setSupportActionBar(binding.getRoot());
+        binding.toolbarTitle.setText(title);
+        binding.toolbarBack.setOnClickListener(v -> activity.finish());
+    }
+
     public static String isoDateToPrettyDate(String isoDate) {
         String result = "";
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.ROOT);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ROOT);
         try {
             Date date = simpleDateFormat.parse(isoDate);
-            result = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.ROOT).format(date);
+            result = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ROOT).format(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -86,10 +112,14 @@ public class Utilities {
         return result;
     }
 
-    public static void initChildToolbar(AppCompatActivity activity, ToolbarChildrenBinding binding, String title) {
-        activity.setSupportActionBar(binding.getRoot());
-        binding.toolbarTitle.setText(title);
-        binding.toolbarBack.setOnClickListener(v -> activity.finish());
+    public static UserList likeListToUserList(List<PostLike> postLikeList) {
+        List<User> userList = new ArrayList<>();
+
+        for (PostLike postLike : postLikeList) {
+            userList.add(new User(null, postLike.getUsername(), postLike.getFullName(), postLike.getImageUrl()));
+        }
+
+        return new UserList(userList);
     }
 
     public static void makeToast(Context context, String text) {
@@ -117,33 +147,7 @@ public class Utilities {
         return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
     }
 
-    public static UserList likeListToUserList(List<PostLike> postLikeList) {
-        List<User> userList = new ArrayList<>();
-
-        for (PostLike postLike : postLikeList) {
-            userList.add(new User(null, postLike.getUsername(), postLike.getFullName(), postLike.getImageUrl()));
-        }
-
-        return new UserList(userList);
-    }
-
-    public static UserList followerListToUserList(List<UserFollow> userFollowList) {
-        List<User> userList = new ArrayList<>();
-
-        for (UserFollow userFollow : userFollowList) {
-            userList.add(new User(null, userFollow.getUsername(), userFollow.getFullName(), userFollow.getImageUrl()));
-        }
-
-        return new UserList(userList);
-    }
-
-    public static UserList followingListToUserList(List<UserFollow> userFollowList) {
-        List<User> userList = new ArrayList<>();
-
-        for (UserFollow userFollow : userFollowList) {
-            userList.add(new User(null, userFollow.getUsernameFollowing(), userFollow.getFullNameFollowing(), userFollow.getImageUrlFollowing()));
-        }
-
-        return new UserList(userList);
+    public static String timestampToPrettyDate(long timestamp) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ROOT).format(new Date(timestamp));
     }
 }

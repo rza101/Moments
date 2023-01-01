@@ -16,21 +16,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.pahat.moments.data.firebase.model.Chat;
+import com.pahat.moments.data.firebase.model.ChatRoom;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.ActivityChatBinding;
 import com.pahat.moments.ui.adapters.FirebaseChatAdapter;
 import com.pahat.moments.util.Constants;
 import com.pahat.moments.util.Utilities;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -38,7 +40,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
     private static final String TAG = ChatActivity.class.getSimpleName();
-    public static final String USER_INTENT_KEY = "USER_INTENT_KEY";
+    public static final String CHAT_ROOM_INTENT_KEY = "USER_INTENT_KEY";
 
     private ActivityChatBinding binding;
     private FirebaseChatAdapter firebaseChatAdapter;
@@ -46,7 +48,7 @@ public class ChatActivity extends AppCompatActivity {
     private User senderUser;
     private User receiverUser;
 
-    private List<Chat> chatList;
+    private ChatRoom chatRoom;
 
     private Uri tempCameraUri;
 
@@ -107,14 +109,16 @@ public class ChatActivity extends AppCompatActivity {
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        if (!getIntent().hasExtra(USER_INTENT_KEY)) {
+        if (!getIntent().hasExtra(CHAT_ROOM_INTENT_KEY)) {
             Utilities.makeToast(this, "Invalid access");
             finish();
             return;
         }
 
+        chatRoom = getIntent().getParcelableExtra(CHAT_ROOM_INTENT_KEY);
+
         new Thread(() -> {
-            CountDownLatch countDownLatch1 = new CountDownLatch(1);
+            CountDownLatch countDownLatch1 = new CountDownLatch(2);
 
             FirebaseDatabase.getInstance()
                     .getReference()
@@ -126,6 +130,23 @@ public class ChatActivity extends AppCompatActivity {
                             senderUser = task.getResult().getValue(User.class);
                         } else {
                             Utilities.makeToast(ChatActivity.this, "Unable to get user detail");
+                            loadSuccess = false;
+                        }
+                        countDownLatch1.countDown();
+                    });
+
+            FirebaseDatabase.getInstance()
+                    .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(chatRoom.getChatRoomId())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "onCreate: " + task.getResult());
+                            chatRoom = task.getResult().getValue(ChatRoom.class);
+                            chatRoom.setChatRoomId(task.getResult().getKey());
+                        } else {
+                            Utilities.makeToast(ChatActivity.this, "Unable to get room detail");
                             loadSuccess = false;
                         }
                         countDownLatch1.countDown();
@@ -144,14 +165,30 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             runOnUiThread(() -> {
-                receiverUser = getIntent().getParcelableExtra(USER_INTENT_KEY);
+                receiverUser = chatRoom.getParticipants().entrySet().iterator().next().getValue();
 
                 Utilities.initChildToolbar(this, binding.toolbar, receiverUser.getFullName());
 
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
                 linearLayoutManager.setStackFromEnd(true);
 
-                firebaseChatAdapter = new FirebaseChatAdapter(senderUser, receiverUser);
+                DatabaseReference chatRef = FirebaseDatabase.getInstance()
+                        .getReference(Constants.FIREBASE_CHATS_DB_REF)
+                        .child(chatRoom.getChatRoomId());
+                FirebaseRecyclerOptions<Chat> firebaseRecyclerOptions = new FirebaseRecyclerOptions.Builder<Chat>()
+                        .setLifecycleOwner(ChatActivity.this)
+                        .setQuery(chatRef, snapshot -> {
+                            Chat chat = snapshot.getValue(Chat.class);
+
+                            if (chat != null) {
+                                chat.setChatId(snapshot.getKey());
+                            }
+
+                            return chat;
+                        })
+                        .build();
+
+                firebaseChatAdapter = new FirebaseChatAdapter(firebaseRecyclerOptions, senderUser, receiverUser);
                 firebaseChatAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                     @Override
                     public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -167,35 +204,6 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-                FirebaseDatabase.getInstance()
-                        .getReference(Constants.FIREBASE_CHATS_DB_REF)
-                        .addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                chatList = new ArrayList<>();
-
-                                for (DataSnapshot child : snapshot.getChildren()) {
-                                    Chat chat = child.getValue(Chat.class);
-                                    chat.setChatId(child.getKey());
-
-                                    if((chat.getSender().equals(senderUser.getUsername()) && chat.getReceiver().equals(receiverUser.getUsername())) ||
-                                            (chat.getReceiver().equals(senderUser.getUsername()) && chat.getSender().equals(receiverUser.getUsername()))){
-                                        chatList.add(chat);
-                                    }
-                                }
-
-                                Collections.sort(chatList, (o1, o2) ->
-                                        (int) (o2.getTimestamp() - o1.getTimestamp()));
-
-                                firebaseChatAdapter.submitList(chatList);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                runOnUiThread(() -> Utilities.makeToast(ChatActivity.this, "Failed to get chat data"));
-                            }
-                        });
 
                 binding.chatRvChat.setLayoutManager(linearLayoutManager);
                 binding.chatRvChat.setItemAnimator(null);
@@ -218,23 +226,38 @@ public class ChatActivity extends AppCompatActivity {
                 });
 
                 binding.chatIbSend.setOnClickListener(v -> {
+                    String message = binding.chatEtMessage.getText().toString();
+                    long timestamp = System.currentTimeMillis();
+
                     Chat chat = new Chat(
                             senderUser.getUsername(),
-                            senderUser.getFullName(),
-                            senderUser.getProfilePicture(),
-                            receiverUser.getUsername(),
-                            receiverUser.getFullName(),
-                            receiverUser.getProfilePicture(),
-                            binding.chatEtMessage.getText().toString(),
+                            message,
                             null,
-                            System.currentTimeMillis()
+                            timestamp
                     );
 
-                    FirebaseDatabase.getInstance()
-                            .getReference()
-                            .child(Constants.FIREBASE_CHATS_DB_REF)
-                            .push()
-                            .setValue(chat);
+                    chatRef.push().setValue(chat);
+
+                    DatabaseReference senderRoomRef = FirebaseDatabase.getInstance()
+                            .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
+                            .child(senderUser.getUserId())
+                            .child(chatRoom.getChatRoomId());
+
+                    DatabaseReference receiverRoomRef = FirebaseDatabase.getInstance()
+                            .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
+                            .child(receiverUser.getUserId())
+                            .child(chatRoom.getChatRoomId());
+
+                    HashMap<String, Object> lastMessageMap = new HashMap<>();
+                    lastMessageMap.put("lastMessage", message);
+
+                    HashMap<String, Object> lastTimestampMap = new HashMap<>();
+                    lastTimestampMap.put("lastMessageTimestamp", timestamp);
+
+                    senderRoomRef.updateChildren(lastMessageMap);
+                    senderRoomRef.updateChildren(lastTimestampMap);
+                    receiverRoomRef.updateChildren(lastMessageMap);
+                    receiverRoomRef.updateChildren(lastTimestampMap);
 
                     binding.chatEtMessage.setText("");
 
