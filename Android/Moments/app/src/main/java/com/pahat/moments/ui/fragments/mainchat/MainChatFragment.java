@@ -91,7 +91,7 @@ public class MainChatFragment extends Fragment {
             if (!loadSuccess) {
                 return;
             }
-
+            showLoading();
             FirebaseDatabase.getInstance()
                     .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
                     .child(currentUser.getUserId())
