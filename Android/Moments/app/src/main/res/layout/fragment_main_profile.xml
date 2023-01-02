@@ -1,115 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragments.mainprofile.MainProfileFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/fragment_main_profile_civ_dp"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/ic_person_grey_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/fragment_main_profile_tv_fullname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/inter_semibold"
-            android:textSize="35sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragment_main_profile_civ_dp"
-            tools:text="Rheza Rijaya's" />
-
-        <TextView
-            android:id="@+id/fragment_main_profile_tv_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/inter_semibold"
-            android:textSize="17.5sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_main_profile_tv_fullname"
-            tools:text="\@RhezaaGanteng" />
-
-        <TextView
-            android:id="@+id/fragment_main_profile_tv_followers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
-            android:fontFamily="@font/inter_semibold"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toStartOf="@id/fragment_main_profile_tv_following"
-            app:layout_constraintStart_toStartOf="@id/fragment_main_profile_tv_username"
-            app:layout_constraintTop_toBottomOf="@id/fragment_main_profile_tv_username"
-            tools:text="100 Followers" />
-
-        <TextView
-            android:id="@+id/fragment_main_profile_tv_following"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/inter_semibold"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="@id/fragment_main_profile_tv_username"
-            app:layout_constraintStart_toEndOf="@id/fragment_main_profile_tv_followers"
-            app:layout_constraintTop_toBottomOf="@id/fragment_main_profile_tv_username"
-            tools:text="100 Following" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_main_profile_rv_posts"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fragment_main_profile_cl"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="20dp"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@id/fragment_main_profile_tv_followers"
-            app:spanCount="2"
-            tools:itemCount="9"
-            tools:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-            tools:listitem="@layout/item_post" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/fragment_main_profile_tv_no_post"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:fontFamily="@font/inter_medium"
-            android:text="@string/no_post"
-            android:textSize="17.5sp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/fragment_main_profile_rv_posts" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/fragment_main_profile_civ_dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_person_grey_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/fragment_main_profile_tv_fullname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_semibold"
+                android:textSize="35sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_main_profile_civ_dp"
+                tools:text="Rheza Rijaya's" />
+
+            <TextView
+                android:id="@+id/fragment_main_profile_tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_semibold"
+                android:textSize="17.5sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_main_profile_tv_fullname"
+                tools:text="\@RhezaaGanteng" />
+
+            <TextView
+                android:id="@+id/fragment_main_profile_tv_followers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/inter_semibold"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toStartOf="@id/fragment_main_profile_tv_following"
+                app:layout_constraintStart_toStartOf="@id/fragment_main_profile_tv_username"
+                app:layout_constraintTop_toBottomOf="@id/fragment_main_profile_tv_username"
+                tools:text="100 Followers" />
+
+            <TextView
+                android:id="@+id/fragment_main_profile_tv_following"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_semibold"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="@id/fragment_main_profile_tv_username"
+                app:layout_constraintStart_toEndOf="@id/fragment_main_profile_tv_followers"
+                app:layout_constraintTop_toBottomOf="@id/fragment_main_profile_tv_username"
+                tools:text="100 Following" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_main_profile_rv_posts"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="20dp"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toBottomOf="@id/fragment_main_profile_tv_followers"
+                app:spanCount="2"
+                tools:itemCount="9"
+                tools:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                tools:listitem="@layout/item_post" />
+
+            <TextView
+                android:id="@+id/fragment_main_profile_tv_no_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/inter_medium"
+                android:text="@string/no_post"
+                android:textSize="17.5sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/fragment_main_profile_rv_posts" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/fragment_main_profile_loading_lottie"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/loading_spinner"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:lottie_rawRes="@raw/loading_spinner" />
 
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

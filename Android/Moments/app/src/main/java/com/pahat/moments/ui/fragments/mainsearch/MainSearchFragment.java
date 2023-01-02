@@ -45,7 +45,7 @@ public class MainSearchFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        binding.fragmentMainSearchLoadingLottie.setVisibility(View.GONE);
         RecyclerView recyclerView = binding.fragmentMainSearchRvResult;
         itemUserAdapter = new ItemUserAdapter(new OnItemClick<User>() {
             @Override
@@ -53,6 +53,7 @@ public class MainSearchFragment extends Fragment {
                 Intent intent = new Intent(requireContext(), OtherProfileActivity.class);
                 intent.putExtra(OtherProfileActivity.USER_INTENT_KEY, data);
                 startActivity(intent);
+
             }
         });
 
@@ -60,12 +61,15 @@ public class MainSearchFragment extends Fragment {
         recyclerView.setAdapter(itemUserAdapter);
 
         binding.fragmentMainSearchSvSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
+                showLoading();
                 Utilities.makeToast(getActivity(), query);
                 APIUtil.getAPIService().getUserByUsernameOrFullName(query).enqueue(new Callback<APIResponse<List<APIUser>>>() {
                     @Override
                     public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
+                        hideLoading();
                         if (response.isSuccessful()) {
                             List<User> userList = new ArrayList<>();
 
@@ -109,5 +113,12 @@ public class MainSearchFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+    public void showLoading() {
+        binding.fragmentMainSearchLoadingLottie.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoading() {
+        binding.fragmentMainSearchLoadingLottie.setVisibility(View.GONE);
     }
 }

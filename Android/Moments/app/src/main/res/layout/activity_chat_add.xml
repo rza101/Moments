@@ -7,13 +7,17 @@
     android:padding="10dp"
     tools:context=".ui.activities.chatadd.ChatAddActivity">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_children" />
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/chat_add_sv_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/CustomSearchView"
         app:iconifiedByDefault="false"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:queryHint="Search" />
 
     <androidx.recyclerview.widget.RecyclerView

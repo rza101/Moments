@@ -44,7 +44,7 @@ public class ChatAddActivity extends AppCompatActivity {
 
         binding = ActivityChatAddBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        Utilities.initChildToolbar(this, binding.toolbar, "Add Chat");
         new Thread(() -> {
             CountDownLatch countDownLatch = new CountDownLatch(1);
 

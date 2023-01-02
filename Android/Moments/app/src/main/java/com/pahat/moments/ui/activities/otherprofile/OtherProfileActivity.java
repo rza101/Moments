@@ -52,89 +52,15 @@ public class OtherProfileActivity extends AppCompatActivity {
         binding = ActivityOtherProfileBinding.inflate(getLayoutInflater());
         binding.otherProfileLoadingLottie.setVisibility(View.GONE);
         setContentView(binding.getRoot());
+        user = getIntent().getParcelableExtra(USER_INTENT_KEY);
+        Utilities.initChildToolbar(this, binding.toolbar, user.getFullName());
+
 
 
         itemPostAdapter = new ItemPostAdapter((v, data) -> {
             startActivity(new Intent(OtherProfileActivity.this, DetailPostActivity.class)
                     .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
             );
-        }, (v, data) -> {
-            PopupMenu popupMenu = new PopupMenu(OtherProfileActivity.this, v);
-            popupMenu.setOnMenuItemClickListener(item -> {
-                int id = item.getItemId();
-
-                if (id == R.id.menu_popup_post_profile_edit) {
-                    startActivity(new Intent(OtherProfileActivity.this, UpdatePostActivity.class)
-                            .putExtra(UpdatePostActivity.POST_INTENT_KEY, data)
-                    );
-                    return true;
-                } else if (id == R.id.menu_popup_post_profile_delete) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(OtherProfileActivity.this);
-                    builder.setTitle("Delete Post");
-                    builder.setMessage("Are you sure to delete post");
-                    builder.setPositiveButton("Yes", (dialog, which) -> new Thread(() -> {
-                        CountDownLatch cdl1 = new CountDownLatch(1);
-
-                        APIUtil.getAPIService()
-                                .deletePost(data.getId())
-                                .enqueue(new Callback<APIResponse<Post>>() {
-                                    @Override
-                                    public void onResponse(Call<APIResponse<Post>> call, Response<APIResponse<Post>> response) {
-                                        if (response.isSuccessful()) {
-                                            OtherProfileActivity.this.runOnUiThread(() -> {
-                                                Utilities.makeToast(OtherProfileActivity.this, "Post deleted");
-                                            });
-                                        } else {
-                                            showErrorDeleteToast();
-                                        }
-                                        cdl1.countDown();
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<APIResponse<Post>> call, Throwable t) {
-                                        showErrorDeleteToast();
-                                        cdl1.countDown();
-                                    }
-                                });
-
-                        try {
-                            cdl1.await();
-                        } catch (InterruptedException e) {
-                            showErrorDeleteToast();
-                            return;
-                        }
-
-                        APIUtil.getAPIService()
-                                .getAllPostByUsername(user.getUsername())
-                                .enqueue(new Callback<APIResponse<List<Post>>>() {
-                                    @Override
-                                    public void onResponse(Call<APIResponse<List<Post>>> call, Response<APIResponse<List<Post>>> response) {
-                                        if (response.isSuccessful()) {
-                                            postList = response.body().getData();
-                                            submitList();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<APIResponse<List<Post>>> call, Throwable t) {
-                                    }
-                                });
-                    }).start());
-                    builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
-
-                    if (!OtherProfileActivity.this.isFinishing()) {
-                        builder.create().show();
-                    }
-
-                    return true;
-                }
-
-                return false;
-            });
-
-            MenuInflater menuInflater = popupMenu.getMenuInflater();
-            menuInflater.inflate(R.menu.menu_popup_post_profile, popupMenu.getMenu());
-            popupMenu.show();
         });
 
         binding.otherProfileProfileRvPosts.setLayoutManager(

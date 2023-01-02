@@ -50,7 +50,7 @@ public class MainHomeFragment extends Fragment {
                     .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
             );
         });
-
+        binding.fragmentMainHomeLoadingLottie.setVisibility(View.GONE);
         binding.fragmentMainHomeRvPosts.setLayoutManager(
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         binding.fragmentMainHomeRvPosts.setAdapter(itemPostAdapter);
@@ -59,10 +59,12 @@ public class MainHomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        showLoading();
 
         APIUtil.getAPIService().getAllPost().enqueue(new Callback<APIResponse<List<Post>>>() {
             @Override
             public void onResponse(Call<APIResponse<List<Post>>> call, Response<APIResponse<List<Post>>> response) {
+                hideLoading();
                 itemPostAdapter.submitList(response.body().getData());
             }
 
@@ -70,6 +72,7 @@ public class MainHomeFragment extends Fragment {
             public void onFailure(Call<APIResponse<List<Post>>> call, Throwable t) {
                 Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show();
             }
+
         });
     }
 
@@ -77,5 +80,13 @@ public class MainHomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void showLoading() {
+        binding.fragmentMainHomeLoadingLottie.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoading() {
+        binding.fragmentMainHomeLoadingLottie.setVisibility(View.GONE);
     }
 }

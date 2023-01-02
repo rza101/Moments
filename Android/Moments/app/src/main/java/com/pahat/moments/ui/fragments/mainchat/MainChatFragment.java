@@ -45,6 +45,7 @@ public class MainChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMainChatBinding.inflate(inflater, container, false);
         return binding.getRoot();
+
     }
 
     @Override
@@ -59,7 +60,7 @@ public class MainChatFragment extends Fragment {
 
         binding.fragmentMainChatRvChats.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.fragmentMainChatRvChats.setAdapter(itemChatRoomAdapter);
-
+        binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE);
         binding.fragmentMainChatFabAdd.setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), ChatAddActivity.class)));
 
@@ -97,6 +98,7 @@ public class MainChatFragment extends Fragment {
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            showLoading();
                             chatRoomList = new ArrayList<>();
 
                             for (DataSnapshot child : snapshot.getChildren()) {
@@ -114,6 +116,7 @@ public class MainChatFragment extends Fragment {
                                     (int) (o1.getLastMessageTimestamp() - o2.getLastMessageTimestamp()));
 
                             itemChatRoomAdapter.submitList(chatRoomList);
+                            hideLoading();
                         }
 
                         @Override
@@ -139,10 +142,21 @@ public class MainChatFragment extends Fragment {
     }
 
     public void showLoading() {
-        binding.fragmentMainChatLoadingLottie.setVisibility(View.VISIBLE);
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                binding.fragmentMainChatLoadingLottie.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
 
     public void hideLoading() {
-        binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE);
+
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE);            }
+        });
     }
 }

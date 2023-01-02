@@ -53,6 +53,7 @@ public class MainProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         binding = FragmentMainProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -60,13 +61,15 @@ public class MainProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.setVisibility(View.GONE);
+        binding.fragmentMainProfileTvFollowers.setVisibility(View.GONE);
+        binding.fragmentMainProfileCl.setVisibility(View.GONE);
 
         itemPostAdapter = new ItemPostAdapter((v, data) -> {
             startActivity(new Intent(requireContext(), DetailPostActivity.class)
                     .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
             );
         }, (v, data) -> {
+
             PopupMenu popupMenu = new PopupMenu(requireContext(), v);
             popupMenu.setOnMenuItemClickListener(item -> {
                 int id = item.getItemId();
@@ -83,6 +86,7 @@ public class MainProfileFragment extends Fragment {
                     builder.setPositiveButton("Yes", (dialog, which) -> new Thread(() -> {
                         CountDownLatch cdl1 = new CountDownLatch(1);
 
+                        showLoading();
                         APIUtil.getAPIService()
                                 .deletePost(data.getId())
                                 .enqueue(new Callback<APIResponse<Post>>() {
@@ -117,6 +121,7 @@ public class MainProfileFragment extends Fragment {
                                 .enqueue(new Callback<APIResponse<List<Post>>>() {
                                     @Override
                                     public void onResponse(Call<APIResponse<List<Post>>> call, Response<APIResponse<List<Post>>> response) {
+                                        hideLoading();
                                         if (response.isSuccessful()) {
                                             postList = response.body().getData();
                                             submitList();
@@ -125,6 +130,7 @@ public class MainProfileFragment extends Fragment {
 
                                     @Override
                                     public void onFailure(Call<APIResponse<List<Post>>> call, Throwable t) {
+                                        hideLoading();
                                     }
                                 });
                     }).start());
@@ -148,7 +154,7 @@ public class MainProfileFragment extends Fragment {
         binding.fragmentMainProfileRvPosts.setLayoutManager(
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         binding.fragmentMainProfileRvPosts.setAdapter(itemPostAdapter);
-
+        showLoading();
         new Thread(() -> {
             CountDownLatch countDownLatch1 = new CountDownLatch(1);
 
@@ -233,13 +239,14 @@ public class MainProfileFragment extends Fragment {
                 return;
             }
 
+
             requireActivity().runOnUiThread(() -> {
                 if (!loadSuccess) {
                     return;
                 }
 
-                view.setVisibility(View.VISIBLE);
-
+                binding.fragmentMainProfileCl.setVisibility(View.VISIBLE);
+                hideLoading();
                 submitList();
 
                 if (!TextUtils.isEmpty(user.getProfilePicture())) {
@@ -303,5 +310,24 @@ public class MainProfileFragment extends Fragment {
     private void submitList() {
         binding.fragmentMainProfileTvNoPost.setVisibility(postList.size() == 0 ? View.VISIBLE : View.GONE);
         itemPostAdapter.submitList(postList);
+    }
+
+    public void showLoading() {
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                binding.fragmentMainProfileLoadingLottie.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+
+    public void hideLoading() {
+
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                binding.fragmentMainProfileLoadingLottie.setVisibility(View.GONE);            }
+        });
     }
 }
