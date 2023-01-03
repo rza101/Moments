@@ -15,9 +15,9 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_margin="20dp"
+        android:src="@drawable/img_about_ejak"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:src="@drawable/img_about_ejak" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,9 +35,9 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_margin="20dp"
+        android:src="@drawable/img_about_dika"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/about_civ_rheza"
-        tools:src="@drawable/img_about_dika" />
+        app:layout_constraintTop_toBottomOf="@id/about_civ_rheza" />
 
     <TextView
         android:layout_width="wrap_content"
