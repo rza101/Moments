@@ -15,7 +15,6 @@ import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.data.network.model.SavedPost;
 import com.pahat.moments.databinding.ActivitySavedPostBinding;
-import com.pahat.moments.ui.OnItemClick;
 import com.pahat.moments.ui.activities.detailpost.DetailPostActivity;
 import com.pahat.moments.ui.adapters.ItemPostAdapter;
 import com.pahat.moments.util.Constants;
@@ -46,14 +45,11 @@ public class SavedPostActivity extends AppCompatActivity {
 
         Utilities.initChildToolbar(this, binding.toolbar, "Saved Posts");
 
-        itemPostAdapter = new ItemPostAdapter(new OnItemClick<Post>() {
-            @Override
-            public void onClick(View v, Post data) {
-                // ON ITEM CLICK
-                startActivity(new Intent(SavedPostActivity.this, DetailPostActivity.class)
-                        .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
-                );
-            }
+        itemPostAdapter = new ItemPostAdapter((v, data) -> {
+            // ON ITEM CLICK
+            startActivity(new Intent(SavedPostActivity.this, DetailPostActivity.class)
+                    .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
+            );
         });
 
         binding.fragmentSavedPostRvPosts.setLayoutManager(
@@ -111,10 +107,11 @@ public class SavedPostActivity extends AppCompatActivity {
                 });
     }
 
-    public void showLoading(){
+    public void showLoading() {
         binding.savedPostLoadingLottie.setVisibility(View.VISIBLE);
-    };
-    public void hideLoading(){
+    }
+
+    public void hideLoading() {
         binding.savedPostLoadingLottie.setVisibility(View.GONE);
-    };
+    }
 }

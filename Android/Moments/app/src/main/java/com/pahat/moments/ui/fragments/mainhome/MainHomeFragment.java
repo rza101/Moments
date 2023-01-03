@@ -16,12 +16,9 @@ import com.pahat.moments.data.network.APIUtil;
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.databinding.FragmentMainHomeBinding;
-import com.pahat.moments.ui.OnItemClick;
 import com.pahat.moments.ui.activities.detailpost.DetailPostActivity;
 import com.pahat.moments.ui.adapters.ItemPostAdapter;
-import com.pahat.moments.util.Utilities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -70,16 +67,11 @@ public class MainHomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<APIResponse<List<Post>>> call, Throwable t) {
+                hideLoading();
                 Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show();
             }
 
         });
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 
     public void showLoading() {

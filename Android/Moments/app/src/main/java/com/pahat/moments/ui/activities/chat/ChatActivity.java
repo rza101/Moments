@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.pahat.moments.BuildConfig;
 import com.pahat.moments.data.firebase.model.Chat;
 import com.pahat.moments.data.firebase.model.ChatRoom;
@@ -45,10 +44,8 @@ import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
-    private static final String TAG = ChatActivity.class.getSimpleName();
     public static final String CHAT_ROOM_INTENT_KEY = "USER_INTENT_KEY";
-
+    private static final String TAG = ChatActivity.class.getSimpleName();
     private ActivityChatBinding binding;
     private FirebaseChatAdapter firebaseChatAdapter;
 
@@ -306,7 +303,7 @@ public class ChatActivity extends AppCompatActivity {
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
                                             imageUrl[0] = task1.getResult().toString();
-                                        }else{
+                                        } else {
                                             isSuccess[0] = false;
                                         }
                                         countDownLatch.countDown();
@@ -324,7 +321,7 @@ public class ChatActivity extends AppCompatActivity {
                 isSuccess[0] = false;
             }
 
-            if(!isSuccess[0]){
+            if (!isSuccess[0]) {
                 return;
             }
 

@@ -176,45 +176,34 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        binding.registerTvLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        binding.registerTvLogin.setOnClickListener(v -> finish());
+
+        binding.registerIvPasswordEye.setOnClickListener(v -> {
+            binding.registerEtPassword.setInputType(
+                    binding.registerEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                            InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
+            );
+
+            binding.registerIvPasswordEye.setImageDrawable(AppCompatResources.getDrawable(RegisterActivity.this,
+                    binding.registerEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                            R.drawable.ic_visibility_off_24 :
+                            R.drawable.ic_visibility_24
+            ));
         });
 
-        binding.registerIvPasswordEye.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.registerEtPassword.setInputType(
-                        binding.registerEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
-                                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
-                                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
-                );
+        binding.registerIvConfirmPasswordEye.setOnClickListener(v -> {
+            binding.registerEtConfirmPassword.setInputType(
+                    binding.registerEtConfirmPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                            InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
+            );
 
-                binding.registerIvPasswordEye.setImageDrawable(AppCompatResources.getDrawable(RegisterActivity.this,
-                        binding.registerEtPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
-                                R.drawable.ic_visibility_off_24 :
-                                R.drawable.ic_visibility_24
-                ));
-            }
-        });
-
-        binding.registerIvConfirmPasswordEye.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.registerEtConfirmPassword.setInputType(
-                        binding.registerEtConfirmPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
-                                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
-                                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
-                );
-
-                binding.registerIvConfirmPasswordEye.setImageDrawable(AppCompatResources.getDrawable(RegisterActivity.this,
-                        binding.registerEtConfirmPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
-                                R.drawable.ic_visibility_off_24 :
-                                R.drawable.ic_visibility_24
-                ));
-            }
+            binding.registerIvConfirmPasswordEye.setImageDrawable(AppCompatResources.getDrawable(RegisterActivity.this,
+                    binding.registerEtConfirmPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD) ?
+                            R.drawable.ic_visibility_off_24 :
+                            R.drawable.ic_visibility_24
+            ));
         });
     }
 
@@ -222,11 +211,7 @@ public class RegisterActivity extends AppCompatActivity {
         binding.registerLoadingLottie.setVisibility(View.VISIBLE);
     }
 
-    ;
-
     public void hideLoading() {
         binding.registerLoadingLottie.setVisibility(View.GONE);
     }
-
-    ;
 }

@@ -1,15 +1,12 @@
 package com.pahat.moments.ui.activities.otherprofile;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MenuInflater;
 import android.view.View;
-import android.widget.PopupMenu;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,7 +19,6 @@ import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.data.network.model.UserFollowComposite;
 import com.pahat.moments.databinding.ActivityOtherProfileBinding;
 import com.pahat.moments.ui.activities.detailpost.DetailPostActivity;
-import com.pahat.moments.ui.activities.updatepost.UpdatePostActivity;
 import com.pahat.moments.ui.activities.userlist.UserListActivity;
 import com.pahat.moments.ui.adapters.ItemPostAdapter;
 import com.pahat.moments.util.Constants;
@@ -54,7 +50,6 @@ public class OtherProfileActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         user = getIntent().getParcelableExtra(USER_INTENT_KEY);
         Utilities.initChildToolbar(this, binding.toolbar, user.getFullName());
-
 
 
         itemPostAdapter = new ItemPostAdapter((v, data) -> {
@@ -197,16 +192,10 @@ public class OtherProfileActivity extends AppCompatActivity {
             });
         }).start();
     }
+
     private void showErrorToast() {
         OtherProfileActivity.this.runOnUiThread(() -> {
             Utilities.makeToast(OtherProfileActivity.this, "Failed to show profile");
-            loadSuccess = false;
-        });
-    }
-
-    private void showErrorDeleteToast() {
-        OtherProfileActivity.this.runOnUiThread(() -> {
-            Utilities.makeToast(OtherProfileActivity.this, "Failed to delete post");
             loadSuccess = false;
         });
     }
@@ -216,11 +205,11 @@ public class OtherProfileActivity extends AppCompatActivity {
         itemPostAdapter.submitList(postList);
     }
 
-
-    public void showLoading(){
+    public void showLoading() {
         binding.otherProfileLoadingLottie.setVisibility(View.VISIBLE);
-    };
-    public void hideLoading(){
+    }
+
+    public void hideLoading() {
         binding.otherProfileLoadingLottie.setVisibility(View.GONE);
-    };
+    }
 }

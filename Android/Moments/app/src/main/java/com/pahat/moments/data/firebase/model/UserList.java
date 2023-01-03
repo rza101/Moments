@@ -6,6 +6,17 @@ import android.os.Parcelable;
 import java.util.List;
 
 public class UserList implements Parcelable {
+    public static final Creator<UserList> CREATOR = new Creator<UserList>() {
+        @Override
+        public UserList createFromParcel(Parcel in) {
+            return new UserList(in);
+        }
+
+        @Override
+        public UserList[] newArray(int size) {
+            return new UserList[size];
+        }
+    };
     private List<User> userList;
 
     public UserList() {
@@ -18,18 +29,6 @@ public class UserList implements Parcelable {
     protected UserList(Parcel in) {
         userList = in.createTypedArrayList(User.CREATOR);
     }
-
-    public static final Creator<UserList> CREATOR = new Creator<UserList>() {
-        @Override
-        public UserList createFromParcel(Parcel in) {
-            return new UserList(in);
-        }
-
-        @Override
-        public UserList[] newArray(int size) {
-            return new UserList[size];
-        }
-    };
 
     public List<User> getUserList() {
         return userList;

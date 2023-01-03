@@ -17,10 +17,6 @@ import com.pahat.moments.databinding.ItemChatRoomBinding;
 import com.pahat.moments.ui.OnItemClick;
 import com.pahat.moments.util.Utilities;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class ItemChatRoomAdapter extends ListAdapter<ChatRoom, ItemChatRoomAdapter.ViewHolder> {
     private final OnItemClick<ChatRoom> onItemClick;
 

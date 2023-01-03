@@ -8,12 +8,21 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class PostComposite implements Parcelable {
+    public static final Creator<PostComposite> CREATOR = new Creator<PostComposite>() {
+        @Override
+        public PostComposite createFromParcel(Parcel in) {
+            return new PostComposite(in);
+        }
+
+        @Override
+        public PostComposite[] newArray(int size) {
+            return new PostComposite[size];
+        }
+    };
     @SerializedName("post")
     private Post post;
-
     @SerializedName("post_like")
     private List<PostLike> postLike;
-
     @SerializedName("post_comment")
     private List<PostComment> postComment;
 
@@ -37,18 +46,6 @@ public class PostComposite implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<PostComposite> CREATOR = new Creator<PostComposite>() {
-        @Override
-        public PostComposite createFromParcel(Parcel in) {
-            return new PostComposite(in);
-        }
-
-        @Override
-        public PostComposite[] newArray(int size) {
-            return new PostComposite[size];
-        }
-    };
 
     public Post getPost() {
         return post;

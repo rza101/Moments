@@ -1,7 +1,6 @@
 package com.pahat.moments.ui.activities.about;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -61,7 +61,6 @@ public class MainProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.fragmentMainProfileTvFollowers.setVisibility(View.GONE);
         binding.fragmentMainProfileCl.setVisibility(View.GONE);
 
         itemPostAdapter = new ItemPostAdapter((v, data) -> {
@@ -69,7 +68,6 @@ public class MainProfileFragment extends Fragment {
                     .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
             );
         }, (v, data) -> {
-
             PopupMenu popupMenu = new PopupMenu(requireContext(), v);
             popupMenu.setOnMenuItemClickListener(item -> {
                 int id = item.getItemId();
@@ -84,9 +82,9 @@ public class MainProfileFragment extends Fragment {
                     builder.setTitle("Delete Post");
                     builder.setMessage("Are you sure to delete post");
                     builder.setPositiveButton("Yes", (dialog, which) -> new Thread(() -> {
+                        showLoading();
                         CountDownLatch cdl1 = new CountDownLatch(1);
 
-                        showLoading();
                         APIUtil.getAPIService()
                                 .deletePost(data.getId())
                                 .enqueue(new Callback<APIResponse<Post>>() {
@@ -154,7 +152,9 @@ public class MainProfileFragment extends Fragment {
         binding.fragmentMainProfileRvPosts.setLayoutManager(
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         binding.fragmentMainProfileRvPosts.setAdapter(itemPostAdapter);
+
         showLoading();
+
         new Thread(() -> {
             CountDownLatch countDownLatch1 = new CountDownLatch(1);
 
@@ -287,12 +287,6 @@ public class MainProfileFragment extends Fragment {
         }).start();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
     private void showErrorToast() {
         requireActivity().runOnUiThread(() -> {
             Utilities.makeToast(requireContext(), "Failed to show profile");
@@ -313,21 +307,10 @@ public class MainProfileFragment extends Fragment {
     }
 
     public void showLoading() {
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.fragmentMainProfileLoadingLottie.setVisibility(View.VISIBLE);
-            }
-        });
-
+        requireActivity().runOnUiThread(() -> binding.fragmentMainProfileLoadingLottie.setVisibility(View.VISIBLE));
     }
 
     public void hideLoading() {
-
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.fragmentMainProfileLoadingLottie.setVisibility(View.GONE);            }
-        });
+        requireActivity().runOnUiThread(() -> binding.fragmentMainProfileLoadingLottie.setVisibility(View.GONE));
     }
 }

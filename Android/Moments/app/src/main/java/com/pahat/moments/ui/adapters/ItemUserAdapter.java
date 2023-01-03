@@ -3,7 +3,6 @@ package com.pahat.moments.ui.adapters;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -57,12 +56,7 @@ public class ItemUserAdapter extends ListAdapter<User, ItemUserAdapter.ViewHolde
         holder.binding.itemUserTvUsername.setText(user.getUsername());
         holder.binding.itemUserTvFullname.setText(user.getFullName());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClick.onClick(v, user);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> onItemClick.onClick(v, user));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

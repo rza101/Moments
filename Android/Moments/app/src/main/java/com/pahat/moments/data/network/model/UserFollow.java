@@ -6,24 +6,29 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 public class UserFollow implements Parcelable {
+    public static final Creator<UserFollow> CREATOR = new Creator<UserFollow>() {
+        @Override
+        public UserFollow createFromParcel(Parcel in) {
+            return new UserFollow(in);
+        }
+
+        @Override
+        public UserFollow[] newArray(int size) {
+            return new UserFollow[size];
+        }
+    };
     @SerializedName("id")
     private long id;
-
     @SerializedName("username")
     private String username;
-
     @SerializedName("full_name")
     private String fullName;
-
     @SerializedName("image_url")
     private String imageUrl;
-
     @SerializedName("username_following")
     private String usernameFollowing;
-
     @SerializedName("full_name_following")
     private String fullNameFollowing;
-
     @SerializedName("image_url_following")
     private String imageUrlFollowing;
 
@@ -40,18 +45,6 @@ public class UserFollow implements Parcelable {
         username = in.readString();
         usernameFollowing = in.readString();
     }
-
-    public static final Creator<UserFollow> CREATOR = new Creator<UserFollow>() {
-        @Override
-        public UserFollow createFromParcel(Parcel in) {
-            return new UserFollow(in);
-        }
-
-        @Override
-        public UserFollow[] newArray(int size) {
-            return new UserFollow[size];
-        }
-    };
 
     public long getId() {
         return id;

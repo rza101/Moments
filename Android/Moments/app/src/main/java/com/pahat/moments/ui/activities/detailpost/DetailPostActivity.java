@@ -755,11 +755,11 @@ public class DetailPostActivity extends AppCompatActivity {
         });
     }
 
-    public void showLoading(){
+    public void showLoading() {
         binding.detailPostLoadingLottie.setVisibility(View.VISIBLE);
-    };
-    public void hideLoading(){
-        binding.detailPostLoadingLottie.setVisibility(View.GONE);
-    };
+    }
 
+    public void hideLoading() {
+        binding.detailPostLoadingLottie.setVisibility(View.GONE);
+    }
 }

@@ -129,11 +129,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void showLoading(){
+    public void showLoading() {
         binding.loginLoadingLottie.setVisibility(View.VISIBLE);
-    };
+    }
 
-    public void hideLoading(){
+    public void hideLoading() {
         binding.loginLoadingLottie.setVisibility(View.GONE);
-    };
+    }
 }

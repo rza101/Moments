@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
                     });
         }
 
-        
 
         setSupportActionBar(binding.toolbar.getRoot());
         binding.toolbar.toolbarFullname.setText(user == null ? "" : user.getFullName());

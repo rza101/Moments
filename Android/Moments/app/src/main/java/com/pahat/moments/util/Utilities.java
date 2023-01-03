@@ -3,7 +3,6 @@ package com.pahat.moments.util;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Environment;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 

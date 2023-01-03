@@ -109,7 +109,7 @@ public class ChatAddActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    if(!isSuccess[0]){
+                    if (!isSuccess[0]) {
                         runOnUiThread(() -> Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat"));
                         return;
                     }
@@ -145,7 +145,7 @@ public class ChatAddActivity extends AppCompatActivity {
                                                                 break;
                                                             }
                                                         }
-                                                    }else{
+                                                    } else {
                                                         isSuccess[0] = false;
                                                     }
                                                     countDownLatch2.countDown();
@@ -164,7 +164,7 @@ public class ChatAddActivity extends AppCompatActivity {
                         }
                     }
 
-                    if(!isSuccess[0]){
+                    if (!isSuccess[0]) {
                         runOnUiThread(() -> Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat"));
                         return;
                     }
@@ -187,7 +187,7 @@ public class ChatAddActivity extends AppCompatActivity {
                                             break;
                                         }
                                     }
-                                }else{
+                                } else {
                                     isSuccess[0] = false;
                                 }
 
@@ -200,7 +200,7 @@ public class ChatAddActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    if(!isSuccess[0]){
+                    if (!isSuccess[0]) {
                         runOnUiThread(() -> Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat"));
                         return;
                     }
@@ -218,7 +218,7 @@ public class ChatAddActivity extends AppCompatActivity {
                                 .child(extraChatRoom[0].getChatRoomId())
                                 .setValue(new ChatRoom(otherUserMap))
                                 .addOnCompleteListener(task1 -> {
-                                    if(!task1.isSuccessful()){
+                                    if (!task1.isSuccessful()) {
                                         isSuccess[0] = false;
                                     }
                                     countDownLatch4.countDown();
@@ -232,7 +232,7 @@ public class ChatAddActivity extends AppCompatActivity {
                         }
                     }
 
-                    if(!isSuccess[0]){
+                    if (!isSuccess[0]) {
                         runOnUiThread(() -> Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat"));
                         return;
                     }

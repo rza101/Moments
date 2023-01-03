@@ -11,8 +11,6 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.FileProvider;
@@ -20,8 +18,6 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.pahat.moments.BuildConfig;
@@ -145,150 +141,147 @@ public class EditProfileActivity extends AppCompatActivity {
                         .load(currentUser.getProfilePicture())
                         .into(binding.editProfileIvPreview);
 
-                binding.editProfileBtnEdit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String fullName = binding.editProfileEtFullName.getText().toString();
-                        String username = binding.editProfileEtUsername.getText().toString();
+                binding.editProfileBtnEdit.setOnClickListener(view -> {
+                    String fullName = binding.editProfileEtFullName.getText().toString();
+                    String username = binding.editProfileEtUsername.getText().toString();
 
-                        if (TextUtils.isEmpty(fullName)) {
-                            binding.editProfileEtFullName.setError("Enter some captions");
+                    if (TextUtils.isEmpty(fullName)) {
+                        binding.editProfileEtFullName.setError("Enter some captions");
+                    }
+
+                    if (TextUtils.isEmpty(username)) {
+                        binding.editProfileEtFullName.setError("Enter some captions");
+                    }
+
+                    if (imageUri == null) {
+                        Utilities.makeToast(EditProfileActivity.this, "Please enter an image");
+                    }
+
+                    new Thread(() -> {
+                        boolean[] isUpdateSuccess = {true};
+                        String[] imageUrl = new String[1];
+
+                        CountDownLatch countDownLatch1 = new CountDownLatch(1);
+
+                        FirebaseStorage.getInstance()
+                                .getReference()
+                                .child(Constants.FIREBASE_PROFILE_PICTURES_STORAGE_REF)
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .child(imageUri.getLastPathSegment())
+                                .putFile(imageUri)
+                                .addOnCompleteListener(taskUpload -> {
+                                    if (taskUpload.isSuccessful()) {
+                                        taskUpload.getResult()
+                                                .getMetadata()
+                                                .getReference()
+                                                .getDownloadUrl()
+                                                .addOnCompleteListener(taskMetadata -> {
+                                                    if (taskMetadata.isSuccessful()) {
+                                                        imageUrl[0] = taskMetadata.getResult().toString();
+                                                    } else {
+                                                        Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again");
+                                                        isUpdateSuccess[0] = false;
+                                                    }
+                                                    countDownLatch1.countDown();
+                                                });
+                                    } else {
+                                        Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again");
+                                        isUpdateSuccess[0] = false;
+                                        countDownLatch1.countDown();
+                                    }
+                                });
+
+                        try {
+                            countDownLatch1.await();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
 
-                        if (TextUtils.isEmpty(username)) {
-                            binding.editProfileEtFullName.setError("Enter some captions");
+                        if (!isUpdateSuccess[0]) {
+                            return;
                         }
 
-                        if (imageUri == null) {
-                            Utilities.makeToast(EditProfileActivity.this, "Please enter an image");
-                        }
+                        CountDownLatch countDownLatch2 = new CountDownLatch(3);
 
-                        new Thread(() -> {
-                            boolean[] isUpdateSuccess = {true};
-                            String[] imageUrl = new String[1];
+                        Map<String, Object> updateMap = new HashMap<>();
+                        updateMap.put("fullName", fullName);
+                        updateMap.put("profilePicture", imageUrl[0]);
 
-                            CountDownLatch countDownLatch1 = new CountDownLatch(1);
-
-                            FirebaseStorage.getInstance()
-                                    .getReference()
-                                    .child(Constants.FIREBASE_PROFILE_PICTURES_STORAGE_REF)
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .child(imageUri.getLastPathSegment())
-                                    .putFile(imageUri)
-                                    .addOnCompleteListener(taskUpload -> {
-                                        if (taskUpload.isSuccessful()) {
-                                            taskUpload.getResult()
-                                                    .getMetadata()
-                                                    .getReference()
-                                                    .getDownloadUrl()
-                                                    .addOnCompleteListener(taskMetadata -> {
-                                                        if (taskMetadata.isSuccessful()) {
-                                                            imageUrl[0] = taskMetadata.getResult().toString();
-                                                        } else {
-                                                            Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again");
-                                                            isUpdateSuccess[0] = false;
-                                                        }
-                                                        countDownLatch1.countDown();
-                                                    });
-                                        } else {
-                                            Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again");
-                                            isUpdateSuccess[0] = false;
-                                            countDownLatch1.countDown();
-                                        }
-                                    });
-
-                            try {
-                                countDownLatch1.await();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                            if (!isUpdateSuccess[0]) {
-                                return;
-                            }
-
-                            CountDownLatch countDownLatch2 = new CountDownLatch(3);
-
-                            Map<String, Object> updateMap = new HashMap<>();
-                            updateMap.put("fullName", fullName);
-                            updateMap.put("profilePicture", imageUrl[0]);
-
-                            // update API
-                            APIUtil.getAPIService()
-                                    .updateUser(currentUser.getUserId(), fullName, imageUrl[0])
-                                    .enqueue(new Callback<APIResponse<APIUser>>() {
-                                        @Override
-                                        public void onResponse(Call<APIResponse<APIUser>> call, Response<APIResponse<APIUser>> response) {
-                                            if (!response.isSuccessful()) {
-                                                isUpdateSuccess[0] = false;
-                                            }
-                                            countDownLatch2.countDown();
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<APIResponse<APIUser>> call, Throwable t) {
-                                            isUpdateSuccess[0] = false;
-                                            countDownLatch2.countDown();
-                                        }
-                                    });
-
-                            // update Firebase
-                            FirebaseDatabase.getInstance()
-                                    .getReference(Constants.FIREBASE_USERS_DB_REF)
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .updateChildren(updateMap, (error, ref) -> {
-                                        if (error != null) {
+                        // update API
+                        APIUtil.getAPIService()
+                                .updateUser(currentUser.getUserId(), fullName, imageUrl[0])
+                                .enqueue(new Callback<APIResponse<APIUser>>() {
+                                    @Override
+                                    public void onResponse(Call<APIResponse<APIUser>> call, Response<APIResponse<APIUser>> response) {
+                                        if (!response.isSuccessful()) {
                                             isUpdateSuccess[0] = false;
                                         }
                                         countDownLatch2.countDown();
-                                    });
+                                    }
 
-                            // update chat group participants data
-                            FirebaseDatabase.getInstance()
-                                    .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
-                                    .get()
-                                    .addOnCompleteListener(task -> {
-                                        Map<String, Object> otherUpdateMap = new HashMap<>();
+                                    @Override
+                                    public void onFailure(Call<APIResponse<APIUser>> call, Throwable t) {
+                                        isUpdateSuccess[0] = false;
+                                        countDownLatch2.countDown();
+                                    }
+                                });
 
-                                        for (DataSnapshot chatUserSnapshot : task.getResult().getChildren()) {
-                                            for (DataSnapshot chatRoomSnapshot : chatUserSnapshot.getChildren()) {
-                                                for (String userId : chatRoomSnapshot.getValue(ChatRoom.class).getParticipants().keySet()) {
-                                                    if (userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                                                        otherUpdateMap.put(chatUserSnapshot.getKey() + "/" +
-                                                                chatRoomSnapshot.getKey() + "/participants/" +
-                                                                userId + "/fullName", fullName);
-                                                        otherUpdateMap.put(chatUserSnapshot.getKey() + "/" +
-                                                                chatRoomSnapshot.getKey() + "/participants/" +
-                                                                userId + "/profilePicture", imageUrl[0]);
-                                                    }
+                        // update Firebase
+                        FirebaseDatabase.getInstance()
+                                .getReference(Constants.FIREBASE_USERS_DB_REF)
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .updateChildren(updateMap, (error, ref) -> {
+                                    if (error != null) {
+                                        isUpdateSuccess[0] = false;
+                                    }
+                                    countDownLatch2.countDown();
+                                });
+
+                        // update chat group participants data
+                        FirebaseDatabase.getInstance()
+                                .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
+                                .get()
+                                .addOnCompleteListener(task -> {
+                                    Map<String, Object> otherUpdateMap = new HashMap<>();
+
+                                    for (DataSnapshot chatUserSnapshot : task.getResult().getChildren()) {
+                                        for (DataSnapshot chatRoomSnapshot : chatUserSnapshot.getChildren()) {
+                                            for (String userId : chatRoomSnapshot.getValue(ChatRoom.class).getParticipants().keySet()) {
+                                                if (userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                                    otherUpdateMap.put(chatUserSnapshot.getKey() + "/" +
+                                                            chatRoomSnapshot.getKey() + "/participants/" +
+                                                            userId + "/fullName", fullName);
+                                                    otherUpdateMap.put(chatUserSnapshot.getKey() + "/" +
+                                                            chatRoomSnapshot.getKey() + "/participants/" +
+                                                            userId + "/profilePicture", imageUrl[0]);
                                                 }
                                             }
                                         }
+                                    }
 
-                                        FirebaseDatabase.getInstance()
-                                                .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
-                                                .updateChildren(otherUpdateMap, (error, ref) -> {
-                                                    if (error != null) {
-                                                        isUpdateSuccess[0] = false;
-                                                    }
-                                                    countDownLatch2.countDown();
-                                                });
-                                    });
+                                    FirebaseDatabase.getInstance()
+                                            .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
+                                            .updateChildren(otherUpdateMap, (error, ref) -> {
+                                                if (error != null) {
+                                                    isUpdateSuccess[0] = false;
+                                                }
+                                                countDownLatch2.countDown();
+                                            });
+                                });
 
-                            try {
-                                countDownLatch2.await();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                        try {
+                            countDownLatch2.await();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
-                            if (!isUpdateSuccess[0]) {
-                                Utilities.makeToast(EditProfileActivity.this, "Profile updated!");
-                                finish();
-                            } else {
-                                Utilities.makeToast(EditProfileActivity.this, "Failed to update profile");
-                            }
-                        }).start();
-                    }
+                        if (!isUpdateSuccess[0]) {
+                            Utilities.makeToast(EditProfileActivity.this, "Profile updated!");
+                            finish();
+                        } else {
+                            Utilities.makeToast(EditProfileActivity.this, "Failed to update profile");
+                        }
+                    }).start();
                 });
             });
         }).start();

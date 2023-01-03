@@ -6,24 +6,29 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 public class PostLike implements Parcelable {
+    public static final Creator<PostLike> CREATOR = new Creator<PostLike>() {
+        @Override
+        public PostLike createFromParcel(Parcel in) {
+            return new PostLike(in);
+        }
+
+        @Override
+        public PostLike[] newArray(int size) {
+            return new PostLike[size];
+        }
+    };
     @SerializedName("id")
     private long id;
-
     @SerializedName("post_id")
     private long postId;
-
     @SerializedName("username")
     private String username;
-
     @SerializedName("full_name")
     private String fullName;
-
     @SerializedName("image_url")
     private String imageUrl;
-
     @SerializedName("created_at")
     private String createdAt;
-
     @SerializedName("updated_at")
     private String updatedAt;
 
@@ -60,18 +65,6 @@ public class PostLike implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<PostLike> CREATOR = new Creator<PostLike>() {
-        @Override
-        public PostLike createFromParcel(Parcel in) {
-            return new PostLike(in);
-        }
-
-        @Override
-        public PostLike[] newArray(int size) {
-            return new PostLike[size];
-        }
-    };
 
     public long getId() {
         return id;

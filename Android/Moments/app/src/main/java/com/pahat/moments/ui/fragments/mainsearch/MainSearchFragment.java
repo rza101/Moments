@@ -18,7 +18,6 @@ import com.pahat.moments.data.network.APIUtil;
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.APIUser;
 import com.pahat.moments.databinding.FragmentMainSearchBinding;
-import com.pahat.moments.ui.OnItemClick;
 import com.pahat.moments.ui.activities.otherprofile.OtherProfileActivity;
 import com.pahat.moments.ui.adapters.ItemUserAdapter;
 import com.pahat.moments.util.Utilities;
@@ -47,21 +46,17 @@ public class MainSearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.fragmentMainSearchLoadingLottie.setVisibility(View.GONE);
         RecyclerView recyclerView = binding.fragmentMainSearchRvResult;
-        itemUserAdapter = new ItemUserAdapter(new OnItemClick<User>() {
-            @Override
-            public void onClick(View v, User data) {
-                Intent intent = new Intent(requireContext(), OtherProfileActivity.class);
-                intent.putExtra(OtherProfileActivity.USER_INTENT_KEY, data);
-                startActivity(intent);
+        itemUserAdapter = new ItemUserAdapter((v, data) -> {
+            Intent intent = new Intent(requireContext(), OtherProfileActivity.class);
+            intent.putExtra(OtherProfileActivity.USER_INTENT_KEY, data);
+            startActivity(intent);
 
-            }
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(itemUserAdapter);
 
         binding.fragmentMainSearchSvSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
             @Override
             public boolean onQueryTextSubmit(String query) {
                 showLoading();
@@ -90,6 +85,7 @@ public class MainSearchFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<APIResponse<List<APIUser>>> call, Throwable t) {
+                        hideLoading();
                         Utilities.makeToast(getActivity(), "Failed to show search result");
                     }
                 });
@@ -109,11 +105,6 @@ public class MainSearchFragment extends Fragment {
         super.onResume();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
     public void showLoading() {
         binding.fragmentMainSearchLoadingLottie.setVisibility(View.VISIBLE);
     }

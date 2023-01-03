@@ -4,9 +4,19 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class ChatRoom implements Parcelable {
+    public static final Creator<ChatRoom> CREATOR = new Creator<ChatRoom>() {
+        @Override
+        public ChatRoom createFromParcel(Parcel in) {
+            return new ChatRoom(in);
+        }
+
+        @Override
+        public ChatRoom[] newArray(int size) {
+            return new ChatRoom[size];
+        }
+    };
     private String chatRoomId;
     private String lastMessage;
     private long lastMessageTimestamp;
@@ -35,18 +45,6 @@ public class ChatRoom implements Parcelable {
         lastMessage = in.readString();
         lastMessageTimestamp = in.readLong();
     }
-
-    public static final Creator<ChatRoom> CREATOR = new Creator<ChatRoom>() {
-        @Override
-        public ChatRoom createFromParcel(Parcel in) {
-            return new ChatRoom(in);
-        }
-
-        @Override
-        public ChatRoom[] newArray(int size) {
-            return new ChatRoom[size];
-        }
-    };
 
     @Override
     public int describeContents() {

@@ -5,11 +5,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.pahat.moments.databinding.ActivityForgotPassBinding;
 
@@ -29,36 +26,31 @@ public class ForgotPassActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         binding.forgotPassLoadingLottie.setVisibility(View.GONE);
 
-        binding.forgotPassBtnSendEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = binding.forgotPassEtEmail.getText().toString();
+        binding.forgotPassBtnSendEmail.setOnClickListener(v -> {
+            String email = binding.forgotPassEtEmail.getText().toString();
 
-                if (TextUtils.isEmpty(email)) {
-                    binding.forgotPassEtEmail.setError("Enter your email address!");
-                    return;
-                }
-                showLoading();
-                mAuth.sendPasswordResetEmail(email)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                hideLoading();
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(ForgotPassActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(ForgotPassActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+            if (TextUtils.isEmpty(email)) {
+                binding.forgotPassEtEmail.setError("Enter your email address!");
+                return;
             }
+            showLoading();
+            mAuth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(task -> {
+                        hideLoading();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(ForgotPassActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ForgotPassActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
     }
 
-    public void showLoading(){
+    public void showLoading() {
         binding.forgotPassLoadingLottie.setVisibility(View.VISIBLE);
-    };
-    public void hideLoading(){
+    }
+
+    public void hideLoading() {
         binding.forgotPassLoadingLottie.setVisibility(View.GONE);
-    };
+    }
 }

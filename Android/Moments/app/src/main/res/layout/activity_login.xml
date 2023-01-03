@@ -50,10 +50,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
-            android:maxLines="1"
-            android:inputType="textEmailAddress"
             android:background="@android:color/transparent"
             android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/login_iv_email" />
 
@@ -94,11 +94,11 @@
             android:id="@+id/login_et_password"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:inputType="text|textPassword"
-            android:maxLines="1"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
             android:hint="Password"
+            android:inputType="text|textPassword"
+            android:maxLines="1"
             app:layout_constraintEnd_toStartOf="@+id/login_iv_password_eye"
             app:layout_constraintStart_toEndOf="@id/login_iv_password" />
 
@@ -146,15 +146,14 @@
         android:id="@+id/login_loading_lottie"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/loading_spinner"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:lottie_rawRes="@raw/loading_spinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

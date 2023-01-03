@@ -6,27 +6,31 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 public class PostComment implements Parcelable {
+    public static final Creator<PostComment> CREATOR = new Creator<PostComment>() {
+        @Override
+        public PostComment createFromParcel(Parcel in) {
+            return new PostComment(in);
+        }
+
+        @Override
+        public PostComment[] newArray(int size) {
+            return new PostComment[size];
+        }
+    };
     @SerializedName("id")
     private long id;
-
     @SerializedName("post_id")
     private long postId;
-
     @SerializedName("username")
     private String username;
-
     @SerializedName("full_name")
     private String fullName;
-
     @SerializedName("image_url")
     private String imageUrl;
-
     @SerializedName("comment")
     private String comment;
-
     @SerializedName("created_at")
     private String createdAt;
-
     @SerializedName("updated_at")
     private String updatedAt;
 
@@ -49,18 +53,6 @@ public class PostComment implements Parcelable {
         createdAt = in.readString();
         updatedAt = in.readString();
     }
-
-    public static final Creator<PostComment> CREATOR = new Creator<PostComment>() {
-        @Override
-        public PostComment createFromParcel(Parcel in) {
-            return new PostComment(in);
-        }
-
-        @Override
-        public PostComment[] newArray(int size) {
-            return new PostComment[size];
-        }
-    };
 
     public long getId() {
         return id;

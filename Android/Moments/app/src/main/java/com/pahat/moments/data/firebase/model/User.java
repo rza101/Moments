@@ -3,10 +3,20 @@ package com.pahat.moments.data.firebase.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Map;
 import java.util.Objects;
 
 public class User implements Parcelable {
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
     private String userId;
     private String username;
     private String fullName;
@@ -37,18 +47,6 @@ public class User implements Parcelable {
         fullName = in.readString();
         profilePicture = in.readString();
     }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
 
     public String getUserId() {
         return userId;

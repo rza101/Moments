@@ -192,12 +192,13 @@ public class CreatePostActivity extends AppCompatActivity {
         });
     }
 
-    public void showLoading(){
+    public void showLoading() {
         binding.createPostLoadingLottie.setVisibility(View.VISIBLE);
-    };
-    public void hideLoading(){
+    }
+
+    public void hideLoading() {
         binding.createPostLoadingLottie.setVisibility(View.GONE);
-    };
+    }
 
     private void setImagePreview(Uri uri) {
         Glide.with(CreatePostActivity.this)

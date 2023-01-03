@@ -75,22 +75,12 @@ public class ItemPostAdapter extends ListAdapter<Post, ItemPostAdapter.ViewHolde
 
         holder.binding.itemPostTvCaption.setText(data.getCaption());
         if (onMoreClick != null) {
-            holder.binding.itemPostIvMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onMoreClick.onClick(v, data);
-                }
-            });
+            holder.binding.itemPostIvMore.setOnClickListener(v -> onMoreClick.onClick(v, data));
         } else {
             holder.binding.itemPostIvMore.setVisibility(View.INVISIBLE);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClick.onClick(v, data);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> onItemClick.onClick(v, data));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

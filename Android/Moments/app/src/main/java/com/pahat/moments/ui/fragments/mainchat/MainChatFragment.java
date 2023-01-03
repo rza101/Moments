@@ -65,6 +65,8 @@ public class MainChatFragment extends Fragment {
                 startActivity(new Intent(requireContext(), ChatAddActivity.class)));
 
         new Thread(() -> {
+            showLoading();
+
             CountDownLatch countDownLatch1 = new CountDownLatch(1);
 
             FirebaseDatabase.getInstance()
@@ -91,7 +93,7 @@ public class MainChatFragment extends Fragment {
             if (!loadSuccess) {
                 return;
             }
-            showLoading();
+
             FirebaseDatabase.getInstance()
                     .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
                     .child(currentUser.getUserId())
@@ -104,7 +106,7 @@ public class MainChatFragment extends Fragment {
                             for (DataSnapshot child : snapshot.getChildren()) {
                                 ChatRoom chatRoom = child.getValue(ChatRoom.class);
 
-                                if(chatRoom.getLastMessage() != null){
+                                if (chatRoom.getLastMessage() != null) {
                                     chatRoom.setChatRoomId(child.getKey());
                                     chatRoomList.add(chatRoom);
                                 }
@@ -121,17 +123,12 @@ public class MainChatFragment extends Fragment {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
+                            hideLoading();
                             requireActivity().runOnUiThread(() ->
                                     Utilities.makeToast(requireContext(), "Failed to get chat data"));
                         }
                     });
         }).start();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 
     private void showError() {
@@ -142,21 +139,10 @@ public class MainChatFragment extends Fragment {
     }
 
     public void showLoading() {
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.fragmentMainChatLoadingLottie.setVisibility(View.VISIBLE);
-            }
-        });
-
+        requireActivity().runOnUiThread(() -> binding.fragmentMainChatLoadingLottie.setVisibility(View.VISIBLE));
     }
 
     public void hideLoading() {
-
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE);            }
-        });
+        requireActivity().runOnUiThread(() -> binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE));
     }
 }

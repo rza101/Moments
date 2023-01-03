@@ -10,26 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.data.firebase.model.UserList;
-import com.pahat.moments.data.network.APIService;
-import com.pahat.moments.data.network.APIUtil;
-import com.pahat.moments.data.network.model.APIResponse;
-import com.pahat.moments.data.network.model.Post;
-import com.pahat.moments.data.network.model.PostLike;
-import com.pahat.moments.data.network.model.UserFollowComposite;
 import com.pahat.moments.databinding.ActivityUserListBinding;
-import com.pahat.moments.ui.OnItemClick;
-import com.pahat.moments.ui.activities.detailpost.DetailPostActivity;
 import com.pahat.moments.ui.activities.otherprofile.OtherProfileActivity;
-import com.pahat.moments.ui.activities.savedpost.SavedPostActivity;
-import com.pahat.moments.ui.adapters.ItemPostAdapter;
 import com.pahat.moments.ui.adapters.ItemUserAdapter;
 import com.pahat.moments.util.Utilities;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class UserListActivity extends AppCompatActivity {
 
@@ -84,14 +70,11 @@ public class UserListActivity extends AppCompatActivity {
         }
         hideLoading();
 
-        itemUserAdapter = new ItemUserAdapter(new OnItemClick<User>() {
-            @Override
-            public void onClick(View v, User data) {
+        itemUserAdapter = new ItemUserAdapter((v, data) ->
                 startActivity(new Intent(UserListActivity.this, OtherProfileActivity.class)
                         .putExtra(OtherProfileActivity.USER_INTENT_KEY, data)
-                );
-            }
-        });
+                )
+        );
 
         userList = ((UserList) getIntent().getParcelableExtra(USER_LIST_INTENT_KEY)).getUserList();
         Utilities.initChildToolbar(this, binding.toolbar, title);
@@ -101,10 +84,12 @@ public class UserListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(UserListActivity.this));
         recyclerView.setAdapter(itemUserAdapter);
     }
-    public void showLoading(){
+
+    public void showLoading() {
         binding.userListLoadingLottie.setVisibility(View.VISIBLE);
-    };
-    public void hideLoading(){
+    }
+
+    public void hideLoading() {
         binding.userListLoadingLottie.setVisibility(View.GONE);
-    };
+    }
 }

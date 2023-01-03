@@ -1,38 +1,18 @@
 package com.pahat.moments.ui.activities.updatepost;
 
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.pahat.moments.R;
-import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.data.network.APIUtil;
 import com.pahat.moments.data.network.model.APIResponse;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.databinding.ActivityUpdatePostBinding;
-import com.pahat.moments.ui.activities.createpost.CreatePostActivity;
-import com.pahat.moments.ui.activities.savedpost.SavedPostActivity;
-import com.pahat.moments.ui.activities.updatepost.UpdatePostActivity;
-import com.pahat.moments.util.Constants;
 import com.pahat.moments.util.Utilities;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,11 +44,11 @@ public class UpdatePostActivity extends AppCompatActivity {
 
         binding.updatePostBtnPost.setOnClickListener(view -> {
             String caption = binding.updatePostEtCaption.getText().toString();
+
             if (TextUtils.isEmpty(caption)) {
                 binding.updatePostEtCaption.setError("Enter a caption");
                 return;
             }
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
             APIUtil.getAPIService().updatePost(post.getId(), caption).enqueue(new Callback<APIResponse<Post>>() {
                 @Override
@@ -86,10 +66,6 @@ public class UpdatePostActivity extends AppCompatActivity {
                     Utilities.makeToast(UpdatePostActivity.this, "API ERROR");
                 }
             });
-//                if (caption ==) {
-//                    binding.updatePostEtCaption.setError("Caption cannot be same as before");
-//                    return;
-//                }
         });
     }
 }
