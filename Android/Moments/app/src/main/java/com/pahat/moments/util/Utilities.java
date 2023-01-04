@@ -10,6 +10,7 @@ import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.data.firebase.model.UserList;
+import com.pahat.moments.data.network.model.APIUser;
 import com.pahat.moments.data.network.model.PostLike;
 import com.pahat.moments.data.network.model.UserFollow;
 import com.pahat.moments.databinding.ToolbarChildrenBinding;
@@ -37,6 +38,10 @@ public class Utilities {
         suffixes.put(1_000_000_000_000L, "T");
         suffixes.put(1_000_000_000_000_000L, "P");
         suffixes.put(1_000_000_000_000_000_000L, "E");
+    }
+
+    public static User APIUserToUser(APIUser apiUser) {
+        return new User(apiUser.getUserId(), apiUser.getUsername(), apiUser.getFullName(), apiUser.getImageUrl());
     }
 
     public static File createTempImageFile(Context context) {

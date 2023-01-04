@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FCMController;
 use App\Models\PostLike;
 use Illuminate\Http\Request;
 use Exception;
@@ -36,9 +37,12 @@ class PostLikesController extends Controller
             $post_like->post_id = $request->post_id;
             $post_like->save();
 
+            $fcmResult = FCMController::sendFCM($post_like->Post->User->fcm_token, "Post Like", "$post_like->username liked your post");
+
             return response()->json([
                 'status' => 200,
-                'message' => 'Post like stored'
+                'message' => 'Post like stored',
+                'data' => $fcmResult
             ]);
         } catch (Exception $e) {
             return response()->json([

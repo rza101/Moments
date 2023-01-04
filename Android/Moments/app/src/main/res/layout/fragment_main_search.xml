@@ -21,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
+        android:overScrollMode="never"
         app:layout_constraintTop_toBottomOf="@id/fragment_main_search_sv_search"
         tools:listitem="@layout/item_user" />
 

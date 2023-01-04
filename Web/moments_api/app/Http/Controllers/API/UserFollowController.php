@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FCMController;
 use App\Models\User;
 use App\Models\UserFollow;
 use Exception;
@@ -45,9 +46,12 @@ class UserFollowController extends Controller
             $user_follow->username_following = $request->username_following;
             $user_follow->save();
 
+            $fcmResult = FCMController::sendFCM($user_follow->UserFollowing->fcm_token, "New Follower", "$user_follow->username_following is following you");
+
             return response()->json([
                 'status' => 200,
-                'message' => 'User follow stored'
+                'message' => 'User follow stored',
+                'data' => $fcmResult
             ]);
         } catch (Exception $e) {
             return response()->json([

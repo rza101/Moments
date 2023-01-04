@@ -20,6 +20,8 @@ import com.pahat.moments.R;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.data.network.APIUtil;
 import com.pahat.moments.data.network.model.APIResponse;
+import com.pahat.moments.data.network.model.APIUser;
+import com.pahat.moments.data.network.model.FCMResponse;
 import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.data.network.model.PostComment;
 import com.pahat.moments.data.network.model.PostComposite;
@@ -89,18 +91,24 @@ public class DetailPostActivity extends AppCompatActivity {
         new Thread(() -> {
             CountDownLatch countDownLatch1 = new CountDownLatch(2);
 
-            FirebaseDatabase.getInstance().getReference()
-                    .child(Constants.FIREBASE_USERS_DB_REF)
-                    .orderByChild("username")
-                    .equalTo(post.getUsername())
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            postUser = task.getResult().getValue(User.class);
-                        } else {
-                            showError();
+            APIUtil.getAPIService()
+                    .getUserByUsername(post.getUsername())
+                    .enqueue(new Callback<APIResponse<APIUser>>() {
+                        @Override
+                        public void onResponse(Call<APIResponse<APIUser>> call, Response<APIResponse<APIUser>> response) {
+                            if (response.isSuccessful()) {
+                                postUser = Utilities.APIUserToUser(response.body().getData());
+                            } else {
+                                showError();
+                            }
+                            countDownLatch1.countDown();
                         }
-                        countDownLatch1.countDown();
+
+                        @Override
+                        public void onFailure(Call<APIResponse<APIUser>> call, Throwable t) {
+                            showError();
+                            countDownLatch1.countDown();
+                        }
                     });
 
             FirebaseDatabase.getInstance().getReference()
@@ -372,217 +380,20 @@ public class DetailPostActivity extends AppCompatActivity {
                 binding.detailPostRvComments.setAdapter(itemCommentAdapter);
                 itemCommentAdapter.submitList(postComposite.getPostComment());
 
-                binding.detailPostBtnFollow.setOnClickListener(v -> {
-                    new Thread(() -> {
-                        runOnUiThread(() -> v.setEnabled(false));
+                binding.detailPostBtnFollow.setOnClickListener(v -> new Thread(() -> {
+                    runOnUiThread(() -> v.setEnabled(false));
 
-                        CountDownLatch cdl1 = new CountDownLatch(1);
+                    CountDownLatch cdl1 = new CountDownLatch(1);
 
-                        if (isFollowing) {
-                            APIUtil.getAPIService()
-                                    .deleteUserFollow(followId)
-                                    .enqueue(new Callback<APIResponse<UserFollow>>() {
-                                        @Override
-                                        public void onResponse(Call<APIResponse<UserFollow>> call, Response<APIResponse<UserFollow>> response) {
-                                            runOnUiThread(() -> {
-                                                if (!response.isSuccessful()) {
-                                                    Utilities.makeToast(DetailPostActivity.this, "Failed to unfollow");
-                                                }
-                                            });
-
-                                            cdl1.countDown();
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<APIResponse<UserFollow>> call, Throwable t) {
-                                            runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to unfollow"));
-                                            cdl1.countDown();
-                                        }
-                                    });
-                        } else {
-                            APIUtil.getAPIService()
-                                    .createUserFollow(currentUser.getUsername(), post.getUsername())
-                                    .enqueue(new Callback<APIResponse<UserFollow>>() {
-                                        @Override
-                                        public void onResponse(Call<APIResponse<UserFollow>> call, Response<APIResponse<UserFollow>> response) {
-                                            runOnUiThread(() -> {
-                                                if (!response.isSuccessful()) {
-                                                    Utilities.makeToast(DetailPostActivity.this, "Failed to follow");
-                                                }
-                                            });
-
-                                            cdl1.countDown();
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<APIResponse<UserFollow>> call, Throwable t) {
-                                            runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to follow"));
-                                            cdl1.countDown();
-                                        }
-                                    });
-                        }
-
-                        try {
-                            cdl1.await();
-                        } catch (InterruptedException e) {
-                            runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to follow"));
-                            return;
-                        }
-
+                    if (isFollowing) {
                         APIUtil.getAPIService()
-                                .getUserFollow(post.getUsername())
-                                .enqueue(new Callback<APIResponse<UserFollowComposite>>() {
+                                .deleteUserFollow(followId)
+                                .enqueue(new Callback<APIResponse<UserFollow>>() {
                                     @Override
-                                    public void onResponse(Call<APIResponse<UserFollowComposite>> call,
-                                                           Response<APIResponse<UserFollowComposite>> responseFollow) {
+                                    public void onResponse(Call<APIResponse<UserFollow>> call, Response<APIResponse<UserFollow>> response) {
                                         runOnUiThread(() -> {
-                                            if (responseFollow.isSuccessful()) {
-                                                postUserFollowerList = responseFollow.body().getData().getFollower();
-
-                                                isFollowing = false;
-                                                followId = -1;
-
-                                                for (UserFollow userFollow : postUserFollowerList) {
-                                                    if (userFollow.getUsername().equals(currentUser.getUsername())) {
-                                                        isFollowing = true;
-                                                        followId = userFollow.getId();
-                                                        break;
-                                                    }
-                                                }
-
-                                                setFollowButtonAndCount(isFollowing);
-                                                v.setEnabled(true);
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<APIResponse<UserFollowComposite>> call, Throwable t) {
-                                    }
-                                });
-                    }).start();
-                });
-
-                binding.detailPostIvLike.setOnClickListener(v -> {
-                    new Thread(() -> {
-                        runOnUiThread(() -> v.setEnabled(false));
-
-                        CountDownLatch cdl1 = new CountDownLatch(1);
-
-                        if (isLike) {
-                            APIUtil.getAPIService()
-                                    .deletePostLike(likeId)
-                                    .enqueue(new Callback<APIResponse<PostLike>>() {
-                                        @Override
-                                        public void onResponse(Call<APIResponse<PostLike>> call, Response<APIResponse<PostLike>> response) {
-                                            runOnUiThread(() -> {
-                                                if (!response.isSuccessful()) {
-                                                    Utilities.makeToast(DetailPostActivity.this, "Failed to remove like");
-                                                }
-                                            });
-
-                                            cdl1.countDown();
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<APIResponse<PostLike>> call, Throwable t) {
-                                            runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to remove like"));
-                                            cdl1.countDown();
-                                        }
-                                    });
-                        } else {
-                            APIUtil.getAPIService()
-                                    .createPostLike(post.getId(), currentUser.getUsername())
-                                    .enqueue(new Callback<APIResponse<PostLike>>() {
-                                        @Override
-                                        public void onResponse(Call<APIResponse<PostLike>> call, Response<APIResponse<PostLike>> response) {
-                                            runOnUiThread(() -> {
-                                                if (!response.isSuccessful()) {
-                                                    Utilities.makeToast(DetailPostActivity.this, "Failed to like");
-                                                }
-                                            });
-
-                                            cdl1.countDown();
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<APIResponse<PostLike>> call, Throwable t) {
-                                            runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to like"));
-                                            cdl1.countDown();
-                                        }
-                                    });
-                        }
-
-                        try {
-                            cdl1.await();
-                        } catch (InterruptedException e) {
-                            runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to like"));
-                            return;
-                        }
-
-                        APIUtil.getAPIService()
-                                .getPostById(String.valueOf(post.getId()))
-                                .enqueue(new Callback<APIResponse<PostComposite>>() {
-                                    @Override
-                                    public void onResponse(Call<APIResponse<PostComposite>> call,
-                                                           Response<APIResponse<PostComposite>> response) {
-                                        runOnUiThread(() -> {
-                                            if (response.isSuccessful()) {
-                                                postComposite = response.body().getData();
-
-                                                isLike = false;
-                                                likeId = -1;
-
-                                                for (PostLike postLike : postComposite.getPostLike()) {
-                                                    if (postLike.getUsername().equals(currentUser.getUsername())) {
-                                                        isLike = true;
-                                                        likeId = postLike.getId();
-                                                        break;
-                                                    }
-                                                }
-
-                                                setLikeButtonAndCount(isLike);
-                                                v.setEnabled(true);
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<APIResponse<PostComposite>> call, Throwable t) {
-                                    }
-                                });
-                    }).start();
-                });
-
-                binding.detailPostIvSendComment.setOnClickListener(v -> {
-                    new Thread(() -> {
-                        runOnUiThread(() -> {
-                            String comment = binding.detailPostEtComment.getText().toString();
-
-                            if (TextUtils.isEmpty(comment)) {
-                                Utilities.makeToast(DetailPostActivity.this, "Comment cannot be empty");
-                                return;
-                            }
-
-                            binding.detailPostEtComment.setEnabled(false);
-                            v.setEnabled(false);
-                        });
-
-                        CountDownLatch cdl1 = new CountDownLatch(1);
-
-                        APIUtil.getAPIService()
-                                .createPostComment(post.getId(),
-                                        currentUser.getUsername(),
-                                        binding.detailPostEtComment.getText().toString()
-                                )
-                                .enqueue(new Callback<APIResponse<PostComment>>() {
-                                    @Override
-                                    public void onResponse(Call<APIResponse<PostComment>> call, Response<APIResponse<PostComment>> response) {
-                                        runOnUiThread(() -> {
-                                            if (response.isSuccessful()) {
-                                                Utilities.makeToast(DetailPostActivity.this, "Comment sent!");
-                                            } else {
-                                                Utilities.makeToast(DetailPostActivity.this, "Failed to send comment");
+                                            if (!response.isSuccessful()) {
+                                                Utilities.makeToast(DetailPostActivity.this, "Failed to unfollow");
                                             }
                                         });
 
@@ -590,130 +401,319 @@ public class DetailPostActivity extends AppCompatActivity {
                                     }
 
                                     @Override
-                                    public void onFailure(Call<APIResponse<PostComment>> call, Throwable t) {
-                                        runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to send comment"));
+                                    public void onFailure(Call<APIResponse<UserFollow>> call, Throwable t) {
+                                        runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to unfollow"));
                                         cdl1.countDown();
                                     }
                                 });
-
-                        try {
-                            cdl1.await();
-                        } catch (InterruptedException e) {
-                            Utilities.makeToast(DetailPostActivity.this, "Failed to send comment");
-                            return;
-                        }
-
-                        runOnUiThread(() -> {
-                            binding.detailPostEtComment.setText("");
-                            binding.detailPostEtComment.setEnabled(true);
-                            v.setEnabled(true);
-                        });
-
+                    } else {
                         APIUtil.getAPIService()
-                                .getPostById(String.valueOf(post.getId()))
-                                .enqueue(new Callback<APIResponse<PostComposite>>() {
+                                .createUserFollow(currentUser.getUsername(), post.getUsername())
+                                .enqueue(new Callback<APIResponse<FCMResponse>>() {
                                     @Override
-                                    public void onResponse(Call<APIResponse<PostComposite>> call,
-                                                           Response<APIResponse<PostComposite>> response) {
-                                        if (response.isSuccessful()) {
-                                            postComposite = response.body().getData();
-                                            itemCommentAdapter.submitList(postComposite.getPostComment());
-                                        }
+                                    public void onResponse(Call<APIResponse<FCMResponse>> call, Response<APIResponse<FCMResponse>> response) {
+                                        runOnUiThread(() -> {
+                                            if (!response.isSuccessful()) {
+                                                Utilities.makeToast(DetailPostActivity.this, "Failed to follow");
+                                            }
+                                        });
+
+                                        cdl1.countDown();
                                     }
 
                                     @Override
-                                    public void onFailure(Call<APIResponse<PostComposite>> call, Throwable t) {
+                                    public void onFailure(Call<APIResponse<FCMResponse>> call, Throwable t) {
+                                        runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to follow"));
+                                        cdl1.countDown();
                                     }
                                 });
-                    }).start();
-                });
+                    }
 
-                binding.detailPostIvSave.setOnClickListener(v -> {
-                    new Thread(() -> {
-                        runOnUiThread(() -> v.setEnabled(false));
+                    try {
+                        cdl1.await();
+                    } catch (InterruptedException e) {
+                        runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to follow"));
+                        return;
+                    }
 
-                        CountDownLatch cdl1 = new CountDownLatch(1);
+                    APIUtil.getAPIService()
+                            .getUserFollow(post.getUsername())
+                            .enqueue(new Callback<APIResponse<UserFollowComposite>>() {
+                                @Override
+                                public void onResponse(Call<APIResponse<UserFollowComposite>> call,
+                                                       Response<APIResponse<UserFollowComposite>> responseFollow) {
+                                    runOnUiThread(() -> {
+                                        if (responseFollow.isSuccessful()) {
+                                            postUserFollowerList = responseFollow.body().getData().getFollower();
 
-                        if (isSaved) {
-                            APIUtil.getAPIService()
-                                    .deleteSavedPost(saveId)
-                                    .enqueue(new Callback<APIResponse<Post>>() {
-                                        @Override
-                                        public void onResponse(Call<APIResponse<Post>> call, Response<APIResponse<Post>> response) {
-                                            runOnUiThread(() -> {
-                                                if (!response.isSuccessful()) {
-                                                    Utilities.makeToast(DetailPostActivity.this, "Failed to unsave");
-                                                }
-                                            });
+                                            isFollowing = false;
+                                            followId = -1;
 
-                                            cdl1.countDown();
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<APIResponse<Post>> call, Throwable t) {
-                                            runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to unsave"));
-                                            cdl1.countDown();
-                                        }
-                                    });
-                        } else {
-                            APIUtil.getAPIService()
-                                    .createSavedPost(currentUser.getUsername(), post.getId())
-                                    .enqueue(new Callback<APIResponse<Post>>() {
-                                        @Override
-                                        public void onResponse(Call<APIResponse<Post>> call, Response<APIResponse<Post>> response) {
-                                            runOnUiThread(() -> {
-                                                if (!response.isSuccessful()) {
-                                                    Utilities.makeToast(DetailPostActivity.this, "Failed to save");
-                                                }
-                                            });
-
-                                            cdl1.countDown();
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<APIResponse<Post>> call, Throwable t) {
-                                            runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to save"));
-                                            cdl1.countDown();
-                                        }
-                                    });
-                        }
-
-                        try {
-                            cdl1.await();
-                        } catch (InterruptedException e) {
-                            runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to save"));
-                            return;
-                        }
-
-                        APIUtil.getAPIService()
-                                .getAllSavedPosts(currentUser.getUsername())
-                                .enqueue(new Callback<APIResponse<List<SavedPost>>>() {
-                                    @Override
-                                    public void onResponse(Call<APIResponse<List<SavedPost>>> call, Response<APIResponse<List<SavedPost>>> response) {
-                                        if (response.isSuccessful()) {
-                                            isSaved = false;
-                                            saveId = -1;
-
-                                            for (SavedPost savedPost : response.body().getData()) {
-                                                if (savedPost.getPostId() == post.getId()) {
-                                                    isSaved = true;
-                                                    saveId = savedPost.getId();
+                                            for (UserFollow userFollow : postUserFollowerList) {
+                                                if (userFollow.getUsername().equals(currentUser.getUsername())) {
+                                                    isFollowing = true;
+                                                    followId = userFollow.getId();
                                                     break;
                                                 }
                                             }
 
-                                            setSavedButton(isSaved);
+                                            setFollowButtonAndCount(isFollowing);
                                             v.setEnabled(true);
                                         }
+                                    });
+                                }
+
+                                @Override
+                                public void onFailure(Call<APIResponse<UserFollowComposite>> call, Throwable t) {
+                                }
+                            });
+                }).start());
+
+                binding.detailPostIvLike.setOnClickListener(v -> new Thread(() -> {
+                    runOnUiThread(() -> v.setEnabled(false));
+
+                    CountDownLatch cdl1 = new CountDownLatch(1);
+
+                    if (isLike) {
+                        APIUtil.getAPIService()
+                                .deletePostLike(likeId)
+                                .enqueue(new Callback<APIResponse<PostLike>>() {
+                                    @Override
+                                    public void onResponse(Call<APIResponse<PostLike>> call, Response<APIResponse<PostLike>> response) {
+                                        runOnUiThread(() -> {
+                                            if (!response.isSuccessful()) {
+                                                Utilities.makeToast(DetailPostActivity.this, "Failed to remove like");
+                                            }
+                                        });
+
+                                        cdl1.countDown();
                                     }
 
                                     @Override
-                                    public void onFailure(Call<APIResponse<List<SavedPost>>> call, Throwable t) {
-
+                                    public void onFailure(Call<APIResponse<PostLike>> call, Throwable t) {
+                                        runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to remove like"));
+                                        cdl1.countDown();
                                     }
                                 });
-                    }).start();
-                });
+                    } else {
+                        APIUtil.getAPIService()
+                                .createPostLike(post.getId(), currentUser.getUsername())
+                                .enqueue(new Callback<APIResponse<FCMResponse>>() {
+                                    @Override
+                                    public void onResponse(Call<APIResponse<FCMResponse>> call, Response<APIResponse<FCMResponse>> response) {
+                                        runOnUiThread(() -> {
+                                            if (!response.isSuccessful()) {
+                                                Utilities.makeToast(DetailPostActivity.this, "Failed to like");
+                                            }
+                                        });
+
+                                        cdl1.countDown();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<APIResponse<FCMResponse>> call, Throwable t) {
+                                        runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to like"));
+                                        cdl1.countDown();
+                                    }
+                                });
+                    }
+
+                    try {
+                        cdl1.await();
+                    } catch (InterruptedException e) {
+                        runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to like"));
+                        return;
+                    }
+
+                    APIUtil.getAPIService()
+                            .getPostById(String.valueOf(post.getId()))
+                            .enqueue(new Callback<APIResponse<PostComposite>>() {
+                                @Override
+                                public void onResponse(Call<APIResponse<PostComposite>> call,
+                                                       Response<APIResponse<PostComposite>> response) {
+                                    runOnUiThread(() -> {
+                                        if (response.isSuccessful()) {
+                                            postComposite = response.body().getData();
+
+                                            isLike = false;
+                                            likeId = -1;
+
+                                            for (PostLike postLike : postComposite.getPostLike()) {
+                                                if (postLike.getUsername().equals(currentUser.getUsername())) {
+                                                    isLike = true;
+                                                    likeId = postLike.getId();
+                                                    break;
+                                                }
+                                            }
+
+                                            setLikeButtonAndCount(isLike);
+                                            v.setEnabled(true);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onFailure(Call<APIResponse<PostComposite>> call, Throwable t) {
+                                }
+                            });
+                }).start());
+
+                binding.detailPostIvSendComment.setOnClickListener(v -> new Thread(() -> {
+                    runOnUiThread(() -> {
+                        String comment = binding.detailPostEtComment.getText().toString();
+
+                        if (TextUtils.isEmpty(comment)) {
+                            Utilities.makeToast(DetailPostActivity.this, "Comment cannot be empty");
+                            return;
+                        }
+
+                        binding.detailPostEtComment.setEnabled(false);
+                        v.setEnabled(false);
+                    });
+
+                    CountDownLatch cdl1 = new CountDownLatch(1);
+
+                    APIUtil.getAPIService()
+                            .createPostComment(post.getId(),
+                                    currentUser.getUsername(),
+                                    binding.detailPostEtComment.getText().toString()
+                            )
+                            .enqueue(new Callback<APIResponse<FCMResponse>>() {
+                                @Override
+                                public void onResponse(Call<APIResponse<FCMResponse>> call, Response<APIResponse<FCMResponse>> response) {
+                                    runOnUiThread(() -> {
+                                        if (response.isSuccessful()) {
+                                            Utilities.makeToast(DetailPostActivity.this, "Comment sent!");
+                                        } else {
+                                            Utilities.makeToast(DetailPostActivity.this, "Failed to send comment");
+                                        }
+                                    });
+
+                                    cdl1.countDown();
+                                }
+
+                                @Override
+                                public void onFailure(Call<APIResponse<FCMResponse>> call, Throwable t) {
+                                    runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to send comment"));
+                                    cdl1.countDown();
+                                }
+                            });
+
+                    try {
+                        cdl1.await();
+                    } catch (InterruptedException e) {
+                        Utilities.makeToast(DetailPostActivity.this, "Failed to send comment");
+                        return;
+                    }
+
+                    runOnUiThread(() -> {
+                        binding.detailPostEtComment.setText("");
+                        binding.detailPostEtComment.setEnabled(true);
+                        v.setEnabled(true);
+                    });
+
+                    APIUtil.getAPIService()
+                            .getPostById(String.valueOf(post.getId()))
+                            .enqueue(new Callback<APIResponse<PostComposite>>() {
+                                @Override
+                                public void onResponse(Call<APIResponse<PostComposite>> call,
+                                                       Response<APIResponse<PostComposite>> response) {
+                                    if (response.isSuccessful()) {
+                                        postComposite = response.body().getData();
+                                        itemCommentAdapter.submitList(postComposite.getPostComment());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<APIResponse<PostComposite>> call, Throwable t) {
+                                }
+                            });
+                }).start());
+
+                binding.detailPostIvSave.setOnClickListener(v -> new Thread(() -> {
+                    runOnUiThread(() -> v.setEnabled(false));
+
+                    CountDownLatch cdl1 = new CountDownLatch(1);
+
+                    if (isSaved) {
+                        APIUtil.getAPIService()
+                                .deleteSavedPost(saveId)
+                                .enqueue(new Callback<APIResponse<Post>>() {
+                                    @Override
+                                    public void onResponse(Call<APIResponse<Post>> call, Response<APIResponse<Post>> response) {
+                                        runOnUiThread(() -> {
+                                            if (!response.isSuccessful()) {
+                                                Utilities.makeToast(DetailPostActivity.this, "Failed to unsave");
+                                            }
+                                        });
+
+                                        cdl1.countDown();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<APIResponse<Post>> call, Throwable t) {
+                                        runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to unsave"));
+                                        cdl1.countDown();
+                                    }
+                                });
+                    } else {
+                        APIUtil.getAPIService()
+                                .createSavedPost(currentUser.getUsername(), post.getId())
+                                .enqueue(new Callback<APIResponse<Post>>() {
+                                    @Override
+                                    public void onResponse(Call<APIResponse<Post>> call, Response<APIResponse<Post>> response) {
+                                        runOnUiThread(() -> {
+                                            if (!response.isSuccessful()) {
+                                                Utilities.makeToast(DetailPostActivity.this, "Failed to save");
+                                            }
+                                        });
+
+                                        cdl1.countDown();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<APIResponse<Post>> call, Throwable t) {
+                                        runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to save"));
+                                        cdl1.countDown();
+                                    }
+                                });
+                    }
+
+                    try {
+                        cdl1.await();
+                    } catch (InterruptedException e) {
+                        runOnUiThread(() -> Utilities.makeToast(DetailPostActivity.this, "Failed to save"));
+                        return;
+                    }
+
+                    APIUtil.getAPIService()
+                            .getAllSavedPosts(currentUser.getUsername())
+                            .enqueue(new Callback<APIResponse<List<SavedPost>>>() {
+                                @Override
+                                public void onResponse(Call<APIResponse<List<SavedPost>>> call, Response<APIResponse<List<SavedPost>>> response) {
+                                    if (response.isSuccessful()) {
+                                        isSaved = false;
+                                        saveId = -1;
+
+                                        for (SavedPost savedPost : response.body().getData()) {
+                                            if (savedPost.getPostId() == post.getId()) {
+                                                isSaved = true;
+                                                saveId = savedPost.getId();
+                                                break;
+                                            }
+                                        }
+
+                                        setSavedButton(isSaved);
+                                        v.setEnabled(true);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<APIResponse<List<SavedPost>>> call, Throwable t) {
+
+                                }
+                            });
+                }).start());
             });
         }).start();
     }

@@ -26,8 +26,8 @@ public interface APIService {
     @GET("users/")
     Call<APIResponse<List<APIUser>>> getUserByUsernameOrFullName(@Query("q") String query);
 
-    @GET("users/{query}")
-    Call<APIResponse<APIUser>> getUserByUID(@Path("user_id") String user_id);
+    @GET("users/{username}")
+    Call<APIResponse<APIUser>> getUserByUsername(@Path("username") String username);
 
     @POST("users")
     @FormUrlEncoded
@@ -52,7 +52,7 @@ public interface APIService {
 
     @POST("userfollow")
     @FormUrlEncoded
-    Call<APIResponse<UserFollow>> createUserFollow(@Field("username") String username,
+    Call<APIResponse<FCMResponse>> createUserFollow(@Field("username") String username,
                                                    @Field("username_following") String username_following);
 
     @GET("userfollow/{user_foll_id}/delete")
@@ -88,7 +88,7 @@ public interface APIService {
 
     @POST("postlikes")
     @FormUrlEncoded
-    Call<APIResponse<PostLike>> createPostLike(@Field("post_id") long post_id,
+    Call<APIResponse<FCMResponse>> createPostLike(@Field("post_id") long post_id,
                                                @Field("username") String username);
 
     @GET("postlikes/{post_like_id}/delete")
@@ -100,7 +100,7 @@ public interface APIService {
 
     @POST("postcomments")
     @FormUrlEncoded
-    Call<APIResponse<PostComment>> createPostComment(@Field("post_id") long post_id,
+    Call<APIResponse<FCMResponse>> createPostComment(@Field("post_id") long post_id,
                                                      @Field("username") String username,
                                                      @Field("comment") String comment);
 

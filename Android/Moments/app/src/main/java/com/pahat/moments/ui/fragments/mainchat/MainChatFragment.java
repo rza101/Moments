@@ -45,104 +45,115 @@ public class MainChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMainChatBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        itemChatRoomAdapter = new ItemChatRoomAdapter((v, data) -> {
-            Intent intent = new Intent(requireContext(), ChatActivity.class);
-            intent.putExtra(ChatActivity.CHAT_ROOM_INTENT_KEY, data);
-            startActivity(intent);
-        });
+        if (isAdded()) {
+            itemChatRoomAdapter = new ItemChatRoomAdapter((v, data) -> {
+                if (isAdded()) {
+                    Intent intent = new Intent(requireContext(), ChatActivity.class);
+                    intent.putExtra(ChatActivity.CHAT_ROOM_INTENT_KEY, data);
+                    startActivity(intent);
+                }
+            });
 
-        binding.fragmentMainChatRvChats.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.fragmentMainChatRvChats.setAdapter(itemChatRoomAdapter);
-        binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE);
-        binding.fragmentMainChatFabAdd.setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), ChatAddActivity.class)));
+            binding.fragmentMainChatRvChats.setLayoutManager(new LinearLayoutManager(requireContext()));
+            binding.fragmentMainChatRvChats.setAdapter(itemChatRoomAdapter);
+            binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE);
+            binding.fragmentMainChatFabAdd.setOnClickListener(v -> {
+                if (isAdded()) {
+                    startActivity(new Intent(requireContext(), ChatAddActivity.class));
+                }
+            });
 
-        new Thread(() -> {
-            showLoading();
+            new Thread(() -> {
+                showLoading();
 
-            CountDownLatch countDownLatch1 = new CountDownLatch(1);
+                CountDownLatch countDownLatch1 = new CountDownLatch(1);
 
-            FirebaseDatabase.getInstance()
-                    .getReference()
-                    .child(Constants.FIREBASE_USERS_DB_REF)
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            currentUser = task.getResult().getValue(User.class);
-                        } else {
-                            showError();
-                        }
-                        countDownLatch1.countDown();
-                    });
+                FirebaseDatabase.getInstance()
+                        .getReference()
+                        .child(Constants.FIREBASE_USERS_DB_REF)
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                currentUser = task.getResult().getValue(User.class);
+                            } else {
+                                showError();
+                            }
+                            countDownLatch1.countDown();
+                        });
 
-            try {
-                countDownLatch1.await();
-            } catch (InterruptedException e) {
-                showError();
-                return;
-            }
+                try {
+                    countDownLatch1.await();
+                } catch (InterruptedException e) {
+                    showError();
+                    return;
+                }
 
-            if (!loadSuccess) {
-                return;
-            }
+                if (!loadSuccess) {
+                    return;
+                }
 
-            FirebaseDatabase.getInstance()
-                    .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
-                    .child(currentUser.getUserId())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            showLoading();
-                            chatRoomList = new ArrayList<>();
+                FirebaseDatabase.getInstance()
+                        .getReference(Constants.FIREBASE_CHAT_ROOMS_DB_REF)
+                        .child(currentUser.getUserId())
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                showLoading();
+                                chatRoomList = new ArrayList<>();
 
-                            for (DataSnapshot child : snapshot.getChildren()) {
-                                ChatRoom chatRoom = child.getValue(ChatRoom.class);
+                                for (DataSnapshot child : snapshot.getChildren()) {
+                                    ChatRoom chatRoom = child.getValue(ChatRoom.class);
 
-                                if (chatRoom.getLastMessage() != null) {
-                                    chatRoom.setChatRoomId(child.getKey());
-                                    chatRoomList.add(chatRoom);
+                                    if (chatRoom.getLastMessage() != null) {
+                                        chatRoom.setChatRoomId(child.getKey());
+                                        chatRoomList.add(chatRoom);
+                                    }
                                 }
+
+                                Log.d("t", "onDataChange: " + chatRoomList);
+
+                                Collections.sort(chatRoomList, (o1, o2) ->
+                                        (int) (o1.getLastMessageTimestamp() - o2.getLastMessageTimestamp()));
+
+                                itemChatRoomAdapter.submitList(chatRoomList);
+                                hideLoading();
                             }
 
-                            Log.d("t", "onDataChange: " + chatRoomList);
-
-                            Collections.sort(chatRoomList, (o1, o2) ->
-                                    (int) (o1.getLastMessageTimestamp() - o2.getLastMessageTimestamp()));
-
-                            itemChatRoomAdapter.submitList(chatRoomList);
-                            hideLoading();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            hideLoading();
-                            requireActivity().runOnUiThread(() ->
-                                    Utilities.makeToast(requireContext(), "Failed to get chat data"));
-                        }
-                    });
-        }).start();
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                hideLoading();
+                                showLoading();
+                            }
+                        });
+            }).start();
+        }
     }
 
     private void showError() {
-        requireActivity().runOnUiThread(() -> {
-            Utilities.makeToast(requireContext(), "Failed to get chats");
-            loadSuccess = false;
-        });
+        if (isAdded()) {
+            requireActivity().runOnUiThread(() -> {
+                Utilities.makeToast(requireContext(), "Failed to show chats");
+                loadSuccess = false;
+            });
+        }
     }
 
     public void showLoading() {
-        requireActivity().runOnUiThread(() -> binding.fragmentMainChatLoadingLottie.setVisibility(View.VISIBLE));
+        if (isAdded()) {
+            requireActivity().runOnUiThread(() -> binding.fragmentMainChatLoadingLottie.setVisibility(View.VISIBLE));
+        }
     }
 
     public void hideLoading() {
-        requireActivity().runOnUiThread(() -> binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE));
+        if (isAdded()) {
+            requireActivity().runOnUiThread(() -> binding.fragmentMainChatLoadingLottie.setVisibility(View.GONE));
+        }
     }
 }

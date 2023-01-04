@@ -11,6 +11,7 @@
         android:id="@+id/fragment_main_chat_rv_chats"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
         tools:listitem="@layout/item_user" />
 
     <com.airbnb.lottie.LottieAnimationView

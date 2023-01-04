@@ -112,12 +112,14 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 showLoading();
                 mRef = mRoot.child(Constants.FIREBASE_USERS_DB_REF);
-                mRef.orderByChild("username").equalTo(username)
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                if (task.getResult().getValue(User.class) != null) {
-                                    // USERNAME NOT DUPLICATE
+
+                APIUtil.getAPIService()
+                        .getUserByUsername(username)
+                        .enqueue(new Callback<APIResponse<APIUser>>() {
+                            @Override
+                            public void onResponse(Call<APIResponse<APIUser>> call, Response<APIResponse<APIUser>> response) {
+                                if (!response.isSuccessful()) {
+                                    // user not found
                                     FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                                         @Override
                                         public void onComplete(@NonNull Task<String> fcmTask) {
@@ -169,7 +171,10 @@ public class RegisterActivity extends AppCompatActivity {
                                 } else {
                                     binding.registerEtUsername.setError("Username already exists!");
                                 }
-                            } else {
+                            }
+
+                            @Override
+                            public void onFailure(Call<APIResponse<APIUser>> call, Throwable t) {
                                 Utilities.makeToast(getApplicationContext(), "Failed to register");
                             }
                         });

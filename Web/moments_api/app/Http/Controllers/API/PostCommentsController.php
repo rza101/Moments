@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FCMController;
 use Illuminate\Http\Request;
 use App\Models\PostComment;
 use Exception;
@@ -37,9 +38,12 @@ class PostCommentsController extends Controller
            $post_comment->comment = $request->comment;
            $post_comment->save();
 
+           $fcmResult = FCMController::sendFCM($post_comment->Post->User->fcm_token, "Post Like", "$post_comment->username commented your post");
+
            return response()->json([
                'status' => 200,
-               'message' => 'Post comment stored'
+               'message' => 'Post comment stored',
+               'data' => $fcmResult
            ]);
        } catch (Exception $e) {
            return response()->json([

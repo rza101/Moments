@@ -71,9 +71,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($user_id)
+    public function show($username)
     {
-        $user = User::find($user_id);
+        $user = User::where('username', '=', $username)->first();
+        
         if ($user) {
             return response()->json([
                 'status' => 200,

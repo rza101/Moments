@@ -42,10 +42,11 @@ public class MainHomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         itemPostAdapter = new ItemPostAdapter((v, data) -> {
-            // ON ITEM CLICK
-            startActivity(new Intent(requireContext(), DetailPostActivity.class)
-                    .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
-            );
+            if (isAdded()) {
+                startActivity(new Intent(requireContext(), DetailPostActivity.class)
+                        .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
+                );
+            }
         });
         binding.fragmentMainHomeLoadingLottie.setVisibility(View.GONE);
         binding.fragmentMainHomeRvPosts.setLayoutManager(
@@ -68,9 +69,10 @@ public class MainHomeFragment extends Fragment {
             @Override
             public void onFailure(Call<APIResponse<List<Post>>> call, Throwable t) {
                 hideLoading();
-                Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show();
+                if (isAdded()) {
+                    Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show();
+                }
             }
-
         });
     }
 

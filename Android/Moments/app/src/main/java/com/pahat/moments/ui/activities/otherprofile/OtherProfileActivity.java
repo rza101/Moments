@@ -1,11 +1,13 @@
 package com.pahat.moments.ui.activities.otherprofile;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
@@ -15,7 +17,10 @@ import com.pahat.moments.R;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.data.network.APIUtil;
 import com.pahat.moments.data.network.model.APIResponse;
+import com.pahat.moments.data.network.model.APIUser;
+import com.pahat.moments.data.network.model.FCMResponse;
 import com.pahat.moments.data.network.model.Post;
+import com.pahat.moments.data.network.model.UserFollow;
 import com.pahat.moments.data.network.model.UserFollowComposite;
 import com.pahat.moments.databinding.ActivityOtherProfileBinding;
 import com.pahat.moments.ui.activities.detailpost.DetailPostActivity;
@@ -34,23 +39,33 @@ import retrofit2.Response;
 public class OtherProfileActivity extends AppCompatActivity {
 
     public static final String USER_INTENT_KEY = "USER_INTENT_KEY";
-    private User user;
-    private ItemPostAdapter itemPostAdapter;
-    private UserFollowComposite userFollowComposite;
-    private List<Post> postList;
-    private boolean loadSuccess = true;
 
     private ActivityOtherProfileBinding binding;
+    private ItemPostAdapter itemPostAdapter;
+
+    private User currentUser;
+    private User otherUser;
+    private UserFollowComposite userFollowComposite;
+    private List<Post> postList;
+
+    private boolean loadSuccess = true;
+    private boolean isFollowing = false;
+
+    private long followId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityOtherProfileBinding.inflate(getLayoutInflater());
-        binding.otherProfileLoadingLottie.setVisibility(View.GONE);
-        setContentView(binding.getRoot());
-        user = getIntent().getParcelableExtra(USER_INTENT_KEY);
-        Utilities.initChildToolbar(this, binding.toolbar, user.getFullName());
 
+        binding = ActivityOtherProfileBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        binding.otherProfileLoadingLottie.setVisibility(View.GONE);
+        binding.otherProfileSvMain.setVisibility(View.GONE);
+
+        otherUser = getIntent().getParcelableExtra(USER_INTENT_KEY);
+
+        Utilities.initChildToolbar(this, binding.toolbar, otherUser.getFullName());
 
         itemPostAdapter = new ItemPostAdapter((v, data) -> {
             startActivity(new Intent(OtherProfileActivity.this, DetailPostActivity.class)
@@ -63,7 +78,27 @@ public class OtherProfileActivity extends AppCompatActivity {
         binding.otherProfileProfileRvPosts.setAdapter(itemPostAdapter);
 
         new Thread(() -> {
-            CountDownLatch countDownLatch1 = new CountDownLatch(1);
+            CountDownLatch countDownLatch1 = new CountDownLatch(2);
+
+            APIUtil.getAPIService()
+                    .getUserByUsername(otherUser.getUsername())
+                    .enqueue(new Callback<APIResponse<APIUser>>() {
+                        @Override
+                        public void onResponse(Call<APIResponse<APIUser>> call, Response<APIResponse<APIUser>> response) {
+                            if (response.isSuccessful()) {
+                                otherUser = Utilities.APIUserToUser(response.body().getData());
+                            } else {
+                                showErrorToast();
+                            }
+                            countDownLatch1.countDown();
+                        }
+
+                        @Override
+                        public void onFailure(Call<APIResponse<APIUser>> call, Throwable t) {
+                            showErrorToast();
+                            countDownLatch1.countDown();
+                        }
+                    });
 
             FirebaseDatabase.getInstance().getReference()
                     .child(Constants.FIREBASE_USERS_DB_REF)
@@ -71,7 +106,7 @@ public class OtherProfileActivity extends AppCompatActivity {
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            user = task.getResult().getValue(User.class);
+                            currentUser = task.getResult().getValue(User.class);
                         } else {
                             showErrorToast();
                         }
@@ -85,10 +120,10 @@ public class OtherProfileActivity extends AppCompatActivity {
                 return;
             }
 
-            CountDownLatch countDownLatch2 = new CountDownLatch(1);
+            CountDownLatch countDownLatch2 = new CountDownLatch(2);
 
             APIUtil.getAPIService()
-                    .getUserFollow(user.getUsername())
+                    .getUserFollow(otherUser.getUsername())
                     .enqueue(new Callback<APIResponse<UserFollowComposite>>() {
                         @Override
                         public void onResponse(Call<APIResponse<UserFollowComposite>> call,
@@ -108,17 +143,8 @@ public class OtherProfileActivity extends AppCompatActivity {
                         }
                     });
 
-            try {
-                countDownLatch2.await();
-            } catch (InterruptedException e) {
-                showErrorToast();
-                return;
-            }
-
-            CountDownLatch countDownLatch3 = new CountDownLatch(1);
-
             APIUtil.getAPIService()
-                    .getAllPostByUsername(user.getUsername())
+                    .getAllPostByUsername(otherUser.getUsername())
                     .enqueue(new Callback<APIResponse<List<Post>>>() {
                         @Override
                         public void onResponse(Call<APIResponse<List<Post>>> call, Response<APIResponse<List<Post>>> response) {
@@ -128,19 +154,19 @@ public class OtherProfileActivity extends AppCompatActivity {
                                 showErrorToast();
                             }
 
-                            countDownLatch3.countDown();
+                            countDownLatch2.countDown();
                         }
 
                         @Override
                         public void onFailure(Call<APIResponse<List<Post>>> call, Throwable t) {
                             showErrorToast();
                             t.printStackTrace();
-                            countDownLatch3.countDown();
+                            countDownLatch2.countDown();
                         }
                     });
 
             try {
-                countDownLatch3.await();
+                countDownLatch2.await();
             } catch (InterruptedException e) {
                 showErrorToast();
                 return;
@@ -151,18 +177,25 @@ public class OtherProfileActivity extends AppCompatActivity {
                     return;
                 }
 
+                binding.otherProfileSvMain.setVisibility(View.VISIBLE);
                 submitList();
 
-                user = getIntent().getParcelableExtra(USER_INTENT_KEY);
+                for (UserFollow userFollow : userFollowComposite.getFollower()) {
+                    if (userFollow.getUsername().equals(currentUser.getUsername())) {
+                        isFollowing = true;
+                        followId = userFollow.getId();
+                        break;
+                    }
+                }
 
-                if (!TextUtils.isEmpty(user.getProfilePicture())) {
+                if (!TextUtils.isEmpty(otherUser.getProfilePicture())) {
                     Glide.with(OtherProfileActivity.this)
-                            .load(user.getProfilePicture())
+                            .load(otherUser.getProfilePicture())
                             .into(binding.otherProfileProfileCivDp);
                 }
 
-                binding.otherProfileProfileTvUsername.setText(user.getUsername());
-                binding.otherProfileProfileTvFullname.setText(user.getFullName());
+                binding.otherProfileProfileTvUsername.setText(otherUser.getUsername());
+                binding.otherProfileProfileTvFullname.setText(otherUser.getFullName());
 
                 binding.otherProfileProfileTvFollowers.setText(
                         String.format(getString(R.string.followers_count),
@@ -175,6 +208,97 @@ public class OtherProfileActivity extends AppCompatActivity {
                                 Utilities.numberToText(userFollowComposite.getFollowing().size())
                         )
                 );
+
+                setFollowButtonAndCount(isFollowing);
+
+                binding.otherProfileBtnFollow.setOnClickListener(v -> new Thread(() -> {
+                    runOnUiThread(() -> v.setEnabled(false));
+
+                    CountDownLatch cdl1 = new CountDownLatch(1);
+
+                    if (isFollowing) {
+                        APIUtil.getAPIService()
+                                .deleteUserFollow(followId)
+                                .enqueue(new Callback<APIResponse<UserFollow>>() {
+                                    @Override
+                                    public void onResponse(Call<APIResponse<UserFollow>> call, Response<APIResponse<UserFollow>> response) {
+                                        runOnUiThread(() -> {
+                                            if (!response.isSuccessful()) {
+                                                Utilities.makeToast(OtherProfileActivity.this, "Failed to unfollow");
+                                            }
+                                        });
+
+                                        cdl1.countDown();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<APIResponse<UserFollow>> call, Throwable t) {
+                                        runOnUiThread(() -> Utilities.makeToast(OtherProfileActivity.this, "Failed to unfollow"));
+                                        cdl1.countDown();
+                                    }
+                                });
+                    } else {
+                        APIUtil.getAPIService()
+                                .createUserFollow(currentUser.getUsername(), otherUser.getUsername())
+                                .enqueue(new Callback<APIResponse<FCMResponse>>() {
+                                    @Override
+                                    public void onResponse(Call<APIResponse<FCMResponse>> call, Response<APIResponse<FCMResponse>> response) {
+                                        runOnUiThread(() -> {
+                                            if (!response.isSuccessful()) {
+                                                Utilities.makeToast(OtherProfileActivity.this, "Failed to follow");
+                                            }
+                                        });
+
+                                        cdl1.countDown();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<APIResponse<FCMResponse>> call, Throwable t) {
+                                        runOnUiThread(() -> Utilities.makeToast(OtherProfileActivity.this, "Failed to follow"));
+                                        cdl1.countDown();
+                                    }
+                                });
+                    }
+
+                    try {
+                        cdl1.await();
+                    } catch (InterruptedException e) {
+                        runOnUiThread(() -> Utilities.makeToast(OtherProfileActivity.this, "Failed to follow"));
+                        return;
+                    }
+
+                    APIUtil.getAPIService()
+                            .getUserFollow(otherUser.getUsername())
+                            .enqueue(new Callback<APIResponse<UserFollowComposite>>() {
+                                @Override
+                                public void onResponse(Call<APIResponse<UserFollowComposite>> call,
+                                                       Response<APIResponse<UserFollowComposite>> responseFollow) {
+                                    runOnUiThread(() -> {
+                                        if (responseFollow.isSuccessful()) {
+                                            userFollowComposite = responseFollow.body().getData();
+
+                                            isFollowing = false;
+                                            followId = -1;
+
+                                            for (UserFollow userFollow : userFollowComposite.getFollower()) {
+                                                if (userFollow.getUsername().equals(currentUser.getUsername())) {
+                                                    isFollowing = true;
+                                                    followId = userFollow.getId();
+                                                    break;
+                                                }
+                                            }
+
+                                            setFollowButtonAndCount(isFollowing);
+                                            v.setEnabled(true);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onFailure(Call<APIResponse<UserFollowComposite>> call, Throwable t) {
+                                }
+                            });
+                }).start());
 
                 binding.otherProfileProfileTvFollowers.setOnClickListener(v -> {
                     Intent intent = new Intent(OtherProfileActivity.this, UserListActivity.class);
@@ -191,6 +315,28 @@ public class OtherProfileActivity extends AppCompatActivity {
                 });
             });
         }).start();
+    }
+
+    private void setFollowButtonAndCount(boolean isFollowing) {
+        if (isFollowing) {
+            binding.otherProfileBtnFollow.setBackgroundTintList(AppCompatResources.getColorStateList(this, R.color.grey));
+            binding.otherProfileBtnFollow.setTextColor(Color.BLACK);
+            binding.otherProfileBtnFollow.setText("Unfollow");
+        } else {
+            binding.otherProfileBtnFollow.setBackgroundTintList(AppCompatResources.getColorStateList(this, R.color.blue));
+            binding.otherProfileBtnFollow.setTextColor(Color.WHITE);
+            binding.otherProfileBtnFollow.setText("Follow");
+        }
+        binding.otherProfileProfileTvFollowers.setText(
+                String.format(getString(R.string.followers_count),
+                        Utilities.numberToText(userFollowComposite.getFollower().size())
+                )
+        );
+        binding.otherProfileProfileTvFollowing.setText(
+                String.format(getString(R.string.following_count),
+                        Utilities.numberToText(userFollowComposite.getFollowing().size())
+                )
+        );
     }
 
     private void showErrorToast() {

@@ -11,8 +11,10 @@
         layout="@layout/toolbar_children" />
 
     <ScrollView
+        android:id="@+id/other_profile_sv_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
@@ -80,13 +82,29 @@
                 app:layout_constraintTop_toBottomOf="@id/other_profile_profile_tv_username"
                 tools:text="100 Following" />
 
+            <Button
+                android:id="@+id/other_profile_btn_follow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/blue"
+                android:fontFamily="@font/inter_bold"
+                android:text="@string/follow"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toTopOf="@id/other_profile_profile_rv_posts"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/other_profile_profile_tv_followers" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/other_profile_profile_rv_posts"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
-                app:layout_constraintTop_toBottomOf="@id/other_profile_profile_tv_followers"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toBottomOf="@id/other_profile_btn_follow"
                 app:spanCount="2"
                 tools:itemCount="9"
                 tools:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"

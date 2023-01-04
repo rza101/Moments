@@ -45,64 +45,69 @@ public class MainSearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.fragmentMainSearchLoadingLottie.setVisibility(View.GONE);
-        RecyclerView recyclerView = binding.fragmentMainSearchRvResult;
-        itemUserAdapter = new ItemUserAdapter((v, data) -> {
-            Intent intent = new Intent(requireContext(), OtherProfileActivity.class);
-            intent.putExtra(OtherProfileActivity.USER_INTENT_KEY, data);
-            startActivity(intent);
 
-        });
+        if (isAdded()) {
+            RecyclerView recyclerView = binding.fragmentMainSearchRvResult;
+            itemUserAdapter = new ItemUserAdapter((v, data) -> {
+                if (isAdded()) {
+                    Intent intent = new Intent(requireContext(), OtherProfileActivity.class);
+                    intent.putExtra(OtherProfileActivity.USER_INTENT_KEY, data);
+                    startActivity(intent);
+                }
+            });
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(itemUserAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+            recyclerView.setAdapter(itemUserAdapter);
 
-        binding.fragmentMainSearchSvSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                showLoading();
-                Utilities.makeToast(getActivity(), query);
-                APIUtil.getAPIService().getUserByUsernameOrFullName(query).enqueue(new Callback<APIResponse<List<APIUser>>>() {
-                    @Override
-                    public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
-                        hideLoading();
-                        if (response.isSuccessful()) {
-                            List<User> userList = new ArrayList<>();
+            binding.fragmentMainSearchSvSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    showLoading();
+                    Utilities.makeToast(getActivity(), query);
+                    APIUtil.getAPIService().getUserByUsernameOrFullName(query).enqueue(new Callback<APIResponse<List<APIUser>>>() {
+                        @Override
+                        public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
+                            hideLoading();
+                            if (response.isSuccessful()) {
+                                List<User> userList = new ArrayList<>();
 
-                            for (APIUser apiUser : response.body().getData()) {
-                                userList.add(new User(
-                                        apiUser.getUserId(),
-                                        apiUser.getUsername(),
-                                        apiUser.getFullName(),
-                                        apiUser.getImageUrl()
-                                ));
+                                for (APIUser apiUser : response.body().getData()) {
+                                    userList.add(new User(
+                                            apiUser.getUserId(),
+                                            apiUser.getUsername(),
+                                            apiUser.getFullName(),
+                                            apiUser.getImageUrl()
+                                    ));
+                                }
+
+                                itemUserAdapter.submitList(userList);
+                            } else {
+                                showErrorToast();
                             }
-
-                            itemUserAdapter.submitList(userList);
-                        } else {
-                            Utilities.makeToast(getActivity(), "Failed to show search result");
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<APIResponse<List<APIUser>>> call, Throwable t) {
-                        hideLoading();
-                        Utilities.makeToast(getActivity(), "Failed to show search result");
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<APIResponse<List<APIUser>>> call, Throwable t) {
+                            hideLoading();
+                            showErrorToast();
+                        }
+                    });
 
-                return false;
-            }
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
+        }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void showErrorToast() {
+        if (isAdded()) {
+            Utilities.makeToast(requireActivity(), "Failed to show search result");
+        }
     }
 
     public void showLoading() {
