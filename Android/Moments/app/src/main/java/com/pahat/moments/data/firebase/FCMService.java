@@ -64,7 +64,7 @@ public class FCMService extends FirebaseMessagingService {
                 .setContentTitle(title)
                 .setContentText(content)
                 .setAutoCancel(true)
-                .setColor(ContextCompat.getColor(this, R.color.purple_200))
+                .setColor(ContextCompat.getColor(this, R.color.blue_400))
                 .setContentInfo(getString(R.string.app_name))
                 .setContentIntent(pendingIntent)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
