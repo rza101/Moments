@@ -9,109 +9,89 @@ Endpoints : /api/users
 Method : POST
 Parameter :
 1. user_id
-2. full_name
-3. profile_picture
+2. username
+3. full_name
+4. fcm_token
 
 ### Show
-Endpoints : /api/users/{user_id}
+Endpoints : /api/users/{username}
 Method : GET
 
 ### Update
-Endpoints : /api/users/{user_id}
-Method : PUT | PATCH
+Endpoints : /api/users/{user_id}/update
+Method : POST
 Parameter :
-1. full_name
-2. profile_picture
-
-### destroy
-Endpoints : /api/users/{user_id}
-Method : DELETE
+1. fcm_token
+2. full_name
+3. image_url
 
 ## User Follow Controller
-### Index
-Endpoints : /api/userfollow
-Method : GET
-
 ### Store
 Endpoints : /api/userfollow
 Method : POST
 Parameter :
-1. user_id
-2. user_following
+1. username
+2. username_following
 
 ### Show
-Endpoints : /api/userfollow/{user_id}
+Endpoints : /api/userfollow/{username}
 Method : GET
 
-### Update
-Endpoints : /api/userfollow/{id}
-Method : PUT | PATCH
-
 ### destroy
-Endpoints : /api/userfollow/{id}
-Method : DELETE
+Endpoints : /api/userfollow/{id}/delete
+Method : GET
 
 ## Post Controller
 ### Index
 Endpoints : /api/posts
 Method : GET
+Parameter :
+1. username
 
 ### Store
 Endpoints : /api/posts
 Method : POST
 Parameter :
-1. user_id
+1. username
 2. image_url
 3. caption
 
 ### Show
-Endpoints : /api/posts/{user_id}
+Endpoints : /api/posts/{id}
 Method : GET
 
 ### Update
-Endpoints : /api/posts/{id}
-Method : PUT | PATCH
+Endpoints : /api/posts/{id}/update
+Method : POST
 Parameter :
 1. caption
 
 ### destroy
-Endpoints : /api/posts/{id}
-Method : DELETE
-
-## Post Like Controller
-### Index
-Endpoints : /api/postlikes
+Endpoints : /api/posts/{id}/delete
 Method : GET
 
+## Post Like Controller
 ### Store
 Endpoints : /api/postlikes
 Method : POST
 Parameter :
-1. user_id
+1. username
 2. post_id
 
 ### Show
 Endpoints : /api/postlikes/{post_id}
 Method : GET
 
-### Update
-Endpoints : /api/postlikes/{id}
-Method : PUT | PATCH
-
 ### destroy
-Endpoints : /api/postlikes/{id}
-Method : DELETE
-
-## Post Comments Controller
-### Index
-Endpoints : /api/postcomments
+Endpoints : /api/postlikes/{id}/delete
 Method : GET
 
+## Post Comments Controller
 ### Store
 Endpoints : /api/postcomments
 Method : POST
 Parameter :
-1. user_id
+1. username
 2. post_id
 3. comment
 
@@ -119,34 +99,22 @@ Parameter :
 Endpoints : /api/postcomments/{post_id}
 Method : GET
 
-### Update
-Endpoints : /api/postcomments/{id}
-Method : PUT | PATCH
-
 ### destroy
-Endpoints : /api/postcomments/{id}
-Method : DELETE
-
-## Saved Posts Controller
-### Index
-Endpoints : /api/savedposts
+Endpoints : /api/postcomments/{id}/delete
 Method : GET
 
+## Saved Posts Controller
 ### Store
 Endpoints : /api/savedposts
 Method : POST
 Parameter :
-1. user_id
+1. username
 2. post_id
 
 ### Show
-Endpoints : /api/savedposts/{user_id}
+Endpoints : /api/savedposts/{username}
 Method : GET
 
-### Update
-Endpoints : /api/savedposts/{id}
-Method : PUT | PATCH
-
 ### destroy
-Endpoints : /api/savedposts/{id}
-Method : DELETE
+Endpoints : /api/savedposts/{id}/delete
+Method : GET
