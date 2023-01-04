@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -49,8 +50,9 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String login = "<font color=#FF000000>Have an account? </font>" +
-                "<font color=#3FBDF1>Login</font>";
+        String login = "Have an account? <font color=" +
+                Integer.toHexString(ContextCompat.getColor(this, R.color.blue_400)) +
+                ">Login</font>";
         binding.registerTvLogin.setText(Html.fromHtml(login));
 
         mAuth = FirebaseAuth.getInstance();

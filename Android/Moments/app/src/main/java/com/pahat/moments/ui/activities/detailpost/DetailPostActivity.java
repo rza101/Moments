@@ -724,7 +724,7 @@ public class DetailPostActivity extends AppCompatActivity {
             binding.detailPostBtnFollow.setTextColor(Color.BLACK);
             binding.detailPostBtnFollow.setText("Unfollow");
         } else {
-            binding.detailPostBtnFollow.setBackgroundTintList(AppCompatResources.getColorStateList(this, R.color.blue));
+            binding.detailPostBtnFollow.setBackgroundTintList(AppCompatResources.getColorStateList(this, R.color.blue_400));
             binding.detailPostBtnFollow.setTextColor(Color.WHITE);
             binding.detailPostBtnFollow.setText("Follow");
         }

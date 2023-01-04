@@ -112,7 +112,7 @@
         android:padding="0dp"
         android:text="Forgot Password?"
         android:textAllCaps="false"
-        android:textColor="@color/blue"
+        android:textColor="@color/blue_400"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_cl_password" />
 
@@ -120,7 +120,7 @@
         android:id="@+id/login_btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/blue"
+        android:backgroundTint="@color/blue_400"
         android:paddingVertical="15dp"
         android:text="Login"
         android:textAllCaps="false"

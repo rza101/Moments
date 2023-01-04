@@ -240,7 +240,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:backgroundTint="@color/blue"
+            android:backgroundTint="@color/blue_400"
             android:paddingVertical="15dp"
             android:text="Register"
             android:textAllCaps="false"

@@ -65,7 +65,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/chat_ib_image"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/blue" />
+                app:tint="@color/blue_400" />
 
             <ImageButton
                 android:id="@+id/chat_ib_image"
@@ -78,7 +78,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/blue" />
+                app:tint="@color/blue_400" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -93,7 +93,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/blue" />
+            app:tint="@color/blue_400" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

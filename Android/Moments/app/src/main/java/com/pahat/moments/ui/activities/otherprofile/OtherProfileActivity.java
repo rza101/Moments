@@ -323,7 +323,7 @@ public class OtherProfileActivity extends AppCompatActivity {
             binding.otherProfileBtnFollow.setTextColor(Color.BLACK);
             binding.otherProfileBtnFollow.setText("Unfollow");
         } else {
-            binding.otherProfileBtnFollow.setBackgroundTintList(AppCompatResources.getColorStateList(this, R.color.blue));
+            binding.otherProfileBtnFollow.setBackgroundTintList(AppCompatResources.getColorStateList(this, R.color.blue_400));
             binding.otherProfileBtnFollow.setTextColor(Color.WHITE);
             binding.otherProfileBtnFollow.setText("Follow");
         }

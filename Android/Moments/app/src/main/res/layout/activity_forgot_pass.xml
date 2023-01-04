@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/blue"
+        android:backgroundTint="@color/blue_400"
         android:fontFamily="@font/nunitosans_extrabold"
         android:paddingVertical="15dp"
         android:text="Send Email"

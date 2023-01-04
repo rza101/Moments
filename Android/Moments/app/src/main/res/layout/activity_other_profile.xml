@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="10dp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="@color/blue_400"
                 android:fontFamily="@font/inter_bold"
                 android:text="@string/follow"
                 android:textAllCaps="false"

@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="@color/blue_400"
                 android:fontFamily="@font/inter_bold"
                 android:text="@string/follow"
                 android:textAllCaps="false"
@@ -113,7 +113,7 @@
                 android:src="@drawable/ic_favorite_border_24"
                 app:layout_constraintStart_toStartOf="@id/detail_post_tv_captions"
                 app:layout_constraintTop_toBottomOf="@id/detail_post_tv_date"
-                app:tint="@color/color_red" />
+                app:tint="@color/red" />
 
             <TextView
                 android:id="@+id/detail_post_tv_like_count"
@@ -134,7 +134,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/detail_post_iv_like"
                 app:layout_constraintEnd_toEndOf="@id/detail_post_tv_captions"
                 app:layout_constraintTop_toTopOf="@id/detail_post_iv_like"
-                app:tint="@color/color_light_orange" />
+                app:tint="@color/orange_400" />
 
             <TextView
                 android:id="@+id/detail_post_tv_comment_title"
