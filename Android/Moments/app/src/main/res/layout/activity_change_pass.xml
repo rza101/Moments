@@ -71,11 +71,9 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/nunitosans_regular"
             android:hint="Password"
             android:inputType="text|textPassword"
             android:maxLines="1"
-            android:textColor="@color/grey"
             app:layout_constraintEnd_toStartOf="@id/change_pass_iv_password_eye"
             app:layout_constraintStart_toEndOf="@id/change_pass_iv_password" />
 
@@ -123,7 +121,6 @@
             android:hint="Confirm Password"
             android:inputType="text|textPassword"
             android:maxLines="1"
-            android:textColor="@color/grey"
             app:layout_constraintEnd_toStartOf="@+id/change_pass_iv_confirm_password_eye"
             app:layout_constraintStart_toEndOf="@id/change_pass_iv_password_confirm" />
 
