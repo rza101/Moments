@@ -52,6 +52,7 @@
         app:layout_constraintBottom_toBottomOf="@id/item_chat_room_civ_dp"
         app:layout_constraintStart_toStartOf="@id/item_chat_room_tv_username"
         app:layout_constraintTop_toBottomOf="@id/item_chat_room_tv_username"
-        tools:text="Message" />
+        tools:text="Message"
+        android:maxLines="1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

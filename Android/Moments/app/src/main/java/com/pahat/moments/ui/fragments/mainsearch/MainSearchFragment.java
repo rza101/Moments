@@ -63,7 +63,6 @@ public class MainSearchFragment extends Fragment {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     showLoading();
-                    Utilities.makeToast(getActivity(), query);
                     APIUtil.getAPIService().getUserByUsernameOrFullName(query).enqueue(new Callback<APIResponse<List<APIUser>>>() {
                         @Override
                         public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
