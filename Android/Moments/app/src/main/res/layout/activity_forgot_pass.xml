@@ -56,8 +56,8 @@
             android:layout_marginStart="5dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/nunitosans_regular"
-            android:text="Email"
-            android:textColor="@color/grey"
+            android:hint="Email"
+            android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/forgot_pass_iv_email" />
 
