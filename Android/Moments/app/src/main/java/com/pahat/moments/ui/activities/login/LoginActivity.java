@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -43,8 +44,8 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String register = "New to this app? <font color=" +
-                Integer.toHexString(ContextCompat.getColor(this, R.color.blue_400)) +
+        String register = "New to this app? <font color=#" +
+                Integer.toHexString(ContextCompat.getColor(this, R.color.blue_400)).substring(2) +
                 ">Register Here</font>";
         binding.loginTvRegister.setText(Html.fromHtml(register));
 

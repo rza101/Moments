@@ -19,6 +19,7 @@ import com.pahat.moments.databinding.ActivityMainBinding;
 import com.pahat.moments.ui.activities.about.AboutActivity;
 import com.pahat.moments.ui.activities.changepass.ChangePassActivity;
 import com.pahat.moments.ui.activities.createpost.CreatePostActivity;
+import com.pahat.moments.ui.activities.editprofile.EditProfileActivity;
 import com.pahat.moments.ui.activities.login.LoginActivity;
 import com.pahat.moments.ui.activities.savedpost.SavedPostActivity;
 import com.pahat.moments.util.Constants;
@@ -86,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
                 if (id == R.id.menu_popup_main_about) {
                     startActivity(new Intent(MainActivity.this, AboutActivity.class));
                     return true;
+                } else if (id == R.id.menu_popup_main_edit_profile) {
+                    startActivity(new Intent(MainActivity.this, EditProfileActivity.class));
+                    return true;
                 } else if (id == R.id.menu_popup_main_saved_posts) {
                     startActivity(new Intent(MainActivity.this, SavedPostActivity.class));
                     return true;
@@ -101,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                                 FirebaseAuth.getInstance().removeAuthStateListener(this);
                                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                                 finish();
-                            }else{
+                            } else {
                                 Utilities.makeToast(MainActivity.this, "Failed to sign out");
                             }
                         }
