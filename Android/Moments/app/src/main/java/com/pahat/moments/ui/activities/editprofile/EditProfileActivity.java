@@ -79,6 +79,8 @@ public class EditProfileActivity extends AppCompatActivity {
         binding = ActivityEditProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        Utilities.initChildToolbar(this, binding.toolbar, "Edit Profile");
+
         new Thread(() -> {
             boolean[] isSuccess = {true};
 
@@ -139,7 +141,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 });
 
                 binding.editProfileEtFullName.setText(currentUser.getFullName());
-                binding.editProfileEtUsername.setText(currentUser.getUsername());
 
                 if (currentUser.getProfilePicture() != null) {
                     isImageSet = true;
@@ -152,15 +153,13 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 binding.editProfileBtnEdit.setOnClickListener(view -> {
                     String fullName = binding.editProfileEtFullName.getText().toString();
-                    String username = binding.editProfileEtUsername.getText().toString();
 
                     if (TextUtils.isEmpty(fullName)) {
-                        binding.editProfileEtFullName.setError("Enter some captions");
+                        binding.editProfileEtFullName.setError("Full name must not be empty");
+                        return;
                     }
 
-                    if (TextUtils.isEmpty(username)) {
-                        binding.editProfileEtFullName.setError("Enter some captions");
-                    }
+                    showLoading();
 
                     new Thread(() -> {
                         boolean[] isUpdateSuccess = {true};
@@ -210,6 +209,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             }
 
                             if (!isUpdateSuccess[0]) {
+                                hideLoading();
                                 return;
                             }
                         }
@@ -288,6 +288,8 @@ public class EditProfileActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
+                        hideLoading();
+
                         if (!isUpdateSuccess[0]) {
                             Utilities.makeToast(EditProfileActivity.this, "Profile updated!");
                             finish();
@@ -312,5 +314,13 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void showError() {
         runOnUiThread(() -> Utilities.makeToast(EditProfileActivity.this, "Failed to edit profile"));
+    }
+
+    public void showLoading() {
+        binding.editProfileLoadingLottie.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoading() {
+        binding.editProfileLoadingLottie.setVisibility(View.GONE);
     }
 }
