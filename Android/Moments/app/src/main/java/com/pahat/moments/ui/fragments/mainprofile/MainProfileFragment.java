@@ -60,114 +60,113 @@ public class MainProfileFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        itemPostAdapter = new ItemPostAdapter((v, data) -> {
+            if (isAdded()) {
+                startActivity(new Intent(requireContext(), DetailPostActivity.class)
+                        .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
+                );
+            }
+        }, (v, data) -> {
+            PopupMenu popupMenu = new PopupMenu(requireContext(), v);
+            popupMenu.setOnMenuItemClickListener(item -> {
+                int id = item.getItemId();
+
+                if (id == R.id.menu_popup_post_profile_edit) {
+                    if (isAdded()) {
+                        startActivity(new Intent(requireContext(), UpdatePostActivity.class)
+                                .putExtra(UpdatePostActivity.POST_INTENT_KEY, data)
+                        );
+                    }
+                    return true;
+                } else if (id == R.id.menu_popup_post_profile_delete) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                    builder.setTitle("Delete Post");
+                    builder.setMessage("Are you sure to delete post");
+                    builder.setPositiveButton("Yes", (dialog, which) -> new Thread(() -> {
+                        showLoading();
+                        CountDownLatch cdl1 = new CountDownLatch(1);
+
+                        APIUtil.getAPIService()
+                                .deletePost(data.getId())
+                                .enqueue(new Callback<APIResponse<Post>>() {
+                                    @Override
+                                    public void onResponse(Call<APIResponse<Post>> call, Response<APIResponse<Post>> response) {
+                                        if (response.isSuccessful()) {
+                                            if (isAdded()) {
+                                                requireActivity().runOnUiThread(() -> {
+                                                    Utilities.makeToast(requireContext(), "Post deleted");
+                                                });
+                                            }
+                                        } else {
+                                            showErrorDeleteToast();
+                                        }
+                                        cdl1.countDown();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<APIResponse<Post>> call, Throwable t) {
+                                        showErrorDeleteToast();
+                                        cdl1.countDown();
+                                    }
+                                });
+
+                        try {
+                            cdl1.await();
+                        } catch (InterruptedException e) {
+                            showErrorDeleteToast();
+                            return;
+                        }
+
+                        APIUtil.getAPIService()
+                                .getAllPostByUsername(user.getUsername())
+                                .enqueue(new Callback<APIResponse<List<Post>>>() {
+                                    @Override
+                                    public void onResponse(Call<APIResponse<List<Post>>> call, Response<APIResponse<List<Post>>> response) {
+                                        hideLoading();
+                                        if (response.isSuccessful()) {
+                                            postList = response.body().getData();
+                                            submitList();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<APIResponse<List<Post>>> call, Throwable t) {
+                                        hideLoading();
+                                    }
+                                });
+                    }).start());
+                    builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+
+                    if (isAdded()) {
+                        if (!requireActivity().isFinishing()) {
+                            builder.create().show();
+                        }
+                    }
+
+                    return true;
+                }
+
+                return false;
+            });
+
+            MenuInflater menuInflater = popupMenu.getMenuInflater();
+            menuInflater.inflate(R.menu.menu_popup_post_profile, popupMenu.getMenu());
+            popupMenu.show();
+        });
+
+        binding.fragmentMainProfileRvPosts.setLayoutManager(
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        binding.fragmentMainProfileRvPosts.setAdapter(itemPostAdapter);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
         binding.fragmentMainProfileCl.setVisibility(View.GONE);
 
         if (isAdded()) {
-            itemPostAdapter = new ItemPostAdapter((v, data) -> {
-                if (isAdded()) {
-                    startActivity(new Intent(requireContext(), DetailPostActivity.class)
-                            .putExtra(DetailPostActivity.POST_INTENT_KEY, data)
-                    );
-                }
-            }, (v, data) -> {
-                PopupMenu popupMenu = new PopupMenu(requireContext(), v);
-                popupMenu.setOnMenuItemClickListener(item -> {
-                    int id = item.getItemId();
-
-                    if (id == R.id.menu_popup_post_profile_edit) {
-                        if (isAdded()) {
-                            startActivity(new Intent(requireContext(), UpdatePostActivity.class)
-                                    .putExtra(UpdatePostActivity.POST_INTENT_KEY, data)
-                            );
-                        }
-                        return true;
-                    } else if (id == R.id.menu_popup_post_profile_delete) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-                        builder.setTitle("Delete Post");
-                        builder.setMessage("Are you sure to delete post");
-                        builder.setPositiveButton("Yes", (dialog, which) -> new Thread(() -> {
-                            showLoading();
-                            CountDownLatch cdl1 = new CountDownLatch(1);
-
-                            APIUtil.getAPIService()
-                                    .deletePost(data.getId())
-                                    .enqueue(new Callback<APIResponse<Post>>() {
-                                        @Override
-                                        public void onResponse(Call<APIResponse<Post>> call, Response<APIResponse<Post>> response) {
-                                            if (response.isSuccessful()) {
-                                                if (isAdded()) {
-                                                    requireActivity().runOnUiThread(() -> {
-                                                        Utilities.makeToast(requireContext(), "Post deleted");
-                                                    });
-                                                }
-                                            } else {
-                                                showErrorDeleteToast();
-                                            }
-                                            cdl1.countDown();
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<APIResponse<Post>> call, Throwable t) {
-                                            showErrorDeleteToast();
-                                            cdl1.countDown();
-                                        }
-                                    });
-
-                            try {
-                                cdl1.await();
-                            } catch (InterruptedException e) {
-                                showErrorDeleteToast();
-                                return;
-                            }
-
-                            APIUtil.getAPIService()
-                                    .getAllPostByUsername(user.getUsername())
-                                    .enqueue(new Callback<APIResponse<List<Post>>>() {
-                                        @Override
-                                        public void onResponse(Call<APIResponse<List<Post>>> call, Response<APIResponse<List<Post>>> response) {
-                                            hideLoading();
-                                            if (response.isSuccessful()) {
-                                                postList = response.body().getData();
-                                                submitList();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<APIResponse<List<Post>>> call, Throwable t) {
-                                            hideLoading();
-                                        }
-                                    });
-                        }).start());
-                        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
-
-                        if (isAdded()) {
-                            if (!requireActivity().isFinishing()) {
-                                builder.create().show();
-                            }
-                        }
-
-                        return true;
-                    }
-
-                    return false;
-                });
-
-                MenuInflater menuInflater = popupMenu.getMenuInflater();
-                menuInflater.inflate(R.menu.menu_popup_post_profile, popupMenu.getMenu());
-                popupMenu.show();
-            });
-
-            binding.fragmentMainProfileRvPosts.setLayoutManager(
-                    new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-            binding.fragmentMainProfileRvPosts.setAdapter(itemPostAdapter);
-
             showLoading();
 
             new Thread(() -> {

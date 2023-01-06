@@ -59,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mRoot = mDatabase.getReference();
 
-        binding.registerLoadingLottie.setVisibility(View.GONE);
+        hideLoading();
 
         binding.registerBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +70,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String username = binding.registerEtUsername.getText().toString().toLowerCase(Locale.ROOT);
                 String password = binding.registerEtPassword.getText().toString();
                 String confirmPassword = binding.registerEtConfirmPassword.getText().toString();
+
+                showLoading();
 
                 if (TextUtils.isEmpty(email)) {
                     binding.registerEtEmail.setError("Enter your email address!");
@@ -110,9 +112,10 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 if (!valid) {
+                    hideLoading();
                     return;
                 }
-                showLoading();
+
                 mRef = mRoot.child(Constants.FIREBASE_USERS_DB_REF);
 
                 APIUtil.getAPIService()
@@ -164,6 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                     } else {
                                                                         // REGISTER FAILED
                                                                         Toast.makeText(RegisterActivity.this, "Register failed!", Toast.LENGTH_SHORT).show();
+                                                                        hideLoading();
                                                                     }
                                                                 }
                                                             }
@@ -172,12 +176,14 @@ public class RegisterActivity extends AppCompatActivity {
                                     });
                                 } else {
                                     binding.registerEtUsername.setError("Username already exists!");
+                                    hideLoading();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<APIResponse<APIUser>> call, Throwable t) {
                                 Utilities.makeToast(getApplicationContext(), "Failed to register");
+                                hideLoading();
                             }
                         });
             }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuInflater;
 import android.widget.PopupMenu;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -21,6 +22,7 @@ import com.pahat.moments.ui.activities.createpost.CreatePostActivity;
 import com.pahat.moments.ui.activities.login.LoginActivity;
 import com.pahat.moments.ui.activities.savedpost.SavedPostActivity;
 import com.pahat.moments.util.Constants;
+import com.pahat.moments.util.Utilities;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -91,9 +93,19 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, ChangePassActivity.class));
                     return true;
                 } else if (id == R.id.menu_popup_main_logout) {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     FirebaseAuth.getInstance().signOut();
-                    finish();
+                    FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+                        @Override
+                        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                            if (firebaseAuth.getCurrentUser() == null) {
+                                FirebaseAuth.getInstance().removeAuthStateListener(this);
+                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                                finish();
+                            }else{
+                                Utilities.makeToast(MainActivity.this, "Failed to sign out");
+                            }
+                        }
+                    });
                     return true;
                 }
 

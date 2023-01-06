@@ -134,7 +134,9 @@
                     android:hint="@string/write_some_captions"
                     android:inputType="textMultiLine|textNoSuggestions"
                     android:padding="0dp"
-                    android:scrollHorizontally="false" />
+                    android:scrollbars="vertical"
+                    android:scrollHorizontally="false"
+                    android:singleLine="false" />
 
             </com.google.android.material.card.MaterialCardView>
 
