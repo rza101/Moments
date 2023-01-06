@@ -60,7 +60,15 @@ class PostLikesController extends Controller
      */
     public function show($post_id)
     {
-        $post_like = PostLike::where('post_id', '=', $post_id)->orderBy('created_at', 'DESC')->get();
+        $post_like = PostLike::where('post_id', '=', $post_id)
+            ->orderBy('post_likes.created_at', 'DESC')
+            ->join('users', 'post_likes.username','=','users.username')
+            ->select([
+                'post_likes.*',
+                'users.full_name AS full_name',
+                'users.image_url AS image_url',
+            ])
+            ->get();
 
         if ($post_like) {
             return response()->json([

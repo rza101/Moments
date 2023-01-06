@@ -70,6 +70,8 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     });
 
+    private boolean isImageSet = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +131,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 ));
 
                 binding.editProfileIbClear.setOnClickListener(v -> {
+                    isImageSet = false;
                     imageUri = null;
                     binding.editProfileIvPreview.setImageDrawable(null);
                     binding.editProfileIvCameraInfo.setVisibility(View.VISIBLE);
@@ -137,9 +140,15 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 binding.editProfileEtFullName.setText(currentUser.getFullName());
                 binding.editProfileEtUsername.setText(currentUser.getUsername());
-                Glide.with(EditProfileActivity.this)
-                        .load(currentUser.getProfilePicture())
-                        .into(binding.editProfileIvPreview);
+
+                if (currentUser.getProfilePicture() != null) {
+                    isImageSet = true;
+                    Glide.with(EditProfileActivity.this)
+                            .load(currentUser.getProfilePicture())
+                            .into(binding.editProfileIvPreview);
+                    binding.editProfileIvCameraInfo.setVisibility(View.GONE);
+                    binding.editProfileTvTextInfo.setVisibility(View.GONE);
+                }
 
                 binding.editProfileBtnEdit.setOnClickListener(view -> {
                     String fullName = binding.editProfileEtFullName.getText().toString();
@@ -153,52 +162,56 @@ public class EditProfileActivity extends AppCompatActivity {
                         binding.editProfileEtFullName.setError("Enter some captions");
                     }
 
-                    if (imageUri == null) {
-                        Utilities.makeToast(EditProfileActivity.this, "Please enter an image");
-                    }
-
                     new Thread(() -> {
                         boolean[] isUpdateSuccess = {true};
-                        String[] imageUrl = new String[1];
+                        String[] imageUrl = {null};
 
-                        CountDownLatch countDownLatch1 = new CountDownLatch(1);
-
-                        FirebaseStorage.getInstance()
-                                .getReference()
-                                .child(Constants.FIREBASE_PROFILE_PICTURES_STORAGE_REF)
-                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .child(imageUri.getLastPathSegment())
-                                .putFile(imageUri)
-                                .addOnCompleteListener(taskUpload -> {
-                                    if (taskUpload.isSuccessful()) {
-                                        taskUpload.getResult()
-                                                .getMetadata()
-                                                .getReference()
-                                                .getDownloadUrl()
-                                                .addOnCompleteListener(taskMetadata -> {
-                                                    if (taskMetadata.isSuccessful()) {
-                                                        imageUrl[0] = taskMetadata.getResult().toString();
-                                                    } else {
-                                                        Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again");
-                                                        isUpdateSuccess[0] = false;
-                                                    }
-                                                    countDownLatch1.countDown();
-                                                });
-                                    } else {
-                                        Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again");
-                                        isUpdateSuccess[0] = false;
-                                        countDownLatch1.countDown();
-                                    }
-                                });
-
-                        try {
-                            countDownLatch1.await();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                        // if image is not taken AND set from database
+                        if (imageUri == null && isImageSet && currentUser.getProfilePicture() != null) {
+                            imageUrl[0] = currentUser.getProfilePicture();
                         }
 
-                        if (!isUpdateSuccess[0]) {
-                            return;
+                        // if image is changed
+                        if (imageUri != null) {
+                            CountDownLatch countDownLatch1 = new CountDownLatch(1);
+
+                            FirebaseStorage.getInstance()
+                                    .getReference()
+                                    .child(Constants.FIREBASE_PROFILE_PICTURES_STORAGE_REF)
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .child(imageUri.getLastPathSegment())
+                                    .putFile(imageUri)
+                                    .addOnCompleteListener(taskUpload -> {
+                                        if (taskUpload.isSuccessful()) {
+                                            taskUpload.getResult()
+                                                    .getMetadata()
+                                                    .getReference()
+                                                    .getDownloadUrl()
+                                                    .addOnCompleteListener(taskMetadata -> {
+                                                        if (taskMetadata.isSuccessful()) {
+                                                            imageUrl[0] = taskMetadata.getResult().toString();
+                                                        } else {
+                                                            Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again");
+                                                            isUpdateSuccess[0] = false;
+                                                        }
+                                                        countDownLatch1.countDown();
+                                                    });
+                                        } else {
+                                            Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again");
+                                            isUpdateSuccess[0] = false;
+                                            countDownLatch1.countDown();
+                                        }
+                                    });
+
+                            try {
+                                countDownLatch1.await();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (!isUpdateSuccess[0]) {
+                                return;
+                            }
                         }
 
                         CountDownLatch countDownLatch2 = new CountDownLatch(3);
@@ -288,6 +301,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void setImagePreview(Uri uri) {
+        isImageSet = true;
         Glide.with(EditProfileActivity.this)
                 .load(uri)
                 .placeholder(AppCompatResources.getDrawable(EditProfileActivity.this, R.drawable.ic_broken_image_24))

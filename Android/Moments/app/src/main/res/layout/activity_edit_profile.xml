@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="20dp"
     tools:context=".ui.activities.editprofile.EditProfileActivity">
 
     <include
@@ -96,11 +95,11 @@
         app:layout_constraintStart_toEndOf="@id/edit_profile_ib_gallery"
         app:layout_constraintTop_toTopOf="@id/edit_profile_ib_camera" />
 
-
     <TextView
         android:id="@+id/edit_profile_tv_full_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
         android:text="Full Name"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,6 +109,7 @@
         android:id="@+id/edit_profile_et_full_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_profile_tv_full_name" />
@@ -118,6 +118,7 @@
         android:id="@+id/edit_profile_tv_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
         android:text="username"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -127,6 +128,7 @@
         android:id="@+id/edit_profile_et_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_profile_tv_username" />
@@ -135,6 +137,7 @@
         android:id="@+id/edit_profile_btn_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
         android:layout_marginTop="15dp"
         android:backgroundTint="@color/blue_400"
         android:paddingVertical="15dp"

@@ -52,9 +52,9 @@ public class ChangePassActivity extends AppCompatActivity {
 
             user.reauthenticate(credential)
                     .addOnCompleteListener(task -> {
+                        hideLoading();
                         if (task.isSuccessful()) {
                             user.updatePassword(password).addOnCompleteListener(task1 -> {
-                                hideLoading();
                                 if (task1.isSuccessful()) {
                                     Toast.makeText(ChangePassActivity.this, "Password updated!", Toast.LENGTH_SHORT).show();
                                     finish();

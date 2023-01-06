@@ -18,13 +18,13 @@ class PostsController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->username){
+        if ($request->username) {
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',
                 'data' => Post::where('username', '=', $request->username)->orderBy('created_at', 'DESC')->get()
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',
@@ -70,10 +70,26 @@ class PostsController extends Controller
     public function show($id)
     {
         $posts = Post::find($id);
-        
+
         if ($posts) {
-            $post_like = PostLike::where('post_id', '=', $id)->orderBy('created_at', 'DESC')->get();
-            $post_comment = PostComment::where('post_id', '=', $id)->orderBy('created_at', 'DESC')->get();
+            $post_like = PostLike::where('post_likes.post_id', '=', $id)
+                ->orderBy('post_likes.created_at', 'DESC')
+                ->join('users', 'post_likes.username','=','users.username')
+                ->select([
+                    'post_likes.*',
+                    'users.full_name AS full_name',
+                    'users.image_url AS image_url',
+                ])
+                ->get();
+            $post_comment = PostComment::where('post_comments.post_id', '=', $id)
+                ->orderBy('post_comments.created_at', 'DESC')
+                ->join('users', 'post_comments.username','=','users.username')
+                ->select([
+                    'post_comments.*',
+                    'users.full_name AS full_name',
+                    'users.image_url AS image_url',
+                ])
+                ->get();
 
             return response()->json([
                 'status' => 200,
