@@ -44,8 +44,7 @@ class PostLikesController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Post like stored',
-                'data' => $fcmResult,
-                'token' => $post_like->Post->User->fcm_token
+                'data' => $fcmResult
             ]);
         } catch (Exception $e) {
             return response()->json([

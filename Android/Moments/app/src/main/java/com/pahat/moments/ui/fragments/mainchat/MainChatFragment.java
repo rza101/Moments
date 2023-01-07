@@ -116,7 +116,7 @@ public class MainChatFragment extends Fragment {
                                 }
 
                                 Collections.sort(chatRoomList, (o1, o2) ->
-                                        (int) (o1.getLastMessageTimestamp() - o2.getLastMessageTimestamp()));
+                                        (int) (o2.getLastMessageTimestamp() - o1.getLastMessageTimestamp()));
 
                                 itemChatRoomAdapter.submitList(chatRoomList);
                             }

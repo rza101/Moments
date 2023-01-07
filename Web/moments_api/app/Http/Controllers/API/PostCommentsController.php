@@ -45,8 +45,7 @@ class PostCommentsController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Post comment stored',
-                'data' => $fcmResult,
-                'token' => $post_comment->Post->User->fcm_token
+                'data' => $fcmResult
             ]);
         } catch (Exception $e) {
             return response()->json([

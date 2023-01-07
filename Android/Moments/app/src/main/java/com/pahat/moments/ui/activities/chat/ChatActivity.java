@@ -237,7 +237,7 @@ public class ChatActivity extends AppCompatActivity {
                             receiverRoomRef.updateChildren(lastMessageMap);
                             receiverRoomRef.updateChildren(lastTimestampMap);
 
-                            sendNotification(receiverUser.getUsername(), message);
+                            sendNotification(senderUser.getUsername(), message);
                         }
                     });
 
@@ -347,7 +347,7 @@ public class ChatActivity extends AppCompatActivity {
                     receiverRoomRef.updateChildren(lastMessageMap);
                     receiverRoomRef.updateChildren(lastTimestampMap);
 
-                    sendNotification(receiverUser.getUsername(), "📷 Image");
+                    sendNotification(senderUser.getUsername(), "📷 Image");
                 }
             });
         }).start();
