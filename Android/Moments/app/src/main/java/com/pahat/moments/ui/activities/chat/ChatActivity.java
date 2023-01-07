@@ -237,7 +237,7 @@ public class ChatActivity extends AppCompatActivity {
                             receiverRoomRef.updateChildren(lastMessageMap);
                             receiverRoomRef.updateChildren(lastTimestampMap);
 
-                            sendNotification(senderUser.getUsername(), message);
+                            sendNotification(senderUser.getUsername(), receiverUser.getUsername(), message);
                         }
                     });
 
@@ -347,15 +347,15 @@ public class ChatActivity extends AppCompatActivity {
                     receiverRoomRef.updateChildren(lastMessageMap);
                     receiverRoomRef.updateChildren(lastTimestampMap);
 
-                    sendNotification(senderUser.getUsername(), "📷 Image");
+                    sendNotification(senderUser.getUsername(), receiverUser.getUsername(), "📷 Image");
                 }
             });
         }).start();
     }
 
-    private void sendNotification(String username, String message) {
+    private void sendNotification(String senderUsername, String receiverUsername, String message) {
         APIUtil.getAPIService()
-                .sendFCM(username, "Chat from " + username, message)
+                .sendFCM(receiverUsername, "Chat from " + senderUsername, message)
                 .enqueue(new Callback<APIResponse<FCMResponse>>() {
                     @Override
                     public void onResponse(Call<APIResponse<FCMResponse>> call, Response<APIResponse<FCMResponse>> response) {
