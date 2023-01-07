@@ -2,6 +2,7 @@ package com.pahat.moments.ui.activities.updatepost;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -50,9 +51,12 @@ public class UpdatePostActivity extends AppCompatActivity {
                 return;
             }
 
+            showLoading();
+
             APIUtil.getAPIService().updatePost(post.getId(), caption).enqueue(new Callback<APIResponse<Post>>() {
                 @Override
                 public void onResponse(Call<APIResponse<Post>> call, Response<APIResponse<Post>> response) {
+                    hideLoading();
                     if (response.isSuccessful()) {
                         Utilities.makeToast(UpdatePostActivity.this, "Success to update posts");
                         finish();
@@ -63,9 +67,18 @@ public class UpdatePostActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<APIResponse<Post>> call, Throwable t) {
+                    hideLoading();
                     Utilities.makeToast(UpdatePostActivity.this, "API ERROR");
                 }
             });
         });
+    }
+
+    public void showLoading() {
+        binding.updatePostLoadingLottie.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoading() {
+        binding.updatePostLoadingLottie.setVisibility(View.GONE);
     }
 }

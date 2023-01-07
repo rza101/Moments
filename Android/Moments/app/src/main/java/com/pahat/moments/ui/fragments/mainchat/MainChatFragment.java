@@ -92,10 +92,10 @@ public class MainChatFragment extends Fragment {
                     countDownLatch1.await();
                 } catch (InterruptedException e) {
                     showError();
-                    return;
                 }
 
                 if (!loadSuccess) {
+                    hideLoading();
                     return;
                 }
 
@@ -105,7 +105,6 @@ public class MainChatFragment extends Fragment {
                         .addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                showLoading();
                                 chatRoomList = new ArrayList<>();
 
                                 for (DataSnapshot child : snapshot.getChildren()) {
@@ -123,13 +122,11 @@ public class MainChatFragment extends Fragment {
                                         (int) (o1.getLastMessageTimestamp() - o2.getLastMessageTimestamp()));
 
                                 itemChatRoomAdapter.submitList(chatRoomList);
-                                hideLoading();
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-                                hideLoading();
-                                showLoading();
+                                showError();
                             }
                         });
             }).start();

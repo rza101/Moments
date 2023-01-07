@@ -60,8 +60,6 @@ public class RegisterActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mRoot = mDatabase.getReference();
 
-        hideLoading();
-
         binding.registerBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

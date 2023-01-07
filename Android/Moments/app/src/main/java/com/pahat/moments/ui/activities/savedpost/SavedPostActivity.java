@@ -98,10 +98,12 @@ public class SavedPostActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onFailure(Call<APIResponse<List<SavedPost>>> call, Throwable t) {
+                                        hideLoading();
                                         Utilities.makeToast(SavedPostActivity.this, "Failed to load saved posts");
                                     }
                                 });
                     } else {
+                        hideLoading();
                         Utilities.makeToast(SavedPostActivity.this, "Failed to load saved posts");
                     }
                 });

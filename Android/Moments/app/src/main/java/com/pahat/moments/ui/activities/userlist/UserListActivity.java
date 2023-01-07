@@ -53,7 +53,6 @@ public class UserListActivity extends AppCompatActivity {
             finish();
             return;
         }
-        showLoading();
 
         String title = "";
         int type = getIntent().getIntExtra(TYPE_INTENT_KEY, -1);
@@ -68,7 +67,6 @@ public class UserListActivity extends AppCompatActivity {
                 title = "Following";
                 break;
         }
-        hideLoading();
 
         itemUserAdapter = new ItemUserAdapter((v, data) ->
                 startActivity(new Intent(UserListActivity.this, OtherProfileActivity.class)

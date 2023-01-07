@@ -78,6 +78,7 @@ public class OtherProfileActivity extends AppCompatActivity {
         binding.otherProfileProfileRvPosts.setAdapter(itemPostAdapter);
 
         new Thread(() -> {
+            showLoading();
             CountDownLatch countDownLatch1 = new CountDownLatch(2);
 
             APIUtil.getAPIService()
@@ -117,6 +118,10 @@ public class OtherProfileActivity extends AppCompatActivity {
                 countDownLatch1.await();
             } catch (InterruptedException e) {
                 showErrorToast();
+            }
+
+            if (!loadSuccess) {
+                runOnUiThread(this::hideLoading);
                 return;
             }
 
@@ -169,10 +174,15 @@ public class OtherProfileActivity extends AppCompatActivity {
                 countDownLatch2.await();
             } catch (InterruptedException e) {
                 showErrorToast();
+            }
+
+            if (!loadSuccess) {
+                runOnUiThread(this::hideLoading);
                 return;
             }
 
             OtherProfileActivity.this.runOnUiThread(() -> {
+                hideLoading();
                 if (!loadSuccess) {
                     return;
                 }

@@ -1,6 +1,5 @@
 package com.pahat.moments.ui.fragments.mainprofile;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -189,6 +188,10 @@ public class MainProfileFragment extends Fragment {
                     countDownLatch1.await();
                 } catch (InterruptedException e) {
                     showErrorToast();
+                }
+
+                if (!loadSuccess) {
+                    hideLoading();
                     return;
                 }
 
@@ -219,6 +222,10 @@ public class MainProfileFragment extends Fragment {
                     countDownLatch2.await();
                 } catch (InterruptedException e) {
                     showErrorToast();
+                }
+
+                if (!loadSuccess) {
+                    hideLoading();
                     return;
                 }
 
@@ -250,23 +257,29 @@ public class MainProfileFragment extends Fragment {
                     countDownLatch3.await();
                 } catch (InterruptedException e) {
                     showErrorToast();
+                }
+
+                if (!loadSuccess) {
+                    hideLoading();
                     return;
                 }
 
                 if (isAdded()) {
                     requireActivity().runOnUiThread(() -> {
+                        hideLoading();
                         if (!loadSuccess) {
                             return;
                         }
 
                         binding.fragmentMainProfileCl.setVisibility(View.VISIBLE);
-                        hideLoading();
                         submitList();
 
                         if (!TextUtils.isEmpty(user.getProfilePicture())) {
                             Glide.with(requireContext())
                                     .load(user.getProfilePicture())
                                     .into(binding.fragmentMainProfileCivDp);
+                        } else {
+                            binding.fragmentMainProfileCivDp.setImageDrawable(Utilities.generateTextDrawable(user.getUsername(), user.getFullName()));
                         }
 
                         binding.fragmentMainProfileTvUsername.setText(user.getUsername());

@@ -54,6 +54,8 @@ public class ItemCommentAdapter extends ListAdapter<PostComment, ItemCommentAdap
             Glide.with(context)
                     .load(postComment.getImageUrl())
                     .into(holder.binding.itemCommentCivDp);
+        } else {
+            holder.binding.itemCommentCivDp.setImageDrawable(Utilities.generateTextDrawable(postComment.getUsername(), postComment.getFullName()));
         }
 
         holder.binding.itemCommentTvUsername.setText(postComment.getUsername());

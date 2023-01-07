@@ -6,6 +6,8 @@ import android.os.Environment;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.pahat.moments.data.firebase.model.User;
@@ -95,6 +97,15 @@ public class Utilities {
 
             return "" + firstName.charAt(0) + lastName.charAt(0);
         }
+    }
+
+    public static TextDrawable generateTextDrawable(String username, String fullName) {
+        return TextDrawable.builder()
+                .beginConfig()
+                .width(300)
+                .height(300)
+                .endConfig()
+                .buildRound(getInitialName(fullName.toUpperCase(Locale.ROOT)), ColorGenerator.Companion.getDEFAULT().getColor(username));
     }
 
     public static void initChildToolbar(AppCompatActivity activity, ToolbarChildrenBinding binding, String title) {

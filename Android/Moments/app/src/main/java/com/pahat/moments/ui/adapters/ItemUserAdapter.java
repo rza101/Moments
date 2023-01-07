@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.ItemUserBinding;
 import com.pahat.moments.ui.OnItemClick;
+import com.pahat.moments.util.Utilities;
 
 import java.util.Objects;
 
@@ -51,6 +52,8 @@ public class ItemUserAdapter extends ListAdapter<User, ItemUserAdapter.ViewHolde
             Glide.with(context)
                     .load(user.getProfilePicture())
                     .into(holder.binding.itemUserCivDp);
+        } else {
+            holder.binding.itemUserCivDp.setImageDrawable(Utilities.generateTextDrawable(user.getUsername(), user.getFullName()));
         }
 
         holder.binding.itemUserTvUsername.setText(user.getUsername());

@@ -128,10 +128,10 @@ public class DetailPostActivity extends AppCompatActivity {
                 countDownLatch1.await();
             } catch (InterruptedException e) {
                 showError();
-                return;
             }
 
             if (!loadSuccess) {
+                runOnUiThread(this::hideLoading);
                 return;
             }
 
@@ -164,6 +164,10 @@ public class DetailPostActivity extends AppCompatActivity {
                 countDownLatch2.await();
             } catch (InterruptedException e) {
                 showError();
+            }
+
+            if (!loadSuccess) {
+                runOnUiThread(this::hideLoading);
                 return;
             }
 
@@ -194,6 +198,10 @@ public class DetailPostActivity extends AppCompatActivity {
                 countDownLatch3.await();
             } catch (InterruptedException e) {
                 showError();
+            }
+
+            if (!loadSuccess) {
+                runOnUiThread(this::hideLoading);
                 return;
             }
 
@@ -230,16 +238,16 @@ public class DetailPostActivity extends AppCompatActivity {
                 countDownLatch4.await();
             } catch (InterruptedException e) {
                 showError();
-                return;
             }
 
             runOnUiThread(() -> {
+                hideLoading();
+
                 if (!loadSuccess) {
                     return;
                 }
 
                 binding.detailPostClMain.setVisibility(View.VISIBLE);
-                hideLoading();
 
                 for (UserFollow userFollow : postUserFollowerList) {
                     if (userFollow.getUsername().equals(currentUser.getUsername())) {
@@ -336,6 +344,8 @@ public class DetailPostActivity extends AppCompatActivity {
                     Glide.with(DetailPostActivity.this)
                             .load(postUser.getProfilePicture())
                             .into(binding.detailPostCivDp);
+                } else {
+                    binding.detailPostCivDp.setImageDrawable(Utilities.generateTextDrawable(postUser.getUsername(), postUser.getFullName()));
                 }
 
                 binding.detailPostTvCaptions.setText(post.getCaption());

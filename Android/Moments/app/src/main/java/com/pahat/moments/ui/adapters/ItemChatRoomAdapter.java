@@ -53,6 +53,8 @@ public class ItemChatRoomAdapter extends ListAdapter<ChatRoom, ItemChatRoomAdapt
             Glide.with(context)
                     .load(user.getProfilePicture())
                     .into(holder.binding.itemChatRoomCivDp);
+        } else {
+            holder.binding.itemChatRoomCivDp.setImageDrawable(Utilities.generateTextDrawable(user.getUsername(), user.getFullName()));
         }
 
         holder.binding.itemChatRoomTvUsername.setText(user.getUsername());

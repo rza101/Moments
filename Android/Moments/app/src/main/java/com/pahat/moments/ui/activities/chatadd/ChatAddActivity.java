@@ -2,6 +2,7 @@ package com.pahat.moments.ui.activities.chatadd;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -44,7 +45,9 @@ public class ChatAddActivity extends AppCompatActivity {
 
         binding = ActivityChatAddBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         Utilities.initChildToolbar(this, binding.toolbar, "Add Chat");
+
         new Thread(() -> {
             CountDownLatch countDownLatch = new CountDownLatch(1);
 
@@ -68,6 +71,7 @@ public class ChatAddActivity extends AppCompatActivity {
 
             runOnUiThread(() -> {
                 itemUserAdapter = new ItemUserAdapter((v, data) -> new Thread(() -> {
+                    runOnUiThread(this::showLoading);
                     CountDownLatch countDownLatch1 = new CountDownLatch(1);
 
                     ChatRoom[] extraChatRoom = new ChatRoom[1];
@@ -110,7 +114,10 @@ public class ChatAddActivity extends AppCompatActivity {
                     }
 
                     if (!isSuccess[0]) {
-                        runOnUiThread(() -> Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat"));
+                        runOnUiThread(() -> {
+                            Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat");
+                            hideLoading();
+                        });
                         return;
                     }
 
@@ -165,7 +172,10 @@ public class ChatAddActivity extends AppCompatActivity {
                     }
 
                     if (!isSuccess[0]) {
-                        runOnUiThread(() -> Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat"));
+                        runOnUiThread(() -> {
+                            Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat");
+                            hideLoading();
+                        });
                         return;
                     }
 
@@ -201,7 +211,10 @@ public class ChatAddActivity extends AppCompatActivity {
                     }
 
                     if (!isSuccess[0]) {
-                        runOnUiThread(() -> Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat"));
+                        runOnUiThread(() -> {
+                            Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat");
+                            hideLoading();
+                        });
                         return;
                     }
 
@@ -233,9 +246,14 @@ public class ChatAddActivity extends AppCompatActivity {
                     }
 
                     if (!isSuccess[0]) {
-                        runOnUiThread(() -> Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat"));
+                        runOnUiThread(() -> {
+                            Utilities.makeToast(ChatAddActivity.this, "Failed to setup chat");
+                            hideLoading();
+                        });
                         return;
                     }
+
+                    hideLoading();
 
                     Intent intent = new Intent(ChatAddActivity.this, ChatActivity.class);
                     intent.putExtra(ChatActivity.CHAT_ROOM_INTENT_KEY, extraChatRoom[0]);
@@ -249,34 +267,36 @@ public class ChatAddActivity extends AppCompatActivity {
                 binding.chatAddSvSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-                        APIUtil.getAPIService().getUserByUsernameOrFullName(query).enqueue(new Callback<APIResponse<List<APIUser>>>() {
-                            @Override
-                            public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
-                                if (response.isSuccessful()) {
-                                    List<User> userList = new ArrayList<>();
+                        APIUtil.getAPIService()
+                                .getUserByUsernameOrFullName(query)
+                                .enqueue(new Callback<APIResponse<List<APIUser>>>() {
+                                    @Override
+                                    public void onResponse(Call<APIResponse<List<APIUser>>> call, Response<APIResponse<List<APIUser>>> response) {
+                                        if (response.isSuccessful()) {
+                                            List<User> userList = new ArrayList<>();
 
-                                    for (APIUser apiUser : response.body().getData()) {
-                                        if (!apiUser.getUsername().equals(currentUser.getUsername())) {
-                                            userList.add(new User(
-                                                    apiUser.getUserId(),
-                                                    apiUser.getUsername(),
-                                                    apiUser.getFullName(),
-                                                    apiUser.getImageUrl()
-                                            ));
+                                            for (APIUser apiUser : response.body().getData()) {
+                                                if (!apiUser.getUsername().equals(currentUser.getUsername())) {
+                                                    userList.add(new User(
+                                                            apiUser.getUserId(),
+                                                            apiUser.getUsername(),
+                                                            apiUser.getFullName(),
+                                                            apiUser.getImageUrl()
+                                                    ));
+                                                }
+                                            }
+
+                                            itemUserAdapter.submitList(userList);
+                                        } else {
+                                            Utilities.makeToast(ChatAddActivity.this, "Failed to show search result");
                                         }
                                     }
 
-                                    itemUserAdapter.submitList(userList);
-                                } else {
-                                    Utilities.makeToast(ChatAddActivity.this, "Failed to show search result");
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<APIResponse<List<APIUser>>> call, Throwable t) {
-                                Utilities.makeToast(ChatAddActivity.this, "Failed to show search result");
-                            }
-                        });
+                                    @Override
+                                    public void onFailure(Call<APIResponse<List<APIUser>>> call, Throwable t) {
+                                        Utilities.makeToast(ChatAddActivity.this, "Failed to show search result");
+                                    }
+                                });
 
                         return true;
                     }
@@ -288,5 +308,13 @@ public class ChatAddActivity extends AppCompatActivity {
                 });
             });
         }).start();
+    }
+
+    public void showLoading() {
+        binding.chatAddLottieLoading.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoading() {
+        binding.chatAddLottieLoading.setVisibility(View.GONE);
     }
 }
