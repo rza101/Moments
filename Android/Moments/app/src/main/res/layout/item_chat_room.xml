@@ -48,11 +48,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:fontFamily="@font/inter_medium"
+        android:maxLines="1"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@id/item_chat_room_civ_dp"
         app:layout_constraintStart_toStartOf="@id/item_chat_room_tv_username"
         app:layout_constraintTop_toBottomOf="@id/item_chat_room_tv_username"
-        tools:text="Message"
-        android:maxLines="1"/>
+        tools:text="Message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

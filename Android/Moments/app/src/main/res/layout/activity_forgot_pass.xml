@@ -14,8 +14,8 @@
         android:layout_marginTop="8dp"
         android:src="@drawable/img_forgot_pass_bg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/forgot_pass_tv_title"

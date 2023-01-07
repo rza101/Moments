@@ -311,10 +311,10 @@ public class ChatAddActivity extends AppCompatActivity {
     }
 
     public void showLoading() {
-        binding.chatAddLottieLoading.setVisibility(View.VISIBLE);
+        runOnUiThread(() -> binding.chatAddLottieLoading.setVisibility(View.VISIBLE));
     }
 
     public void hideLoading() {
-        binding.chatAddLottieLoading.setVisibility(View.GONE);
+        runOnUiThread(() -> binding.chatAddLottieLoading.setVisibility(View.GONE));
     }
 }

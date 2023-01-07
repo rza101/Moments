@@ -38,12 +38,15 @@ class PostCommentsController extends Controller
             $post_comment->comment = $request->comment;
             $post_comment->save();
 
-            $fcmResult = FCMController::sendFCM($post_comment->Post->User->fcm_token, "Post Like", "$post_comment->username commented your post");
-
+            if ($request->username !== $post_comment->Post->User->username) {
+                $fcmResult = FCMController::sendFCM($post_comment->Post->User->fcm_token, "Post Like", "$post_comment->username commented your post");
+            }
+            
             return response()->json([
                 'status' => 200,
                 'message' => 'Post comment stored',
-                'data' => $fcmResult
+                'data' => $fcmResult,
+                'token' => $post_comment->Post->User->fcm_token
             ]);
         } catch (Exception $e) {
             return response()->json([

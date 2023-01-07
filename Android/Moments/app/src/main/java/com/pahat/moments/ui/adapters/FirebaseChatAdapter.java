@@ -1,7 +1,6 @@
 package com.pahat.moments.ui.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.storage.FirebaseStorage;
+import com.pahat.moments.R;
 import com.pahat.moments.data.firebase.model.Chat;
 import com.pahat.moments.data.firebase.model.User;
 import com.pahat.moments.databinding.ItemChatBinding;
@@ -62,7 +62,10 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                                             .override(Target.SIZE_ORIGINAL)
                                             .into(holder.binding.itemChatIvImageRight);
                                 } else {
-                                    Log.w(TAG, "Getting download url failed!", task.getException());
+                                    Glide.with(context)
+                                            .load(R.drawable.ic_broken_image_24)
+                                            .override(Target.SIZE_ORIGINAL)
+                                            .into(holder.binding.itemChatIvImageRight);
                                 }
                             });
                 } else {
@@ -94,7 +97,10 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                                             .override(Target.SIZE_ORIGINAL)
                                             .into(holder.binding.itemChatIvImageLeft);
                                 } else {
-                                    Log.w(TAG, "Getting download url failed!", task.getException());
+                                    Glide.with(context)
+                                            .load(R.drawable.ic_broken_image_24)
+                                            .override(Target.SIZE_ORIGINAL)
+                                            .into(holder.binding.itemChatIvImageLeft);
                                 }
                             });
                 } else {

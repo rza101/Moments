@@ -362,10 +362,10 @@ public class OtherProfileActivity extends AppCompatActivity {
     }
 
     public void showLoading() {
-        binding.otherProfileLoadingLottie.setVisibility(View.VISIBLE);
+        runOnUiThread(() -> binding.otherProfileLoadingLottie.setVisibility(View.VISIBLE));
     }
 
     public void hideLoading() {
-        binding.otherProfileLoadingLottie.setVisibility(View.GONE);
+        runOnUiThread(() -> binding.otherProfileLoadingLottie.setVisibility(View.GONE));
     }
 }

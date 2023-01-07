@@ -37,12 +37,15 @@ class PostLikesController extends Controller
             $post_like->post_id = $request->post_id;
             $post_like->save();
 
-            $fcmResult = FCMController::sendFCM($post_like->Post->User->fcm_token, "Post Like", "$post_like->username liked your post");
+            if ($request->username !== $post_like->Post->User->username) {
+                $fcmResult = FCMController::sendFCM($post_like->Post->User->fcm_token, "Post Like", "$post_like->username liked your post");
+            }
 
             return response()->json([
                 'status' => 200,
                 'message' => 'Post like stored',
-                'data' => $fcmResult
+                'data' => $fcmResult,
+                'token' => $post_like->Post->User->fcm_token
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -62,7 +65,7 @@ class PostLikesController extends Controller
     {
         $post_like = PostLike::where('post_id', '=', $post_id)
             ->orderBy('post_likes.created_at', 'DESC')
-            ->join('users', 'post_likes.username','=','users.username')
+            ->join('users', 'post_likes.username', '=', 'users.username')
             ->select([
                 'post_likes.*',
                 'users.full_name AS full_name',

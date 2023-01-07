@@ -47,7 +47,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Uri tempCameraUri;
     private Uri imageUri;
     private User currentUser;
-
+    private boolean isImageSet = false;
     private ActivityResultLauncher<Intent> cameraIntent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -57,7 +57,6 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         }
     });
-
     private ActivityResultLauncher<Intent> galleryIntent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -69,8 +68,6 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         }
     });
-
-    private boolean isImageSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +139,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 binding.editProfileEtFullName.setText(currentUser.getFullName());
 
-                if (currentUser.getProfilePicture() != null) {
+                if (!TextUtils.isEmpty(currentUser.getProfilePicture())) {
                     isImageSet = true;
                     Glide.with(EditProfileActivity.this)
                             .load(currentUser.getProfilePicture())
@@ -163,10 +160,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     new Thread(() -> {
                         boolean[] isUpdateSuccess = {true};
-                        String[] imageUrl = {null};
+                        String[] imageUrl = {""};
 
                         // if image is not taken AND set from database
-                        if (imageUri == null && isImageSet && currentUser.getProfilePicture() != null) {
+                        if (imageUri == null && isImageSet && !TextUtils.isEmpty(currentUser.getProfilePicture())) {
                             imageUrl[0] = currentUser.getProfilePicture();
                         }
 
@@ -190,13 +187,13 @@ public class EditProfileActivity extends AppCompatActivity {
                                                         if (taskMetadata.isSuccessful()) {
                                                             imageUrl[0] = taskMetadata.getResult().toString();
                                                         } else {
-                                                            Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again");
+                                                            runOnUiThread(() -> Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again"));
                                                             isUpdateSuccess[0] = false;
                                                         }
                                                         countDownLatch1.countDown();
                                                     });
                                         } else {
-                                            Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again");
+                                            runOnUiThread(() -> Utilities.makeToast(EditProfileActivity.this, "Image upload failed. Please try again"));
                                             isUpdateSuccess[0] = false;
                                             countDownLatch1.countDown();
                                         }
@@ -290,12 +287,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
                         hideLoading();
 
-                        if (!isUpdateSuccess[0]) {
-                            Utilities.makeToast(EditProfileActivity.this, "Profile updated!");
-                            finish();
-                        } else {
-                            Utilities.makeToast(EditProfileActivity.this, "Failed to update profile");
-                        }
+                        runOnUiThread(() -> {
+                            if (isUpdateSuccess[0]) {
+                                Utilities.makeToast(EditProfileActivity.this, "Profile updated!");
+                                finish();
+                            } else {
+                                Utilities.makeToast(EditProfileActivity.this, "Failed to update profile");
+                            }
+                        });
                     }).start();
                 });
             });
@@ -317,10 +316,10 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void showLoading() {
-        binding.editProfileLoadingLottie.setVisibility(View.VISIBLE);
+        runOnUiThread(() -> binding.editProfileLoadingLottie.setVisibility(View.VISIBLE));
     }
 
     public void hideLoading() {
-        binding.editProfileLoadingLottie.setVisibility(View.GONE);
+        runOnUiThread(() -> binding.editProfileLoadingLottie.setVisibility(View.GONE));
     }
 }

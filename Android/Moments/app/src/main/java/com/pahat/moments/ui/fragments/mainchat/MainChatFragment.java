@@ -2,7 +2,6 @@ package com.pahat.moments.ui.fragments.mainchat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,8 +93,8 @@ public class MainChatFragment extends Fragment {
                     showError();
                 }
 
+                hideLoading();
                 if (!loadSuccess) {
-                    hideLoading();
                     return;
                 }
 
@@ -115,8 +114,6 @@ public class MainChatFragment extends Fragment {
                                         chatRoomList.add(chatRoom);
                                     }
                                 }
-
-                                Log.d("t", "onDataChange: " + chatRoomList);
 
                                 Collections.sort(chatRoomList, (o1, o2) ->
                                         (int) (o1.getLastMessageTimestamp() - o2.getLastMessageTimestamp()));

@@ -180,11 +180,13 @@ public class CreatePostActivity extends AppCompatActivity {
                                                         }
                                                     });
                                         } else {
+                                            hideLoading();
                                             Utilities.makeToast(CreatePostActivity.this, "Image upload failed. Please try again");
                                         }
                                     }
                                 });
                             } else {
+                                hideLoading();
                                 Utilities.makeToast(CreatePostActivity.this, "Failed to create post");
                             }
                         });

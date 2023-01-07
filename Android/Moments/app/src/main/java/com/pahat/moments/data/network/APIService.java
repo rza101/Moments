@@ -53,7 +53,7 @@ public interface APIService {
     @POST("userfollow")
     @FormUrlEncoded
     Call<APIResponse<FCMResponse>> createUserFollow(@Field("username") String username,
-                                                   @Field("username_following") String username_following);
+                                                    @Field("username_following") String username_following);
 
     @GET("userfollow/{user_foll_id}/delete")
     Call<APIResponse<UserFollow>> deleteUserFollow(@Path("user_foll_id") long user_follow_id);
@@ -89,7 +89,7 @@ public interface APIService {
     @POST("postlikes")
     @FormUrlEncoded
     Call<APIResponse<FCMResponse>> createPostLike(@Field("post_id") long post_id,
-                                               @Field("username") String username);
+                                                  @Field("username") String username);
 
     @GET("postlikes/{post_like_id}/delete")
     Call<APIResponse<PostLike>> deletePostLike(@Path("post_like_id") long post_like_id);

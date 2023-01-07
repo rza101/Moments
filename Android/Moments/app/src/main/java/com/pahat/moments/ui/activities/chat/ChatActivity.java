@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -121,7 +120,6 @@ public class ChatActivity extends AppCompatActivity {
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "onCreate: " + task.getResult());
                             chatRoom = task.getResult().getValue(ChatRoom.class);
                             chatRoom.setChatRoomId(task.getResult().getKey());
                         } else {

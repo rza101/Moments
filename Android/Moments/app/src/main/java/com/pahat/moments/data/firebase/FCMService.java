@@ -68,6 +68,7 @@ public class FCMService extends FirebaseMessagingService {
                 .setContentInfo(getString(R.string.app_name))
                 .setContentIntent(pendingIntent)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setSmallIcon(R.drawable.ic_moments_logo)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                 .setLights(Color.RED, 1000, 300)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));

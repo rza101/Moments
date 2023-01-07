@@ -766,10 +766,10 @@ public class DetailPostActivity extends AppCompatActivity {
     }
 
     public void showLoading() {
-        binding.detailPostLoadingLottie.setVisibility(View.VISIBLE);
+        runOnUiThread(() -> binding.detailPostLoadingLottie.setVisibility(View.VISIBLE));
     }
 
     public void hideLoading() {
-        binding.detailPostLoadingLottie.setVisibility(View.GONE);
+        runOnUiThread(() -> binding.detailPostLoadingLottie.setVisibility(View.GONE));
     }
 }

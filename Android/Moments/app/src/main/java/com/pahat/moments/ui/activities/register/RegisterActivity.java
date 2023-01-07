@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
