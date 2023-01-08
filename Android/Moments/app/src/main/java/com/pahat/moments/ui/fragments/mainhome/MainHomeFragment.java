@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +17,7 @@ import com.pahat.moments.data.network.model.Post;
 import com.pahat.moments.databinding.FragmentMainHomeBinding;
 import com.pahat.moments.ui.activities.detailpost.DetailPostActivity;
 import com.pahat.moments.ui.adapters.ItemPostAdapter;
+import com.pahat.moments.util.Utilities;
 
 import java.util.List;
 
@@ -70,7 +70,7 @@ public class MainHomeFragment extends Fragment {
             public void onFailure(Call<APIResponse<List<Post>>> call, Throwable t) {
                 hideLoading();
                 if (isAdded()) {
-                    Toast.makeText(requireContext(), "Failed to load posts", Toast.LENGTH_SHORT).show();
+                    Utilities.makeToast(requireContext(), "Failed to load posts");
                 }
             }
         });

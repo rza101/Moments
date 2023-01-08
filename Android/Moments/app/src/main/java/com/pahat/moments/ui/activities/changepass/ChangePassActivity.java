@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -56,14 +55,14 @@ public class ChangePassActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             user.updatePassword(password).addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful()) {
-                                    Toast.makeText(ChangePassActivity.this, "Password updated!", Toast.LENGTH_SHORT).show();
+                                    Utilities.makeToast(ChangePassActivity.this, "Password updated!");
                                     finish();
                                 } else {
-                                    Toast.makeText(ChangePassActivity.this, "Error password not updated", Toast.LENGTH_SHORT).show();
+                                    Utilities.makeToast(ChangePassActivity.this, "Error password not updated");
                                 }
                             });
                         } else {
-                            Toast.makeText(ChangePassActivity.this, "Auth error", Toast.LENGTH_SHORT).show();
+                            Utilities.makeToast(ChangePassActivity.this, "Auth error");
                         }
                     });
 

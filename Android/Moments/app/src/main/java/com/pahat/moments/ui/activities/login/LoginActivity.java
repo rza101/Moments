@@ -6,7 +6,6 @@ import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +25,7 @@ import com.pahat.moments.databinding.ActivityLoginBinding;
 import com.pahat.moments.ui.activities.forgotpass.ForgotPassActivity;
 import com.pahat.moments.ui.activities.main.MainActivity;
 import com.pahat.moments.ui.activities.register.RegisterActivity;
+import com.pahat.moments.util.Utilities;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                 finish();
                                                             } else {
                                                                 FirebaseAuth.getInstance().signOut();
-                                                                Toast.makeText(LoginActivity.this, "Login Failed. Please try again", Toast.LENGTH_SHORT).show();
+                                                                Utilities.makeToast(LoginActivity.this, "Login Failed. Please try again");
                                                             }
                                                         }
 
@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                                                         }
                                                     });
                                         } else {
-                                            Toast.makeText(LoginActivity.this, "Authentication failed, check your email and password or sign up", Toast.LENGTH_SHORT).show();
+                                            Utilities.makeToast(LoginActivity.this, "Authentication failed, check your email and password or sign up");
                                             hideLoading();
                                         }
                                     }

@@ -3,12 +3,12 @@ package com.pahat.moments.ui.activities.forgotpass;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.pahat.moments.databinding.ActivityForgotPassBinding;
+import com.pahat.moments.util.Utilities;
 
 public class ForgotPassActivity extends AppCompatActivity {
 
@@ -38,9 +38,9 @@ public class ForgotPassActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         hideLoading();
                         if (task.isSuccessful()) {
-                            Toast.makeText(ForgotPassActivity.this, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
+                            Utilities.makeToast(ForgotPassActivity.this, "We have sent you instructions to reset your password!");
                         } else {
-                            Toast.makeText(ForgotPassActivity.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
+                            Utilities.makeToast(ForgotPassActivity.this, "Failed to send reset email!");
                         }
                     });
         });

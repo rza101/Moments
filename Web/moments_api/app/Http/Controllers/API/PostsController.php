@@ -28,7 +28,7 @@ class PostsController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',
-                'data' => Post::all()
+                'data' => Post::orderBy('created_at', 'DESC')->get()
             ]);
         }
     }

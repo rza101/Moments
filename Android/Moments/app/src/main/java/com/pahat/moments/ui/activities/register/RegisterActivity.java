@@ -6,7 +6,6 @@ import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -145,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                                     mRef = mRoot.child(Constants.FIREBASE_USERS_DB_REF).child(userId);
                                                                                     mRef.setValue(user);
 
-                                                                                    Toast.makeText(RegisterActivity.this, "Register success!", Toast.LENGTH_SHORT).show();
+                                                                                    Utilities.makeToast(RegisterActivity.this, "Register success!");
 
                                                                                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                                                                     startActivity(intent);
@@ -153,7 +152,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                                 } else {
                                                                                     // STORE TO API FAILED
                                                                                     FirebaseAuth.getInstance().signOut();
-                                                                                    Toast.makeText(RegisterActivity.this, "Register failed, please try with other credentials", Toast.LENGTH_SHORT).show();
+                                                                                    Utilities.makeToast(RegisterActivity.this, "Register failed, please try with other credentials");
                                                                                 }
                                                                             }
 
@@ -164,7 +163,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                         });
                                                                     } else {
                                                                         // REGISTER FAILED
-                                                                        Toast.makeText(RegisterActivity.this, "Register failed!", Toast.LENGTH_SHORT).show();
+                                                                        Utilities.makeToast(RegisterActivity.this, "Register failed!");
                                                                         hideLoading();
                                                                     }
                                                                 }
