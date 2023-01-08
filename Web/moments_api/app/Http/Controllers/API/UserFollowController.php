@@ -46,7 +46,7 @@ class UserFollowController extends Controller
             $user_follow->username_following = $request->username_following;
             $user_follow->save();
 
-            $fcmResult = FCMController::sendFCM($user_follow->UserFollowing->fcm_token, "New Follower", "$user_follow->username_following is following you");
+            $fcmResult = FCMController::sendFCM($user_follow->UserFollowing->fcm_token, "New Follower", "$user_follow->username is following you");
 
             return response()->json([
                 'status' => 200,
