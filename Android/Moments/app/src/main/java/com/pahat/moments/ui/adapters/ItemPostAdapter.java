@@ -70,7 +70,7 @@ public class ItemPostAdapter extends ListAdapter<Post, ItemPostAdapter.ViewHolde
         Glide.with(context)
                 .load(data.getImageUrl())
                 .placeholder(AppCompatResources.getDrawable(context, R.drawable.ic_broken_image_24))
-                .override(Target.SIZE_ORIGINAL)
+                .override(ViewGroup.LayoutParams.MATCH_PARENT)
                 .into(holder.binding.itemPostIvPicture);
 
         holder.binding.itemPostTvCaption.setText(data.getCaption());

@@ -59,19 +59,19 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                                     String downloadUrl = task.getResult().toString();
                                     Glide.with(context)
                                             .load(downloadUrl)
-                                            .override(Target.SIZE_ORIGINAL)
+                                            .override(ViewGroup.LayoutParams.MATCH_PARENT)
                                             .into(holder.binding.itemChatIvImageRight);
                                 } else {
                                     Glide.with(context)
                                             .load(R.drawable.ic_broken_image_24)
-                                            .override(Target.SIZE_ORIGINAL)
+                                            .override(ViewGroup.LayoutParams.MATCH_PARENT)
                                             .into(holder.binding.itemChatIvImageRight);
                                 }
                             });
                 } else {
                     Glide.with(context)
                             .load(model.getImageUrl())
-                            .override(Target.SIZE_ORIGINAL)
+                            .override(ViewGroup.LayoutParams.MATCH_PARENT)
                             .into(holder.binding.itemChatIvImageRight);
                 }
             }
@@ -94,19 +94,19 @@ public class FirebaseChatAdapter extends FirebaseRecyclerAdapter<Chat, FirebaseC
                                     String downloadUrl = task.getResult().toString();
                                     Glide.with(context)
                                             .load(downloadUrl)
-                                            .override(Target.SIZE_ORIGINAL)
+                                            .override(ViewGroup.LayoutParams.MATCH_PARENT)
                                             .into(holder.binding.itemChatIvImageLeft);
                                 } else {
                                     Glide.with(context)
                                             .load(R.drawable.ic_broken_image_24)
-                                            .override(Target.SIZE_ORIGINAL)
+                                            .override(ViewGroup.LayoutParams.MATCH_PARENT)
                                             .into(holder.binding.itemChatIvImageLeft);
                                 }
                             });
                 } else {
                     Glide.with(context)
                             .load(model.getImageUrl())
-                            .override(Target.SIZE_ORIGINAL)
+                            .override(ViewGroup.LayoutParams.MATCH_PARENT)
                             .into(holder.binding.itemChatIvImageLeft);
                 }
             }
